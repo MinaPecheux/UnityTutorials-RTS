@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4aee701b24e74d11979d05a8285e154, type: 3}
+  m_Name: Global Parameters
+  m_EditorClassIdentifier: 
+  _fieldsToShowInGame:
+  - enableDayAndNightCycle
+  - enableFOV
+  enableDayAndNightCycle: 0
+  dayLengthInSeconds: 20
+  dayInitialRatio: 0.2
+  initialBuilding: {fileID: 11400000, guid: 5c2ccb27116004dc1acffa053dc93179, type: 2}
+  baseGoldProduction: 5
+  bonusGoldProductionPerBuilding: 2
+  goldBonusRange: 10
+  woodProductionRange: 10
+  stoneProductionRange: 10
+  enableFOV: 1

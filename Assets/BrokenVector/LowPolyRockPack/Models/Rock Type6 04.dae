@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>Blender User</author>
+      <authoring_tool>Blender 2.76.0 commit date:2015-11-03, commit time:10:56, hash:f337fea</authoring_tool>
+    </contributor>
+    <created>2016-01-10T16:14:07</created>
+    <modified>2016-01-10T16:14:07</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_images/>
+  <library_effects>
+    <effect id="color2-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.64 0.64 0.64 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.5 0.5 0.5 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">50</float>
+            </shininess>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="color2-material" name="color2">
+      <instance_effect url="#color2-effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="Rock_Type6_04_mesh-mesh" name="Rock Type6 04_mesh">
+      <mesh>
+        <source id="Rock_Type6_04_mesh-mesh-positions">
+          <float_array id="Rock_Type6_04_mesh-mesh-positions-array" count="54">-0.3901602 -0.0012542 -0.1389617 -0.3792303 -0.0012542 0.3360539 0.2831533 -0.0012542 -0.1860239 0.2940831 -0.0012542 0.2889918 -0.0693053 -0.0012542 -0.2361956 0.03198647 -0.0012542 0.2610249 -0.4472514 0.3267449 -0.17029 -0.4345481 0.3267449 0.3817873 0.3352937 0.3267449 -0.224987 0.3479967 0.3267449 0.3270904 -0.07434409 0.3267449 -0.283298 0.04338014 0.3267449 0.2945864 -0.3890702 0.4324636 -0.1383638 -0.378174 0.4324636 0.3351807 0.2821577 0.4324636 -0.1852802 0.2930538 0.4324636 0.2882644 -0.06920897 0.4324636 -0.2352964 0.03176897 0.4324636 0.2603842</float_array>
+          <technique_common>
+            <accessor source="#Rock_Type6_04_mesh-mesh-positions-array" count="18" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Rock_Type6_04_mesh-mesh-normals">
+          <float_array id="Rock_Type6_04_mesh-mesh-normals-array" count="45">0 -1 0 0.1395659 -0.1386548 -0.9804572 -0.9852979 -0.1693341 0.0226714 -0.1013429 0.2961358 0.9497544 0.1288653 0.4047858 -0.9052857 -0.1055956 -0.09759074 0.9896088 -0.287145 -0.1404816 -0.9475297 0.1784759 -0.1062896 0.9781866 0.9869232 -0.1595838 -0.02270859 0 1 0 0 1 0 -0.2646126 0.4093195 -0.8731769 0.1700431 0.3201878 0.9319685 0.8901947 0.4551196 -0.02048307 -0.8784773 0.4773562 0.02021366</float_array>
+          <technique_common>
+            <accessor source="#Rock_Type6_04_mesh-mesh-normals-array" count="15" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Rock_Type6_04_mesh-mesh-map-0">
+          <float_array id="Rock_Type6_04_mesh-mesh-map-0-array" count="124">0.2656251 0.765087 0.2786908 0.7575435 0.2786908 0.7424564 0.2656251 0.7349129 0.2525593 0.7424564 0.2525593 0.7575435 0.2505379 0.7349129 0.2807121 0.7349129 0.2807121 0.765087 0.2505379 0.765087 0.2505379 0.7349129 0.2807121 0.7349129 0.2807121 0.765087 0.2505379 0.765087 0.2505379 0.7349129 0.2807121 0.7349129 0.2807121 0.765087 0.2505379 0.765087 0.2505379 0.7349129 0.2807121 0.7349129 0.2807121 0.765087 0.2505379 0.765087 0.2505379 0.7349129 0.2807121 0.7349129 0.2807121 0.765087 0.2505379 0.765087 0.2505379 0.7349129 0.2807121 0.7349129 0.2807121 0.765087 0.2505379 0.765087 0.2505379 0.7349129 0.2807121 0.7349129 0.2807121 0.765087 0.2505379 0.765087 0.2505379 0.7349129 0.2807121 0.7349129 0.2807121 0.765087 0.2505379 0.765087 0.2505379 0.7349129 0.2807121 0.7349129 0.2807121 0.765087 0.2505379 0.765087 0.2505379 0.7349129 0.2807121 0.7349129 0.2807121 0.765087 0.2505379 0.765087 0.2505379 0.7349129 0.2807121 0.7349129 0.2807121 0.765087 0.2505379 0.765087 0.2505379 0.7349129 0.2807121 0.7349129 0.2807121 0.765087 0.2505379 0.765087 0.2505379 0.7349129 0.2807121 0.7349129 0.2807121 0.765087 0.2505379 0.765087 0.2505379 0.7349129 0.2807121 0.7349129 0.2807121 0.765087 0.2505379 0.765087</float_array>
+          <technique_common>
+            <accessor source="#Rock_Type6_04_mesh-mesh-map-0-array" count="62" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Rock_Type6_04_mesh-mesh-vertices">
+          <input semantic="POSITION" source="#Rock_Type6_04_mesh-mesh-positions"/>
+        </vertices>
+        <polylist material="color2-material" count="15">
+          <input semantic="VERTEX" source="#Rock_Type6_04_mesh-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Rock_Type6_04_mesh-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Rock_Type6_04_mesh-mesh-map-0" offset="2" set="0"/>
+          <vcount>6 4 4 4 4 4 4 4 4 4 4 4 4 4 4 </vcount>
+          <p>4 0 0 2 0 1 3 0 2 5 0 3 1 0 4 0 0 5 2 1 6 4 1 7 10 1 8 8 1 9 0 2 10 1 2 11 7 2 12 6 2 13 11 3 14 9 3 15 15 3 16 17 3 17 8 4 18 10 4 19 16 4 20 14 4 21 5 5 22 3 5 23 9 5 24 11 5 25 4 6 26 0 6 27 6 6 28 10 6 29 1 7 30 5 7 31 11 7 32 7 7 33 3 8 34 2 8 35 8 8 36 9 8 37 12 9 38 13 9 39 17 9 40 16 9 41 16 10 42 17 10 43 15 10 44 14 10 45 10 11 46 6 11 47 12 11 48 16 11 49 7 12 50 11 12 51 17 12 52 13 12 53 9 13 54 8 13 55 14 13 56 15 13 57 6 14 58 7 14 59 13 14 60 12 14 61</p>
+        </polylist>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="Rock_Type6_04_mesh" name="Rock_Type6_04_mesh" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 -4.37114e-8 -1 0 0 1 -4.37114e-8 0 0 0 0 1</matrix>
+        <instance_geometry url="#Rock_Type6_04_mesh-mesh" name="Rock_Type6_04_mesh">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="color2-material" target="#color2-material"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>

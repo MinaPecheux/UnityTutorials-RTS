@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d3d7baebcf3947ce9b0366a4348bef9, type: 3}
+  m_Name: Soldier
+  m_EditorClassIdentifier: 
+  code: soldier
+  unitName: Soldier
+  description: A simple unit.
+  healthpoints: 30
+  prefab: {fileID: 4893885829384556338, guid: 3b214c7ee536447728dfcb29fb018e2e, type: 3}
+  sprite: {fileID: 0}
+  cost:
+  - code: 0
+    amount: 30
+  canProduce: 
+  skills: []
+  fieldOfView: 22
+  attackRange: 2
+  attackDamage: 20
+  attackRate: 1
+  onSelectSound: {fileID: 8300000, guid: 52613f28a316c4ec2a02ca4d01eacf0d, type: 3}
+  onMoveValidSound: {fileID: 8300000, guid: d17c2a850b12741799bbde9458aa8005, type: 3}
+  onMoveInvalidSound: {fileID: 8300000, guid: 7684a035e88994f5387716d7239b1653, type: 3}

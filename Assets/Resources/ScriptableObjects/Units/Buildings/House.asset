@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 400d70422732246869e2f032d9ebfc9f, type: 3}
+  m_Name: House
+  m_EditorClassIdentifier: 
+  code: house
+  unitName: House
+  description: A basic shed to rest.
+  healthpoints: 100
+  prefab: {fileID: 4893885829384556338, guid: f6a6d46e467fb47bea39575cc022a002, type: 3}
+  sprite: {fileID: 0}
+  cost:
+  - code: 0
+    amount: 100
+  - code: 1
+    amount: 120
+  canProduce: 000000000100000002000000
+  skills:
+  - {fileID: 11400000, guid: c95be254c31c543539a9005c6196e54c, type: 2}
+  fieldOfView: 35
+  attackRange: 10
+  attackDamage: 5
+  attackRate: 2
+  onSelectSound: {fileID: 8300000, guid: 5fcdb8808e727418799af689b1ce0d74, type: 3}
+  ambientSound: {fileID: 8300000, guid: c0f50d5293b224b9486abd58973e08af, type: 3}

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>Blender User</author>
+      <authoring_tool>Blender 2.76.0 commit date:2015-11-03, commit time:10:56, hash:f337fea</authoring_tool>
+    </contributor>
+    <created>2016-01-10T16:14:07</created>
+    <modified>2016-01-10T16:14:07</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_images/>
+  <library_effects>
+    <effect id="color4-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.64 0.64 0.64 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.5 0.5 0.5 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">50</float>
+            </shininess>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="color4-material" name="color4">
+      <instance_effect url="#color4-effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="Rock_Type4_04_mesh-mesh" name="Rock Type4 04_mesh">
+      <mesh>
+        <source id="Rock_Type4_04_mesh-mesh-positions">
+          <float_array id="Rock_Type4_04_mesh-mesh-positions-array" count="60">-0.0692138 0.02799689 -0.00326538 -0.0692138 0.02799689 -0.604885 -0.6616935 0.02799689 -0.1077355 -0.2749798 0.02799695 0.5620722 0.1365523 0.02799695 0.5620721 0.5232658 0.02799689 -0.1077355 0.3174999 0.02799689 -0.4641327 -0.0692138 0.2020545 -0.604885 -0.6616935 0.2020545 -0.1077355 -0.2749798 0.2020545 0.5620722 0.1365523 0.2020545 0.5620721 0.5232658 0.2020545 -0.1077355 0.3174999 0.2020545 -0.4641327 -0.05525052 0.3694175 -0.00834757 -0.05525052 0.3694175 -0.4579066 -0.4979797 0.3694175 -0.0864126 -0.2090086 0.3694176 0.4140996 0.0985077 0.3694176 0.4140995 0.3874785 0.3694175 -0.08641266 0.2337204 0.3694175 -0.3527296</float_array>
+          <technique_common>
+            <accessor source="#Rock_Type4_04_mesh-mesh-positions-array" count="20" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Rock_Type4_04_mesh-mesh-normals">
+          <float_array id="Rock_Type4_04_mesh-mesh-normals-array" count="72">0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 -0.5200689 0.5876939 -0.6197938 0.7297816 0.5384162 0.4213395 -0.681724 0.6167142 0.3935936 0.6873923 0.6082675 -0.396866 0.2675024 0.6231222 -0.7349566 1.8553e-7 0.6623747 0.7491728 -0.8660254 0 0.5000001 0.8660256 0 0.5 -0.6427876 0 -0.7660445 2.08029e-7 0 1 0.3420202 0 -0.9396926 0.8660255 0 -0.5 0 1 -1.49736e-7 0 1 0 0 1 -1.49736e-7 0 1 0 0 1 0 0 1 -1.49736e-7</float_array>
+          <technique_common>
+            <accessor source="#Rock_Type4_04_mesh-mesh-normals-array" count="24" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Rock_Type4_04_mesh-mesh-map-0">
+          <float_array id="Rock_Type4_04_mesh-mesh-map-0-array" count="168">0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784 0.7779716 0.2232841 0.8079659 0.2232841 0.8079659 0.2532784</float_array>
+          <technique_common>
+            <accessor source="#Rock_Type4_04_mesh-mesh-map-0-array" count="84" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Rock_Type4_04_mesh-mesh-vertices">
+          <input semantic="POSITION" source="#Rock_Type4_04_mesh-mesh-positions"/>
+        </vertices>
+        <polylist material="color4-material" count="24">
+          <input semantic="VERTEX" source="#Rock_Type4_04_mesh-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Rock_Type4_04_mesh-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Rock_Type4_04_mesh-mesh-map-0" offset="2" set="0"/>
+          <vcount>3 3 3 3 3 3 4 4 4 4 4 4 4 4 4 4 4 4 3 3 3 3 3 3 </vcount>
+          <p>0 0 0 2 0 1 1 0 2 0 1 3 4 1 4 3 1 5 0 2 6 3 2 7 2 2 8 0 3 9 6 3 10 5 3 11 0 4 12 1 4 13 6 4 14 0 5 15 5 5 16 4 5 17 7 6 18 8 6 19 15 6 20 14 6 21 10 7 22 11 7 23 18 7 24 17 7 25 8 8 26 9 8 27 16 8 28 15 8 29 11 9 30 12 9 31 19 9 32 18 9 33 12 10 34 7 10 35 14 10 36 19 10 37 9 11 38 10 11 39 17 11 40 16 11 41 2 12 42 3 12 43 9 12 44 8 12 45 4 13 46 5 13 47 11 13 48 10 13 49 1 14 50 2 14 51 8 14 52 7 14 53 3 15 54 4 15 55 10 15 56 9 15 57 6 16 58 1 16 59 7 16 60 12 16 61 5 17 62 6 17 63 12 17 64 11 17 65 13 18 66 14 18 67 15 18 68 13 19 69 16 19 70 17 19 71 13 20 72 15 20 73 16 20 74 13 21 75 18 21 76 19 21 77 13 22 78 19 22 79 14 22 80 13 23 81 17 23 82 18 23 83</p>
+        </polylist>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="Rock_Type4_04_mesh" name="Rock_Type4_04_mesh" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 -4.37114e-8 -1 0 0 1 -4.37114e-8 0 0 0 0 1</matrix>
+        <instance_geometry url="#Rock_Type4_04_mesh-mesh" name="Rock_Type4_04_mesh">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="color4-material" target="#color4-material"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>
