@@ -61,3 +61,5 @@ You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-pr
 <li>Tutorial #23: <a href="https://mina-pecheux.medium.com/making-a-rts-game-23-implementing-behaviour-trees-for-our-units-1-3-unity-c-1a61840058a6" rel="noopener follow"><strong>Implementing behaviour trees for our units 1/3</strong></a></li>
 
 <li>Tutorial #24: <a href="https://mina-pecheux.medium.com/making-a-rts-game-24-implementing-behaviour-trees-for-our-units-2-3-unity-c-17f14cc3c580" rel="noopener follow"><strong>Implementing behaviour trees for our units 2/3</strong></a></li></ul>
+
+<li>Tutorial #25: <a href="https://mina-pecheux.medium.com/making-a-rts-game-25-implementing-behaviour-trees-for-our-units-3-3-unity-c-a132340bc71c" rel="noopener follow"><strong>Implementing behaviour trees for our units 3/3</strong></a></li></ul>
