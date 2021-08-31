@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -10,10 +10,13 @@ public class Unit
     protected Transform _transform;
     protected int _currentHealth;
     protected int _level;
+    protected bool _levelMaxedOut;
     protected float _fieldOfView;
     protected Dictionary<InGameResource, int> _production;
     protected List<SkillManager> _skillManagers;
     protected int _owner;
+    protected int _attackDamage;
+    protected float _attackRange;
 
     public Unit(UnitData data, int owner) : this(data, owner, new List<ResourceValue>() { }) { }
     public Unit(UnitData data, int owner, List<ResourceValue> production)
@@ -22,9 +25,12 @@ public class Unit
         _data = data;
         _currentHealth = data.healthpoints;
         _level = 1;
+        _levelMaxedOut = false;
         _production = production.ToDictionary(rv => rv.code, rv => rv.amount);
         _fieldOfView = data.fieldOfView;
         _owner = owner;
+        _attackDamage = data.attackDamage;
+        _attackRange = data.attackRange;
 
         GameObject g = GameObject.Instantiate(data.prefab) as GameObject;
         _transform = g.transform;
@@ -117,7 +123,38 @@ public class Unit
 
     public void LevelUp()
     {
+        // if unit already at max level: abort early
+        if (_levelMaxedOut)
+            return;
+
         _level += 1;
+
+        GameGlobalParameters p = GameManager.instance.gameGlobalParameters;
+
+        // update production: multiply production of each game resource
+        // by a hardcoded multiplier
+        float prodMultiplier = 1.2f;
+        List<InGameResource> prodResources = _production.Keys.ToList();
+        foreach (InGameResource r in prodResources)
+            _production[r] = (int)((_production[r] + 0.1f) * prodMultiplier);
+
+        // update attack
+        float attDamageMultiplier = 1.1f;
+        _attackDamage = Mathf.CeilToInt(_attackDamage * attDamageMultiplier);
+        float attRangeMultiplier = 1.2f;
+        _attackRange *= attRangeMultiplier;
+
+        // consume resources
+        foreach (ResourceValue resource in GetLevelUpCost())
+        {
+            Globals.GAME_RESOURCES[resource.code].AddAmount(-resource.amount);
+        }
+        EventManager.TriggerEvent("UpdateResourceTexts");
+
+        // play sound / show nice VFX
+
+        // check if reached max level
+        _levelMaxedOut = _level == p.UnitMaxLevel();
     }
 
     public void ProduceResources()
@@ -131,6 +168,11 @@ public class Unit
         _skillManagers[index].Trigger(target);
     }
 
+    public List<ResourceValue> GetLevelUpCost()
+    {
+        int xpCost = _level + 1;
+        return Globals.ConvertXPCostToGameResources(xpCost, Data.cost.Select(v => v.code));
+    }
     public string Uid { get => _uid; }
     public UnitData Data { get => _data; }
     public string Code { get => _data.code; }
@@ -138,7 +180,10 @@ public class Unit
     public int HP { get => _currentHealth; set => _currentHealth = value; }
     public int MaxHP { get => _data.healthpoints; }
     public int Level { get => _level; }
+    public bool LevelMaxedOut { get => _levelMaxedOut; }
     public Dictionary<InGameResource, int> Production { get => _production; }
     public List<SkillManager> SkillManagers { get => _skillManagers; }
     public int Owner { get => _owner; }
+    public int AttackDamage { get => _attackDamage; }
+    public float AttackRange { get => _attackRange; }
 }

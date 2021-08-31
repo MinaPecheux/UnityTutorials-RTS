@@ -10,7 +10,7 @@ public class CheckEnemyInAttackRange : Node
     public CheckEnemyInAttackRange(UnitManager manager) : base()
     {
         _manager = manager;
-        _attackRange = _manager.Unit.Data.attackRange;
+        _attackRange = _manager.Unit.AttackRange;
     }
 
     public override NodeState Evaluate()

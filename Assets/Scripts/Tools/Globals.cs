@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.AI;
 
 public enum InGameResource
@@ -23,6 +24,13 @@ public static class Globals
         { InGameResource.Stone, new GameResource("Stone", 1000) }
     };
 
+    public static Dictionary<InGameResource, int> XP_CONVERSION_TO_RESOURCE = new Dictionary<InGameResource, int>()
+    {
+        { InGameResource.Gold, 100 },
+        { InGameResource.Wood, 80 },
+        { InGameResource.Stone, 40 }
+    };
+
     public static BuildingData[] BUILDING_DATA;
     public static Dictionary<string, SkillData> SKILL_DATA = new Dictionary<string, SkillData>();
     public static List<UnitManager> SELECTED_UNITS = new List<UnitManager>();
@@ -32,5 +40,47 @@ public static class Globals
     public static void UpdateNavMeshSurface()
     {
         NAV_MESH_SURFACE.UpdateNavMesh(NAV_MESH_SURFACE.navMeshData);
+    }
+
+    public static bool CanBuy(List<ResourceValue> cost)
+    {
+        foreach (ResourceValue resource in cost)
+            if (GAME_RESOURCES[resource.code].Amount < resource.amount)
+                return false;
+        return true;
+    }
+
+    public static List<ResourceValue> ConvertXPCostToGameResources(int xpCost, IEnumerable<InGameResource> allowedResources)
+    {
+        // distribute the xp cost between all possible resources, always
+        // starting with 1 unit of every allowed resource type and then
+        // picking the rest from allowed resource types
+
+        // sort resources by xp cost
+        List<InGameResource> sortedResources = allowedResources
+            .OrderBy(r => XP_CONVERSION_TO_RESOURCE[r])
+            .ToList();
+        int n = sortedResources.Count();
+
+
+        Dictionary<InGameResource, int> xpCostToResources = new Dictionary<InGameResource, int>();
+        foreach (InGameResource r in sortedResources)
+        {
+            if (xpCost == 0) break;
+            xpCostToResources[r] = 1;
+            xpCost--;
+        }
+
+        int i = 0;
+        while (xpCost > 0)
+        {
+            xpCostToResources[sortedResources[i]]++;
+            xpCost--;
+            i = (i + 1) % n;
+        }
+
+        return xpCostToResources
+            .Select(pair => new ResourceValue(pair.Key, pair.Value * XP_CONVERSION_TO_RESOURCE[pair.Key]))
+            .ToList();
     }
 }

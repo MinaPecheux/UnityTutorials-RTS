@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "Global Parameters", menuName = "Scriptable Objects/Game Global Parameters", order = 10)]
 public class GameGlobalParameters : GameParameters
@@ -34,4 +34,9 @@ public class GameGlobalParameters : GameParameters
 
     [Header("FOV")]
     public bool enableFOV;
+
+    public int UnitMaxLevel()
+    {
+        return 4;
+    }
 }

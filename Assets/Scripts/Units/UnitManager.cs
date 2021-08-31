@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -72,7 +72,7 @@ public class UnitManager : MonoBehaviour
     {
         UnitManager um = target.GetComponent<UnitManager>();
         if (um == null) return;
-        um.TakeHit(Unit.Data.attackDamage);
+        um.TakeHit(Unit.AttackDamage);
     }
 
     public void TakeHit(int attackPoints)

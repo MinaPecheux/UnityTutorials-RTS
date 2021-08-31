@@ -35,6 +35,7 @@ public class UIManager : MonoBehaviour
     private Transform _selectedUnitResourcesProductionParent;
     private Transform _selectedUnitActionButtonsParent;
     private Unit _selectedUnit;
+    private List<ResourceValue> _selectedUnitNextLevelCost;
     public GameObject unitSkillButtonPrefab;
 
     public Transform selectionGroupsParent;
@@ -184,6 +185,35 @@ public class UIManager : MonoBehaviour
         EventManager.TriggerEvent(showMainMenuPanel ? "PauseGame" : "ResumeGame");
     }
 
+    public void HoverLevelUpButton()
+    {
+        if (_selectedUnit.LevelMaxedOut) return;
+        _UpdateSelectedUnitLevelUpInfoPanel();
+        ShowInfoPanel(true);
+    }
+
+    public void UnhoverLevelUpButton()
+    {
+        ShowInfoPanel(false);
+    }
+
+    public void ClickLevelUpButton()
+    {
+        _selectedUnit.LevelUp();
+        _SetSelectedUnitMenu(_selectedUnit);
+        if (_selectedUnit.LevelMaxedOut)
+        {
+            selectedUnitMenuUpgradeButton.transform.Find("Text").GetComponent<Text>().text = "Maxed out";
+            selectedUnitMenuUpgradeButton.GetComponent<Button>().interactable = false;
+            ShowInfoPanel(false);
+        }
+        else
+        {
+            _UpdateSelectedUnitLevelUpInfoPanel();
+            _CheckBuyLimits();
+        }
+    }
+
     public void LoadGame()
     {
 
@@ -215,6 +245,45 @@ public class UIManager : MonoBehaviour
         b.onClick.AddListener(() => _selectedUnit.TriggerSkill(i));
     }
 
+    private void _CheckBuyLimits()
+    {
+        // chek if level up button is disabled or not
+        if (
+            _selectedUnit != null &&
+            _selectedUnit.Owner == GameManager.instance.gamePlayersParameters.myPlayerId &&
+            !_selectedUnit.LevelMaxedOut &&
+            Globals.CanBuy(_selectedUnitNextLevelCost)
+        )
+            selectedUnitMenuUpgradeButton.GetComponent<Button>().interactable = true;
+
+        // check if building buttons are disabled or not
+        _OnCheckBuildingButtons();
+
+        // check if buy/upgrade is affordable: update text colors
+        if (infoPanel.activeSelf)
+        {
+            foreach (Transform resourceDisplay in _infoPanelResourcesCostParent)
+            {
+                InGameResource resourceCode = (InGameResource)System.Enum.Parse(
+                    typeof(InGameResource),
+                    resourceDisplay.Find("Icon").GetComponent<Image>().sprite.name
+                );
+                Text txt = resourceDisplay.Find("Text").GetComponent<Text>();
+                int resourceAmount = int.Parse(txt.text);
+                if (Globals.GAME_RESOURCES[resourceCode].Amount < resourceAmount)
+                    txt.color = invalidTextColor;
+                else
+                    txt.color = Color.white;
+            }
+        }
+    }
+
+    private void _UpdateSelectedUnitLevelUpInfoPanel()
+    {
+        int nextLevel = _selectedUnit.Level + 1;
+        SetInfoPanel("Level up", $"Upgrade unit to level {nextLevel}", _selectedUnitNextLevelCost);
+    }
+
     private void _SetResourceText(InGameResource resource, int value)
     {
         _resourceTexts[resource].text = value.ToString();
@@ -224,6 +293,8 @@ public class UIManager : MonoBehaviour
     {
         foreach (KeyValuePair<InGameResource, GameResource> pair in Globals.GAME_RESOURCES)
             _SetResourceText(pair.Key, pair.Value.Amount);
+
+        _CheckBuyLimits();
     }
 
     private void _OnUpdatePlacedBuildingProduction(object data)
@@ -305,19 +376,21 @@ public class UIManager : MonoBehaviour
 
     public void SetInfoPanel(UnitData data)
     {
+        SetInfoPanel(data.unitName, data.description, data.cost);
+    }
+    public void SetInfoPanel(string title, string description, List<ResourceValue> resourceCosts)
+    {
         // update texts
-        if (data.unitName != "")
-            _infoPanelTitleText.text = data.unitName;
-        if (data.description != "")
-            _infoPanelDescriptionText.text = data.description;
+        _infoPanelTitleText.text = title;
+        _infoPanelDescriptionText.text = description;
         // clear resource costs and reinstantiate new ones
         foreach (Transform child in _infoPanelResourcesCostParent)
             Destroy(child.gameObject);
-        if (data.cost.Count > 0)
+        if (resourceCosts.Count > 0)
         {
             GameObject g;
             Transform t;
-            foreach (ResourceValue resource in data.cost)
+            foreach (ResourceValue resource in resourceCosts)
             {
                 g = Instantiate(gameResourceCostPrefab) as GameObject;
                 t = g.transform;
@@ -377,6 +450,7 @@ public class UIManager : MonoBehaviour
     private void _SetSelectedUnitMenu(Unit unit)
     {
         _selectedUnit = unit;
+        _selectedUnitNextLevelCost = _selectedUnit.GetLevelUpCost();
 
         bool unitIsMine = unit.Owner == GameManager.instance.gamePlayersParameters.myPlayerId;
 
@@ -422,6 +496,10 @@ public class UIManager : MonoBehaviour
                 _AddUnitSkillButtonListener(b, i);
             }
         }
+
+        // if unit is mine, check if it can level up
+        if (unitIsMine)
+            selectedUnitMenuUpgradeButton.GetComponent<Button>().interactable = Globals.CanBuy(_selectedUnitNextLevelCost);
 
         // hide upgrade/destroy buttons if I don't own the building
         selectedUnitMenuUpgradeButton.SetActive(unitIsMine);
