@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +20,9 @@ public class UnitManager : MonoBehaviour
 
     private Transform _canvas;
     private GameObject _healthbar;
+    private GameObject _levelUpVFX;
+    private Material _levelUpVFXMaterial;
+    private Coroutine _levelUpVFXCoroutine = null;
 
     private void Awake()
     {
@@ -187,5 +190,44 @@ public class UnitManager : MonoBehaviour
         if (!_healthbar) return;
         Transform fill = _healthbar.transform.Find("Fill");
         fill.GetComponent<UnityEngine.UI.Image>().fillAmount = Unit.HP / (float)Unit.MaxHP;
+    }
+
+    public void LevelUp()
+    {
+        // destroy previous (unfinished) visual effect
+        if (_levelUpVFX)
+        {
+            if (_levelUpVFXCoroutine != null)
+                StopCoroutine(_levelUpVFXCoroutine);
+            _levelUpVFXCoroutine = null;
+            Destroy(_levelUpVFX);
+        }
+
+        // play sound
+        AudioClip clip = GameManager.instance.gameGlobalParameters.onLevelUpSound;
+        contextualSource.PlayOneShot(clip);
+
+        // create visual effect (+ discard it after a few seconds)
+        GameObject vfx = Instantiate(Resources.Load("Prefabs/Units/LevelUpVFX")) as GameObject;
+        Vector3 meshScale = transform.Find("Mesh").localScale;
+        float s = Mathf.Max(meshScale.x, meshScale.z);
+        Transform t = vfx.transform;
+        t.localScale = new Vector3(s, meshScale.y, s);
+        t.position = transform.position;
+
+        _levelUpVFX = vfx;
+        _levelUpVFXMaterial = t.GetComponent<Renderer>().material;
+        _levelUpVFXCoroutine = StartCoroutine("_UpdatingLevelUpVFX");
+    }
+
+    private IEnumerator _UpdatingLevelUpVFX()
+    {
+        float lifetime = 1f, t = 0f, step = 0.05f;
+        while (t < lifetime) {
+            _levelUpVFXMaterial.SetFloat("_CurrentTime", t);
+            t += step;
+            yield return new WaitForSeconds(step);
+        }
+        Destroy(_levelUpVFX);
     }
 }

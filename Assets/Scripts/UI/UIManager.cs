@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -33,9 +33,10 @@ public class UIManager : MonoBehaviour
     private Text _selectedUnitTitleText;
     private Text _selectedUnitLevelText;
     private Transform _selectedUnitResourcesProductionParent;
+    private Transform _selectedUnitAttackParametersParent;
     private Transform _selectedUnitActionButtonsParent;
     private Unit _selectedUnit;
-    private List<ResourceValue> _selectedUnitNextLevelCost;
+    public GameObject uiLabelPrefab;
     public GameObject unitSkillButtonPrefab;
 
     public Transform selectionGroupsParent;
@@ -76,8 +77,8 @@ public class UIManager : MonoBehaviour
         _selectedUnitTitleText = selectedUnitMenuTransform.Find("UnitSpecific/Content/GeneralInfo/Title").GetComponent<Text>();
         _selectedUnitLevelText = selectedUnitMenuTransform.Find("UnitSpecific/Content/GeneralInfo/Level").GetComponent<Text>();
         _selectedUnitResourcesProductionParent = selectedUnitMenuTransform.Find("UnitSpecific/Content/ResourcesProduction");
+        _selectedUnitAttackParametersParent = selectedUnitMenuTransform.Find("UnitSpecific/Content/AttackParameters");
         _selectedUnitActionButtonsParent = selectedUnitMenuTransform.Find("UnitSpecific/SpecificActions");
-
 
         placedBuildingProductionRectTransform.gameObject.SetActive(false);
 
@@ -189,17 +190,20 @@ public class UIManager : MonoBehaviour
         if (_selectedUnit.LevelMaxedOut) return;
         _UpdateSelectedUnitLevelUpInfoPanel();
         ShowInfoPanel(true);
+        _SetSelectedUnitMenu(_selectedUnit, true);
     }
 
     public void UnhoverLevelUpButton()
     {
+        if (_selectedUnit.LevelMaxedOut) return;
         ShowInfoPanel(false);
+        _SetSelectedUnitMenu(_selectedUnit);
     }
 
     public void ClickLevelUpButton()
     {
         _selectedUnit.LevelUp();
-        _SetSelectedUnitMenu(_selectedUnit);
+        _SetSelectedUnitMenu(_selectedUnit, !_selectedUnit.LevelMaxedOut);
         if (_selectedUnit.LevelMaxedOut)
         {
             selectedUnitMenuUpgradeButton.transform.Find("Text").GetComponent<Text>().text = "Maxed out";
@@ -251,7 +255,7 @@ public class UIManager : MonoBehaviour
             _selectedUnit != null &&
             _selectedUnit.Owner == GameManager.instance.gamePlayersParameters.myPlayerId &&
             !_selectedUnit.LevelMaxedOut &&
-            Globals.CanBuy(_selectedUnitNextLevelCost)
+            Globals.CanBuy(_selectedUnit.LevelUpData.cost)
         )
             selectedUnitMenuUpgradeButton.GetComponent<Button>().interactable = true;
 
@@ -280,7 +284,11 @@ public class UIManager : MonoBehaviour
     private void _UpdateSelectedUnitLevelUpInfoPanel()
     {
         int nextLevel = _selectedUnit.Level + 1;
-        SetInfoPanel("Level up", $"Upgrade unit to level {nextLevel}", _selectedUnitNextLevelCost);
+        SetInfoPanel(
+            "Level up",
+            $"Upgrade unit to level {nextLevel}",
+            _selectedUnit.LevelUpData.cost
+        );
     }
 
     private void _SetResourceText(InGameResource resource, int value)
@@ -446,16 +454,17 @@ public class UIManager : MonoBehaviour
             t.text = count.ToString();
     }
 
-    private void _SetSelectedUnitMenu(Unit unit)
+    private void _SetSelectedUnitMenu(Unit unit, bool showUpgrade = false)
     {
         _selectedUnit = unit;
-        _selectedUnitNextLevelCost = _selectedUnit.GetLevelUpCost();
 
         bool unitIsMine = unit.Owner == GameManager.instance.gamePlayersParameters.myPlayerId;
 
         // update texts
         _selectedUnitTitleText.text = unit.Data.unitName;
         _selectedUnitLevelText.text = $"Level {unit.Level}";
+
+        // RESOURCE PRODUCTION --------------------------------------------
         // clear resource production
         foreach (Transform child in _selectedUnitResourcesProductionParent)
             Destroy(child.gameObject);
@@ -467,11 +476,36 @@ public class UIManager : MonoBehaviour
             {
                 g = Instantiate(gameResourceCostPrefab);
                 t = g.transform;
-                t.Find("Text").GetComponent<Text>().text = $"+{resource.Value}";
+                t.Find("Text").GetComponent<Text>().text = showUpgrade
+                    ? $"<color=#00ff00>+{_selectedUnit.LevelUpData.newProduction[resource.Key]}</color>"
+                    : $"+{resource.Value}";
                 t.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Textures/GameResources/{resource.Key}");
-                t.SetParent(_selectedUnitResourcesProductionParent);
+                t.SetParent(_selectedUnitResourcesProductionParent, false);
             }
         }
+
+        // ATTACK PARAMETERS ----------------------------------------------
+        // clear attack parameters
+        foreach (Transform child in _selectedUnitAttackParametersParent)
+            Destroy(child.gameObject);
+        // reinstantiate new ones (if I own the unit)
+        if (unitIsMine)
+        {
+            GameObject g;
+            g = Instantiate(uiLabelPrefab);
+            g.GetComponent<Text>().text = showUpgrade
+                    ? $"Damage: <color=#00ff00>{_selectedUnit.LevelUpData.newAttackDamage}</color>"
+                    : $"Damage: {unit.AttackDamage}";
+            g.transform.SetParent(_selectedUnitAttackParametersParent, false);
+
+            g = Instantiate(uiLabelPrefab);
+            g.GetComponent<Text>().text = showUpgrade
+                    ? $"Range: <color=#00ff00>{(int) _selectedUnit.LevelUpData.newAttackRange}</color>"
+                    : $"Range: {(int) unit.AttackRange}";
+            g.transform.SetParent(_selectedUnitAttackParametersParent, false);
+        }
+
+        // SKILLS ---------------------------------------------------------
         // clear skills
         foreach (Transform child in _selectedUnitActionButtonsParent)
             Destroy(child.gameObject);
@@ -486,14 +520,14 @@ public class UIManager : MonoBehaviour
                 b = g.GetComponent<Button>();
                 unit.SkillManagers[i].SetButton(b);
                 t.Find("Text").GetComponent<Text>().text = unit.SkillManagers[i].skill.skillName;
-                t.SetParent(_selectedUnitActionButtonsParent);
+                t.SetParent(_selectedUnitActionButtonsParent, false);
                 _AddUnitSkillButtonListener(b, i);
             }
         }
 
         // if unit is mine, check if it can level up
         if (unitIsMine)
-            selectedUnitMenuUpgradeButton.GetComponent<Button>().interactable = Globals.CanBuy(_selectedUnitNextLevelCost);
+            selectedUnitMenuUpgradeButton.GetComponent<Button>().interactable = Globals.CanBuy(_selectedUnit.LevelUpData.cost);
 
         // hide upgrade/destroy buttons if I don't own the building
         selectedUnitMenuUpgradeButton.SetActive(unitIsMine);

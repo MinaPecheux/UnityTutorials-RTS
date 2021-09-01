@@ -18,6 +18,12 @@ public class BuildingPlacer : MonoBehaviour
             GameManager.instance.gamePlayersParameters.myPlayerId,
             GameManager.instance.startPosition
         );
+        //// instantiate our headquarters
+        //SpawnBuilding(
+        //    GameManager.instance.gameGlobalParameters.initialBuilding,
+        //    1 - GameManager.instance.gamePlayersParameters.myPlayerId,
+        //    GameManager.instance.startPosition - Vector3.right * 32f
+        //);
     }
 
     void Update()
