@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,7 @@ public class UIManager : MonoBehaviour
 {
     private BuildingPlacer _buildingPlacer;
 
+    public Color validTextColor;
     public Color invalidTextColor;
 
     [Header("Building")]
@@ -28,8 +30,6 @@ public class UIManager : MonoBehaviour
     public GameObject selectedUnitMenu;
     public GameObject selectedUnitMenuUpgradeButton;
     public GameObject selectedUnitMenuDestroyButton;
-    private RectTransform _selectedUnitContentRectTransform;
-    private RectTransform _selectedUnitButtonsRectTransform;
     private Text _selectedUnitTitleText;
     private Text _selectedUnitLevelText;
     private Transform _selectedUnitResourcesProductionParent;
@@ -73,12 +73,11 @@ public class UIManager : MonoBehaviour
         _infoPanelResourcesCostParent = infoPanelTransform.Find("Content/ResourcesCost");
 
         Transform selectedUnitMenuTransform = selectedUnitMenu.transform;
-        _selectedUnitContentRectTransform = selectedUnitMenuTransform.Find("Content").GetComponent<RectTransform>();
-        _selectedUnitButtonsRectTransform = selectedUnitMenuTransform.Find("Buttons").GetComponent<RectTransform>();
-        _selectedUnitTitleText = selectedUnitMenuTransform.Find("Content/Title").GetComponent<Text>();
-        _selectedUnitLevelText = selectedUnitMenuTransform.Find("Content/Level").GetComponent<Text>();
-        _selectedUnitResourcesProductionParent = selectedUnitMenuTransform.Find("Content/ResourcesProduction");
-        _selectedUnitActionButtonsParent = selectedUnitMenuTransform.Find("Buttons/SpecificActions");
+        _selectedUnitTitleText = selectedUnitMenuTransform.Find("UnitSpecific/Content/GeneralInfo/Title").GetComponent<Text>();
+        _selectedUnitLevelText = selectedUnitMenuTransform.Find("UnitSpecific/Content/GeneralInfo/Level").GetComponent<Text>();
+        _selectedUnitResourcesProductionParent = selectedUnitMenuTransform.Find("UnitSpecific/Content/ResourcesProduction");
+        _selectedUnitActionButtonsParent = selectedUnitMenuTransform.Find("UnitSpecific/SpecificActions");
+
 
         placedBuildingProductionRectTransform.gameObject.SetActive(false);
 
@@ -102,7 +101,7 @@ public class UIManager : MonoBehaviour
             _resourceTexts[pair.Key] = display.transform.Find("Text").GetComponent<Text>();
             display.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Textures/GameResources/{pair.Key}");
             _SetResourceText(pair.Key, pair.Value.Amount);
-            display.transform.SetParent(resourcesUIParent);
+            display.transform.SetParent(resourcesUIParent, false);
         }
 
         // create buttons for each building type
@@ -124,7 +123,7 @@ public class UIManager : MonoBehaviour
             }
             Button b = button.GetComponent<Button>();
             _AddBuildingButtonListener(b, i);
-            button.transform.SetParent(buildingMenu);
+            button.transform.SetParent(buildingMenu, false);
             _buildingButtons[data.code] = b;
             if (!Globals.BUILDING_DATA[i].CanBuy())
             {
@@ -273,7 +272,7 @@ public class UIManager : MonoBehaviour
                 if (Globals.GAME_RESOURCES[resourceCode].Amount < resourceAmount)
                     txt.color = invalidTextColor;
                 else
-                    txt.color = Color.white;
+                    txt.color = validTextColor;
             }
         }
     }
@@ -316,7 +315,7 @@ public class UIManager : MonoBehaviour
             t = g.transform;
             t.Find("Text").GetComponent<Text>().text = $"+{pair.Value}";
             t.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Textures/GameResources/{pair.Key}");
-            t.SetParent(placedBuildingProductionRectTransform.transform);
+            t.SetParent(placedBuildingProductionRectTransform.transform, false);
         }
 
         // resize container to fit the right number of lines
@@ -324,7 +323,7 @@ public class UIManager : MonoBehaviour
 
         // place container top-right of the "phantom" building
         placedBuildingProductionRectTransform.anchoredPosition =
-            (Vector2) Camera.main.WorldToScreenPoint(pos)
+            (Vector2) Camera.main.WorldToScreenPoint(pos) / GameManager.instance.canvasScaleFactor
             + Vector2.right * 40f
             + Vector2.up * 10f;
     }
@@ -401,7 +400,7 @@ public class UIManager : MonoBehaviour
                 // color
                 if (Globals.GAME_RESOURCES[resource.code].Amount < resource.amount)
                     t.Find("Text").GetComponent<Text>().color = invalidTextColor;
-                t.SetParent(_infoPanelResourcesCostParent);
+                t.SetParent(_infoPanelResourcesCostParent, false);
             }
         }
     }
@@ -430,7 +429,7 @@ public class UIManager : MonoBehaviour
             Transform t = g.transform;
             t.Find("Count").GetComponent<Text>().text = "1";
             t.Find("Name").GetComponent<Text>().text = unit.Data.unitName;
-            t.SetParent(selectedUnitsListParent);
+            t.SetParent(selectedUnitsListParent, false);
         }
     }
 
@@ -454,11 +453,6 @@ public class UIManager : MonoBehaviour
 
         bool unitIsMine = unit.Owner == GameManager.instance.gamePlayersParameters.myPlayerId;
 
-        // adapt content panel heights to match info to display
-        int contentHeight = unitIsMine ? 60 + unit.Production.Count * 16 : 60;
-        _selectedUnitContentRectTransform.sizeDelta = new Vector2(64, contentHeight);
-        _selectedUnitButtonsRectTransform.anchoredPosition = new Vector2(0, -contentHeight - 20);
-        _selectedUnitButtonsRectTransform.sizeDelta = new Vector2(70, Screen.height - contentHeight - 20);
         // update texts
         _selectedUnitTitleText.text = unit.Data.unitName;
         _selectedUnitLevelText.text = $"Level {unit.Level}";
@@ -525,7 +519,7 @@ public class UIManager : MonoBehaviour
             n = parameters.GetParametersName();
             g.transform.Find("Text").GetComponent<Text>().text = n;
             _AddGameSettingsPanelMenuListener(g.GetComponent<Button>(), n);
-            g.transform.SetParent(gameSettingsMenusParent);
+            g.transform.SetParent(gameSettingsMenusParent, false);
             availableMenus.Add(n);
         }
 
@@ -590,14 +584,14 @@ public class UIManager : MonoBehaviour
                     });
                 }
             }
-            gWrapper.transform.SetParent(gameSettingsContentParent);
+            gWrapper.transform.SetParent(gameSettingsContentParent, false);
             rtWrapper = gWrapper.GetComponent<RectTransform>();
             rtWrapper.anchoredPosition = new Vector2(1f, -i * fieldHeight);
             rtWrapper.sizeDelta = new Vector2(contentWidth, fieldHeight);
 
             if (gEditor != null)
             {
-                gEditor.transform.SetParent(gWrapper.transform);
+                gEditor.transform.SetParent(gWrapper.transform, false);
                 rtEditor = gEditor.GetComponent<RectTransform>();
                 rtEditor.anchoredPosition = new Vector2((parameterNameWidth + 16f), 0f);
                 rtEditor.sizeDelta = new Vector2(rtWrapper.sizeDelta.x - (parameterNameWidth + 16f), fieldHeight);

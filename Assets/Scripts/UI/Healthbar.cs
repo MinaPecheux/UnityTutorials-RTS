@@ -40,7 +40,7 @@ public class Healthbar : MonoBehaviour
     public void SetPosition()
     {
         if (!_target) return;
-        _pos = Camera.main.WorldToScreenPoint(_target.position);
+        _pos = Camera.main.WorldToScreenPoint(_target.position) / GameManager.instance.canvasScaleFactor;
         _pos.y += _yOffset;
         rectTransform.anchoredPosition = _pos;
         _lastCameraPosition = _camera.position;

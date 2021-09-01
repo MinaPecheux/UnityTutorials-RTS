@@ -86,7 +86,7 @@ public static class Utils
         // iterate through the vertices to get the equivalent screen projection
         for (int i = 0; i < vertices.Length; i++)
         {
-            Vector3 v = camera.WorldToScreenPoint(vertices[i]);
+            Vector3 v = camera.WorldToScreenPoint(vertices[i]) / GameManager.instance.canvasScaleFactor;
             if (v.x < retVal.xMin)
                 retVal.xMin = v.x;
             if (v.y < retVal.yMin)

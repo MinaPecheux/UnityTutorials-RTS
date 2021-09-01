@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public float canvasScaleFactor;
+
     public GameGlobalParameters gameGlobalParameters;
     public GamePlayersParameters gamePlayersParameters;
     public GameObject fov;
@@ -20,6 +22,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        canvasScaleFactor = GameObject.Find("Canvas").GetComponent<Canvas>().scaleFactor;
+
         DataHandler.LoadGameData();
         GetComponent<DayAndNightCycler>().enabled = gameGlobalParameters.enableDayAndNightCycle;
 

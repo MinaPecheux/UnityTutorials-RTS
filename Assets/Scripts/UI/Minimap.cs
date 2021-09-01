@@ -25,7 +25,7 @@ public class Minimap : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (delta.magnitude > Mathf.Epsilon)
         {
-            Vector2 uiPos = Input.mousePosition;
+            Vector2 uiPos = Input.mousePosition / GameManager.instance.canvasScaleFactor;
             Vector3 realPos = new Vector3(
                 uiPos.x / _uiSize.x * terrainSize.x,
                 0f,
