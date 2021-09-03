@@ -14,6 +14,12 @@ public class FogRendererToggler : MonoBehaviour
 
     private void Awake()
     {
+        // disable if FOV game parameter is inactive
+        if (!GameManager.instance.gameGlobalParameters.enableFOV) {
+            this.enabled = false;
+            return;
+        }
+        
         _camera = GameObject.Find("UnexploredAreasCam").GetComponent<Camera>();
     }
 
