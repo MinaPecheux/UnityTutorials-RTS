@@ -3,8 +3,8 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(PlayerData))]
-public class PlayerDataDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(InputBinding))]
+public class InputBindingDrawer : PropertyDrawer
 {
     // Draw the property inside the given rect
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -14,7 +14,6 @@ public class PlayerDataDrawer : PropertyDrawer
         EditorGUI.BeginProperty(position, label, property);
 
         // Draw label
-        label.text = label.text.Replace("Element", "Player");
         position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
 
         // Don't make child fields be indented
@@ -22,18 +21,24 @@ public class PlayerDataDrawer : PropertyDrawer
         EditorGUI.indentLevel = 0;
 
         // Calculate rects
-        float nameWidth = position.width * 0.7f;
-        float colorWidth = position.width * 0.3f;
-        Rect nameRect = new Rect(position.x, position.y, nameWidth, position.height);
-        Rect colorRect = new Rect(position.x + nameWidth + 5, position.y, colorWidth, position.height);
+        float rowHeight = EditorGUIUtility.singleLineHeight;
+        Rect displayNameRect = new Rect(position.x, position.y, position.width, rowHeight);
+        Rect keyRect = new Rect(position.x, position.y + rowHeight, 50, rowHeight);
+        Rect inputEventRect = new Rect(position.x + 55, position.y + rowHeight, position.width - 55, rowHeight);
 
         // Draw fields - passs GUIContent.none to each so they are drawn without labels
-        EditorGUI.PropertyField(nameRect, property.FindPropertyRelative("name"), GUIContent.none);
-        EditorGUI.PropertyField(colorRect, property.FindPropertyRelative("color"), GUIContent.none);
+        EditorGUI.PropertyField(displayNameRect, property.FindPropertyRelative("displayName"), GUIContent.none);
+        EditorGUI.PropertyField(keyRect, property.FindPropertyRelative("key"), GUIContent.none);
+        EditorGUI.PropertyField(inputEventRect, property.FindPropertyRelative("inputEvent"), GUIContent.none);
 
         // Set indent back to what it was
         EditorGUI.indentLevel = indent;
 
         EditorGUI.EndProperty();
+    }
+
+    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+    {
+        return EditorGUIUtility.singleLineHeight * 2f;
     }
 }

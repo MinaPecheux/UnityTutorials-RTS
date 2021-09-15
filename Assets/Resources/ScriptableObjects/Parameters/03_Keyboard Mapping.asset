@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b94adb5636ad4e7880fac54ffdd7ef8, type: 3}
+  m_Name: 03_Keyboard Mapping
+  m_EditorClassIdentifier: 
+  _fieldsToShowInGame:
+  - bindings
+  bindings:
+  - displayName: Build a house
+    key: h
+    inputEvent: Build:house
+  - displayName: Build a tower
+    key: t
+    inputEvent: Build:tower

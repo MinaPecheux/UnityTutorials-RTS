@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     public GameGlobalParameters gameGlobalParameters;
     public GamePlayersParameters gamePlayersParameters;
+    public GameInputParameters gameInputParameters;
     public GameObject fov;
 
     [HideInInspector]
@@ -19,6 +20,11 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector]
     public float producingRate = 3f; // in seconds
+
+    [HideInInspector]
+    public bool waitingForInput;
+    [HideInInspector]
+    public string pressedKey;
 
     private void Awake()
     {
@@ -40,6 +46,27 @@ public class GameManager : MonoBehaviour
     public void Start()
     {
         instance = this;
+    }
+
+    private void Update()
+    {
+        if (Input.anyKeyDown)
+        {
+            if (waitingForInput)
+            {
+                if (Input.GetMouseButtonDown(0))
+                    pressedKey = "mouse 0";
+                else if (Input.GetMouseButtonDown(1))
+                    pressedKey = "mouse 1";
+                else if (Input.GetMouseButtonDown(2))
+                    pressedKey = "mouse 2";
+                else
+                    pressedKey = Input.inputString;
+                waitingForInput = false;
+            }
+            else
+                gameInputParameters.CheckForInput();
+        }
     }
 
     private void OnEnable()
