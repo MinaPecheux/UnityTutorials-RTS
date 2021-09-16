@@ -68,6 +68,8 @@ You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-pr
 
 <li>Tutorial #27: <a href="https://mina-pecheux.medium.com/making-a-rts-game-27-levelling-up-our-units-2-2-unity-c-33e6959889b6" rel="noopener follow"><strong>Levelling up our units! 2/2</strong></a></li>
 
+<li>Tutorial #27: <a href="https://mina-pecheux.medium.com/making-a-rts-game-28-adding-some-shortcuts-unity-c-c437b635ffca" rel="noopener follow"><strong>Adding some shortcuts</strong></a></li>
+
 </ul>
 
 ## Known issues
