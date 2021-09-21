@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -32,6 +33,8 @@ public class GameManager : MonoBehaviour
 
         DataHandler.LoadGameData();
         GetComponent<DayAndNightCycler>().enabled = gameGlobalParameters.enableDayAndNightCycle;
+
+        Globals.InitializeGameResources(gamePlayersParameters.players.Length);
 
         Globals.NAV_MESH_SURFACE = GameObject.Find("Terrain").GetComponent<NavMeshSurface>();
         Globals.UpdateNavMeshSurface();
@@ -68,6 +71,27 @@ public class GameManager : MonoBehaviour
                 gameInputParameters.CheckForInput();
         }
     }
+
+#if UNITY_EDITOR
+    private void OnGUI()
+    {
+        GUILayout.BeginArea(new Rect(0f, 40f, 100f, 100f));
+
+        int newMyPlayerId = GUILayout.SelectionGrid(
+            gamePlayersParameters.myPlayerId,
+            gamePlayersParameters.players.Select((p, i) => i.ToString()).ToArray(),
+            gamePlayersParameters.players.Length
+        );
+
+        GUILayout.EndArea();
+
+        if (newMyPlayerId != gamePlayersParameters.myPlayerId)
+        {
+            gamePlayersParameters.myPlayerId = newMyPlayerId;
+            EventManager.TriggerEvent("SetPlayer", newMyPlayerId);
+        }
+    }
+#endif
 
     private void OnEnable()
     {

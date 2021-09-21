@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     private BuildingPlacer _buildingPlacer;
+    private int _myPlayerId;
 
     public Color validTextColor;
     public Color invalidTextColor;
@@ -66,6 +67,9 @@ public class UIManager : MonoBehaviour
     [Header("Main Menu Panel")]
     public GameObject mainMenuPanel;
 
+    [Header("Misc")]
+    public Image playerIndicatorImage;
+
     private void Awake()
     {
         _buildingPlacer = GetComponent<BuildingPlacer>();
@@ -95,18 +99,6 @@ public class UIManager : MonoBehaviour
 
         mainMenuPanel.SetActive(false);
 
-        // create texts for each in-game resource (gold, wood, stone...)
-        _resourceTexts = new Dictionary<InGameResource, Text>();
-        foreach (KeyValuePair<InGameResource, GameResource> pair in Globals.GAME_RESOURCES)
-        {
-            GameObject display = Instantiate(gameResourceDisplayPrefab);
-            display.name = pair.Key.ToString();
-            _resourceTexts[pair.Key] = display.transform.Find("Text").GetComponent<Text>();
-            display.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Textures/GameResources/{pair.Key}");
-            _SetResourceText(pair.Key, pair.Value.Amount);
-            display.transform.SetParent(resourcesUIParent, false);
-        }
-
         // create buttons for each building type
         _buildingButtons = new Dictionary<string, Button>();
         for (int i = 0; i < Globals.BUILDING_DATA.Length; i++)
@@ -128,10 +120,6 @@ public class UIManager : MonoBehaviour
             _AddBuildingButtonListener(b, i);
             button.transform.SetParent(buildingMenu, false);
             _buildingButtons[data.code] = b;
-            if (!Globals.BUILDING_DATA[i].CanBuy())
-            {
-                b.interactable = false;
-            }
             button.GetComponent<BuildingButton>().Initialize(Globals.BUILDING_DATA[i]);
         }
 
@@ -140,6 +128,30 @@ public class UIManager : MonoBehaviour
         // hide all selection group buttons
         for (int i = 1; i <= 9; i++)
             ToggleSelectionGroupButton(i, false);
+    }
+
+    private void Start()
+    {
+        _myPlayerId = GameManager.instance.gamePlayersParameters.myPlayerId;
+
+        // set player indicator color to match my player color
+        Color c = GameManager.instance.gamePlayersParameters.players[_myPlayerId].color;
+        c = Utils.LightenColor(c, 0.2f);
+        playerIndicatorImage.color = c;
+
+        // create texts for each in-game resource (gold, wood, stone...)
+        _resourceTexts = new Dictionary<InGameResource, Text>();
+        foreach (KeyValuePair<InGameResource, GameResource> pair in Globals.GAME_RESOURCES[_myPlayerId])
+        {
+            GameObject display = Instantiate(gameResourceDisplayPrefab);
+            display.name = pair.Key.ToString();
+            _resourceTexts[pair.Key] = display.transform.Find("Text").GetComponent<Text>();
+            display.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Textures/GameResources/{pair.Key}");
+            _SetResourceText(pair.Key, pair.Value.Amount);
+            display.transform.SetParent(resourcesUIParent, false);
+        }
+
+        _CheckBuyLimits();
     }
 
     private void OnEnable()
@@ -153,6 +165,7 @@ public class UIManager : MonoBehaviour
         EventManager.AddListener("DeselectUnit", _OnDeselectUnit);
         EventManager.AddListener("PlaceBuildingOn", _OnPlaceBuildingOn);
         EventManager.AddListener("PlaceBuildingOff", _OnPlaceBuildingOff);
+        EventManager.AddListener("SetPlayer", _OnSetPlayer);
     }
 
     private void OnDisable()
@@ -166,6 +179,7 @@ public class UIManager : MonoBehaviour
         EventManager.RemoveListener("DeselectUnit", _OnDeselectUnit);
         EventManager.RemoveListener("PlaceBuildingOn", _OnPlaceBuildingOn);
         EventManager.RemoveListener("PlaceBuildingOff", _OnPlaceBuildingOff);
+        EventManager.RemoveListener("SetPlayer", _OnSetPlayer);
     }
 
     public void ToggleSelectionGroupButton(int groupIndex, bool on)
@@ -275,7 +289,7 @@ public class UIManager : MonoBehaviour
                 );
                 Text txt = resourceDisplay.Find("Text").GetComponent<Text>();
                 int resourceAmount = int.Parse(txt.text);
-                if (Globals.GAME_RESOURCES[resourceCode].Amount < resourceAmount)
+                if (Globals.GAME_RESOURCES[_myPlayerId][resourceCode].Amount < resourceAmount)
                     txt.color = invalidTextColor;
                 else
                     txt.color = validTextColor;
@@ -300,7 +314,7 @@ public class UIManager : MonoBehaviour
 
     private void _OnUpdateResourceTexts()
     {
-        foreach (KeyValuePair<InGameResource, GameResource> pair in Globals.GAME_RESOURCES)
+        foreach (KeyValuePair<InGameResource, GameResource> pair in Globals.GAME_RESOURCES[_myPlayerId])
             _SetResourceText(pair.Key, pair.Value.Amount);
 
         _CheckBuyLimits();
@@ -341,7 +355,7 @@ public class UIManager : MonoBehaviour
     private void _OnCheckBuildingButtons()
     {
         foreach (BuildingData data in Globals.BUILDING_DATA)
-            _buildingButtons[data.code].interactable = data.CanBuy();
+            _buildingButtons[data.code].interactable = data.CanBuy(_myPlayerId);
     }
 
     private void _OnHoverBuildingButton(object data)
@@ -383,6 +397,17 @@ public class UIManager : MonoBehaviour
         placedBuildingProductionRectTransform.gameObject.SetActive(false);
     }
 
+    private void _OnSetPlayer(object data)
+    {
+        int playerId = (int)data;
+        _myPlayerId = playerId;
+        Color c = GameManager.instance.gamePlayersParameters.players[_myPlayerId].color;
+        c = Utils.LightenColor(c, 0.2f);
+        playerIndicatorImage.color = c;
+        _OnUpdateResourceTexts();
+        _CheckBuyLimits();
+    }
+
     public void SetInfoPanel(UnitData data)
     {
         SetInfoPanel(data.unitName, data.description, data.cost);
@@ -405,10 +430,9 @@ public class UIManager : MonoBehaviour
                 t = g.transform;
                 t.Find("Text").GetComponent<Text>().text = resource.amount.ToString();
                 t.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Textures/GameResources/{resource.code}");
-                // check to see if resource requirement is not
-                // currently met - in that case, turn the text into the "invalid"
-                // color
-                if (Globals.GAME_RESOURCES[resource.code].Amount < resource.amount)
+                // check to see if resource requirement is not currently met -
+                // in that case, turn the text into the "invalid" color
+                if (Globals.GAME_RESOURCES[_myPlayerId][resource.code].Amount < resource.amount)
                     t.Find("Text").GetComponent<Text>().color = invalidTextColor;
                 t.SetParent(_infoPanelResourcesCostParent, false);
             }

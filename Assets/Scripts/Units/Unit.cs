@@ -131,22 +131,20 @@ public class Unit
         // for collisions with units
         _transform.GetComponent<BoxCollider>().isTrigger = false;
 
-        if (_owner == GameManager.instance.gamePlayersParameters.myPlayerId)
+        // update game resources: remove the cost of the building
+        // from each game resource
+        foreach (ResourceValue resource in _data.cost)
         {
-            _transform.GetComponent<UnitManager>().EnableFOV(_fieldOfView);
-
-            // update game resources: remove the cost of the building
-            // from each game resource
-            foreach (ResourceValue resource in _data.cost)
-            {
-                Globals.GAME_RESOURCES[resource.code].AddAmount(-resource.amount);
-            }
+            Globals.GAME_RESOURCES[_owner][resource.code].AddAmount(-resource.amount);
         }
+
+        if (_owner == GameManager.instance.gamePlayersParameters.myPlayerId)
+            _transform.GetComponent<UnitManager>().EnableFOV(_fieldOfView);
     }
 
     public bool CanBuy()
     {
-        return _data.CanBuy();
+        return _data.CanBuy(_owner);
     }
 
     public void LevelUp()
@@ -169,7 +167,7 @@ public class Unit
         // consume resources
         foreach (ResourceValue resource in _levelUpData.cost)
         {
-            Globals.GAME_RESOURCES[resource.code].AddAmount(-resource.amount);
+            Globals.GAME_RESOURCES[_owner][resource.code].AddAmount(-resource.amount);
         }
         EventManager.TriggerEvent("UpdateResourceTexts");
 
@@ -186,7 +184,9 @@ public class Unit
     public void ProduceResources()
     {
         foreach (KeyValuePair<InGameResource, int> resource in _production)
-            Globals.GAME_RESOURCES[resource.Key].AddAmount(resource.Value);
+        {
+            Globals.GAME_RESOURCES[_owner][resource.Key].AddAmount(resource.Value);
+        }
     }
 
     public void TriggerSkill(int index, GameObject target = null)

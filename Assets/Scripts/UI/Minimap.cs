@@ -4,14 +4,17 @@ using UnityEngine;
 [RequireComponent(typeof(RectTransform))]
 public class Minimap : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
+    public RectTransform minimapContainerRectTransform;
     public Vector2 terrainSize;
     private Vector2 _uiSize;
 
+    private Vector2 _offset;
     private Vector2 _lastPointerPosition;
     private bool _dragging = false;
 
     private void Start()
     {
+        _offset = minimapContainerRectTransform.anchoredPosition;
         _uiSize = GetComponent<RectTransform>().sizeDelta;
         _lastPointerPosition = Input.mousePosition;
     }
@@ -25,7 +28,7 @@ public class Minimap : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (delta.magnitude > Mathf.Epsilon)
         {
-            Vector2 uiPos = Input.mousePosition / GameManager.instance.canvasScaleFactor;
+            Vector2 uiPos = (new Vector2(Input.mousePosition.x, Input.mousePosition.y) - _offset) / GameManager.instance.canvasScaleFactor;
             Vector3 realPos = new Vector3(
                 uiPos.x / _uiSize.x * terrainSize.x,
                 0f,

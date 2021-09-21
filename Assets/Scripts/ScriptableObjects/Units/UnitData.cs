@@ -24,8 +24,8 @@ public class UnitData : ScriptableObject
     [Header("General Sounds")]
     public AudioClip onSelectSound;
 
-    public bool CanBuy()
+    public bool CanBuy(int owner)
     {
-        return Globals.CanBuy(cost);
+        return Globals.CanBuy(owner, cost);
     }
 }
