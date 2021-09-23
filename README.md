@@ -70,6 +70,8 @@ You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-pr
 
 <li>Tutorial #28: <a href="https://mina-pecheux.medium.com/making-a-rts-game-28-adding-some-shortcuts-unity-c-c437b635ffca" rel="noopener follow"><strong>Adding some shortcuts</strong></a></li>
 
+<li>Tutorial #29: <a href="https://mina-pecheux.medium.com/making-a-rts-game-29-improving-our-players-system-unity-c-328dfc9b818" rel="noopener follow"><strong>Improving our players system</strong></a></li>
+
 </ul>
 
 ## Known issues
