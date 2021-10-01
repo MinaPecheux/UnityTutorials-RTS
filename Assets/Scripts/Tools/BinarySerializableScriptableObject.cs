@@ -14,6 +14,28 @@ public class BinarySerializableScriptableObject : ScriptableObject
     private static string _scriptableObjectsDataDirectory = "ScriptableObjects";
 #endif
 
+    [SerializeField]
+    protected List<string> _fieldsToSerialize;
+    public List<string> FieldsToSeralize => _fieldsToSerialize;
+
+    public bool SerializesField(string fieldName)
+    {
+        if (_fieldsToSerialize == null)
+            return false;
+        return _fieldsToSerialize.Contains(fieldName);
+    }
+
+    public void ToggleSerializeField(string fieldName)
+    {
+        if (_fieldsToSerialize == null)
+            _fieldsToSerialize = new List<string>();
+
+        if (SerializesField(fieldName))
+            _fieldsToSerialize.Remove(fieldName);
+        else
+            _fieldsToSerialize.Add(fieldName);
+    }
+
     public void SaveToFile()
     {
         string dirPath = Path.Combine(
@@ -28,7 +50,7 @@ public class BinarySerializableScriptableObject : ScriptableObject
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream stream = new FileStream(filePath, FileMode.Create);
 
-        BinarySerializableData data = new BinarySerializableData(this);
+        BinarySerializableData data = new BinarySerializableData(this, _fieldsToSerialize);
         try
         {
             formatter.Serialize(stream, data.properties);

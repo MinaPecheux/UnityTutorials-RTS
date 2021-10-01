@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+﻿using System.Runtime.Serialization;
+using UnityEngine;
 
 [System.Serializable]
-public struct PlayerData
+public class PlayerData : BinarySerializable
 {
     public string name;
     public Color color;
+
+    protected PlayerData(SerializationInfo info, StreamingContext context)
+        : base(info, context) { }
 }
 
 [CreateAssetMenu(fileName = "Players Parameters", menuName = "Scriptable Objects/Game Players Parameters", order = 12)]

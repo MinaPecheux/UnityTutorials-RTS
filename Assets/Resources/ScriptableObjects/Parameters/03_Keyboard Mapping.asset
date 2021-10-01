@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b94adb5636ad4e7880fac54ffdd7ef8, type: 3}
   m_Name: 03_Keyboard Mapping
   m_EditorClassIdentifier: 
+  _fieldsToSerialize:
+  - bindings
   _fieldsToShowInGame:
   - bindings
   bindings:

@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f4a5d1a0bdf4ed7a3fd77b8ba10973, type: 3}
   m_Name: 01_Players Parameters
   m_EditorClassIdentifier: 
+  _fieldsToSerialize:
+  - players
+  - myPlayerId
   _fieldsToShowInGame: []
   players:
-  - name: The Enemy
-    color: {r: 0, g: 0.1465373, b: 1, a: 1}
+  - name: Enemy
+    color: {r: 0, g: 0.23097992, b: 1, a: 1}
   - name: Mina
-    color: {r: 1, g: 0, b: 0.008962631, a: 1}
+    color: {r: 1, g: 0, b: 0.038758278, a: 1}
   myPlayerId: 1
