@@ -7714,6 +7714,7 @@ GameObject:
   - component: {fileID: 1464451463}
   - component: {fileID: 1464451464}
   - component: {fileID: 1464451468}
+  - component: {fileID: 1464451469}
   - component: {fileID: 1464451466}
   - component: {fileID: 1464451467}
   m_Layer: 0
@@ -8074,6 +8075,18 @@ MonoBehaviour:
   audioSource: {fileID: 1464451467}
   soundParameters: {fileID: 11400000, guid: 5ad80013b15374ddf9beb1caf495c3d1, type: 2}
   masterMixer: {fileID: 24100000, guid: f6952c5e2db5c4627acbfed417008fa3, type: 2}
+--- !u!114 &1464451469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1464451458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca525d3ed639b483daea446a3647e1f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1466245624
 GameObject:
   m_ObjectHideFlags: 0

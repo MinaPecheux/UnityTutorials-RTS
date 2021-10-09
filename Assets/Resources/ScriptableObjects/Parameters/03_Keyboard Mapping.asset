@@ -23,3 +23,6 @@ MonoBehaviour:
   - displayName: Build a tower
     key: t
     inputEvent: Build:tower
+  - displayName: Show the debug console
+    key: '`'
+    inputEvent: ShowDebugConsole

@@ -21,8 +21,15 @@ public class GameInputParameters : GameParameters
         {
             if (Input.GetKey(i.key))
             {
-                string[] e = i.inputEvent.Split(':');
-                EventManager.TriggerEvent("<Input>" + e[0], e[1]);
+                if (i.inputEvent.Contains(":"))
+                {
+                    string[] e = i.inputEvent.Split(':');
+                    EventManager.TriggerEvent("<Input>" + e[0], e[1]);
+                }
+                else
+                {
+                    EventManager.TriggerEvent("<Input>" + i.inputEvent);
+                }
                 break;
             }
         }
