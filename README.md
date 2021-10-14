@@ -76,6 +76,8 @@ You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-pr
 
 <li>Tutorial #31: <a href="https://mina-pecheux.medium.com/making-a-rts-game-31-refactoring-our-save-load-system-with-binary-serialisation-2-2-unity-c-eb2c807c0fe6" rel="noopener follow"><strong>Refactoring our save/load system with binary serialisation 2/2</strong></a></li>
 
+<li>Tutorial #32: <a href="https://mina-pecheux.medium.com/making-a-rts-game-32-creating-a-debug-console-unity-c-841f0fb97dda" rel="noopener follow"><strong>Creating a debug console</strong></a></li>
+
 </ul>
 
 ## Known issues
