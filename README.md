@@ -78,6 +78,8 @@ You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-pr
 
 <li>Tutorial #32: <a href="https://mina-pecheux.medium.com/making-a-rts-game-32-creating-a-debug-console-unity-c-841f0fb97dda" rel="noopener follow"><strong>Creating a debug console</strong></a></li>
 
+<li>Tutorial #33: <a href="https://mina-pecheux.medium.com/making-a-rts-game-33-using-unitys-terrain-tools-unity-c-2ed360459536" rel="noopener follow"><strong>Using Unity’s terrain tools</strong></a></li>
+
 </ul>
 
 ## Known issues
