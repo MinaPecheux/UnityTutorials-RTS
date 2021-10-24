@@ -45,8 +45,11 @@ public class UIManager : MonoBehaviour
     public Transform selectedUnitsListParent;
     public GameObject selectedUnitDisplayPrefab;
 
-    private Dictionary<string, Button> _buildingButtons;
-    private Dictionary<InGameResource, Text> _resourceTexts;
+    [Header("Units Selection")]
+    public Transform unitFormationTypesParent;
+    private Image[] _unitFormationTypeImages;
+    private Color _unitFormationTypeActiveColor = Color.white;
+    private Color _unitFormationTypeInactiveColor = Color.gray;
 
     [Header("Placed Building Production")]
     public RectTransform placedBuildingProductionRectTransform;
@@ -69,6 +72,8 @@ public class UIManager : MonoBehaviour
 
     [Header("Misc")]
     public Image playerIndicatorImage;
+    private Dictionary<string, Button> _buildingButtons;
+    private Dictionary<InGameResource, Text> _resourceTexts;
 
     private void Awake()
     {
@@ -85,6 +90,14 @@ public class UIManager : MonoBehaviour
         _selectedUnitResourcesProductionParent = selectedUnitMenuTransform.Find("UnitSpecific/Content/ResourcesProduction");
         _selectedUnitAttackParametersParent = selectedUnitMenuTransform.Find("UnitSpecific/Content/AttackParameters");
         _selectedUnitActionButtonsParent = selectedUnitMenuTransform.Find("UnitSpecific/SpecificActions");
+
+        _unitFormationTypeImages = new Image[] {
+            unitFormationTypesParent.Find("FormationNone").GetComponent<Image>(),
+            unitFormationTypesParent.Find("FormationLine").GetComponent<Image>(),
+            unitFormationTypesParent.Find("FormationGrid").GetComponent<Image>(),
+            unitFormationTypesParent.Find("FormationXCross").GetComponent<Image>()
+        };
+        _OnUpdateUnitFormationType();
 
         placedBuildingProductionRectTransform.gameObject.SetActive(false);
 
@@ -166,6 +179,7 @@ public class UIManager : MonoBehaviour
         EventManager.AddListener("PlaceBuildingOn", _OnPlaceBuildingOn);
         EventManager.AddListener("PlaceBuildingOff", _OnPlaceBuildingOff);
         EventManager.AddListener("SetPlayer", _OnSetPlayer);
+        EventManager.AddListener("UpdateUnitFormationType", _OnUpdateUnitFormationType);
     }
 
     private void OnDisable()
@@ -180,6 +194,7 @@ public class UIManager : MonoBehaviour
         EventManager.RemoveListener("PlaceBuildingOn", _OnPlaceBuildingOn);
         EventManager.RemoveListener("PlaceBuildingOff", _OnPlaceBuildingOff);
         EventManager.RemoveListener("SetPlayer", _OnSetPlayer);
+        EventManager.RemoveListener("UpdateUnitFormationType", _OnUpdateUnitFormationType);
     }
 
     public void ToggleSelectionGroupButton(int groupIndex, bool on)
@@ -231,6 +246,12 @@ public class UIManager : MonoBehaviour
             _UpdateSelectedUnitLevelUpInfoPanel();
             _CheckBuyLimits();
         }
+    }
+
+    public void SetUnitFormationType(int type)
+    {
+        Globals.UNIT_FORMATION_TYPE = (UnitFormationType)type;
+        _OnUpdateUnitFormationType();
     }
 
     public void LoadGame()
@@ -406,6 +427,17 @@ public class UIManager : MonoBehaviour
         playerIndicatorImage.color = c;
         _OnUpdateResourceTexts();
         _CheckBuyLimits();
+    }
+
+    private void _OnUpdateUnitFormationType()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if ((int)Globals.UNIT_FORMATION_TYPE == i)
+                _unitFormationTypeImages[i].color = _unitFormationTypeActiveColor;
+            else
+                _unitFormationTypeImages[i].color = _unitFormationTypeInactiveColor;
+        }
     }
 
     public void SetInfoPanel(UnitData data)

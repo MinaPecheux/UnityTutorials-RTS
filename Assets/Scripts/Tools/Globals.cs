@@ -9,6 +9,14 @@ public enum InGameResource
     Stone
 }
 
+public enum UnitFormationType
+{
+    None,
+    Line,
+    Grid,
+    XCross
+}
+
 public static class Globals
 {
     public static int TERRAIN_LAYER_MASK = 1 << 8;
@@ -27,8 +35,11 @@ public static class Globals
     };
 
     public static BuildingData[] BUILDING_DATA;
+    public static Dictionary<string, CharacterData> CHARACTER_DATA = new Dictionary<string, CharacterData>();
     public static Dictionary<string, SkillData> SKILL_DATA = new Dictionary<string, SkillData>();
     public static List<UnitManager> SELECTED_UNITS = new List<UnitManager>();
+
+    public static UnitFormationType UNIT_FORMATION_TYPE = UnitFormationType.None;
 
     public static NavMeshSurface NAV_MESH_SURFACE;
 

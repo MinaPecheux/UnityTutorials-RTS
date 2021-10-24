@@ -173,4 +173,40 @@ public static class Utils
             Mathf.Clamp01(color.a + factor)
         );
     }
+
+    public static List<Vector2> SampleOffsets(int amount, float radius, Vector2 sampleRegionSize)
+    {
+        List<Vector2> offsets = new List<Vector2>();
+        List<Vector2> samples = PoissonDiscSampling.GeneratePoints(radius, sampleRegionSize);
+        float hw = sampleRegionSize.x / 2f;
+        float hh = sampleRegionSize.y / 2f;
+        for (int i = 0; i < amount && i < samples.Count; i++)
+            offsets.Add(new Vector2(samples[i].x - hw, samples[i].y - hh));
+        return offsets;
+    }
+
+    public static List<Vector3> SamplePositions(int amount, float radius, Vector2 sampleRegionSize)
+    {
+        return SamplePositions(amount, radius, sampleRegionSize, Vector3.zero);
+    }
+    public static List<Vector3> SamplePositions(int amount, float radius, Vector2 sampleRegionSize, Vector3 referencePoint)
+    {
+        List<Vector2> offsets = SampleOffsets(amount, radius, sampleRegionSize);
+        return OffsetsToPositions(offsets, referencePoint);
+    }
+
+    public static List<Vector3> OffsetsToPositions(List<Vector2> offsets, Vector3 referencePoint)
+    {
+        List<Vector3> positions = new List<Vector3>();
+        RaycastHit hit;
+        for (int i = 0; i < offsets.Count; i++)
+        {
+            // place unit high above the ground and raycast down
+            // to project it back on the terrain
+            Vector3 initialPos = referencePoint + new Vector3(offsets[i].x, 1000, offsets[i].y);
+            if (Physics.Raycast(initialPos, Vector3.down, out hit, 2000f, Globals.TERRAIN_LAYER_MASK))
+                positions.Add(hit.point);
+        }
+        return positions;
+    }
 }
