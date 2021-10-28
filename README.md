@@ -80,6 +80,8 @@ You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-pr
 
 <li>Tutorial #33: <a href="https://mina-pecheux.medium.com/making-a-rts-game-33-using-unitys-terrain-tools-unity-c-2ed360459536" rel="noopener follow"><strong>Using Unity’s terrain tools</strong></a></li>
 
+<li>Tutorial #34: <a href="https://mina-pecheux.medium.com/making-a-rts-game-34-improving-unit-navigation-adding-unit-formations-1-2-unity-c-234c1fcd8" rel="noopener follow"><strong>Improving unit navigation & adding unit formations 1/2</strong></a></li>
+
 </ul>
 
 ## Known issues
