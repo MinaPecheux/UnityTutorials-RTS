@@ -124,12 +124,14 @@ public class TaskTrySetDestinationOrTarget : Node
         return positions;
     }
 
-    public void SetFormationTargetOffset(List<Vector2> targetOffsets)
+    public void SetFormationTargetOffset(List<Vector2> targetOffsets, Transform targetTransform = null)
     {
         int i = _manager.SelectIndex;
         if (i < 0) return; // (unit is not selected anymore)
         ClearData("destinationPoint");
         Parent.Parent.SetData("currentTargetOffset", targetOffsets[i]);
+        if (targetTransform != null)
+            Parent.Parent.SetData("currentTarget", targetTransform);
     }
 
     public void SetFormationTargetPosition(List<Vector3> targetPositions)

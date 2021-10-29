@@ -21,7 +21,7 @@ public class BuildingBT : Tree
         if (manager.Unit.Data.attackDamage > 0)
         {
             Sequence attackSequence = new Sequence(new List<Node> {
-                new CheckEnemyInAttackRange(manager),
+                new CheckUnitInRange(manager, true),
                 new Timer(
                     manager.Unit.Data.attackRate,
                     new List<Node>()

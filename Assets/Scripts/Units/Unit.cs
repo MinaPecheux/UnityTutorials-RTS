@@ -137,6 +137,7 @@ public class Unit
         {
             Globals.GAME_RESOURCES[_owner][resource.code].AddAmount(-resource.amount);
         }
+        EventManager.TriggerEvent("UpdateResourceTexts");
 
         if (_owner == GameManager.instance.gamePlayersParameters.myPlayerId)
             _transform.GetComponent<UnitManager>().EnableFOV(_fieldOfView);
@@ -236,4 +237,6 @@ public class Unit
     public int Owner { get => _owner; }
     public int AttackDamage { get => _attackDamage; }
     public float AttackRange { get => _attackRange; }
+
+    public virtual bool IsAlive { get => true; }
 }

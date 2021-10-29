@@ -86,6 +86,14 @@ public class DebugConsole : MonoBehaviour
             EventManager.TriggerEvent("UpdateUnitFormationType");
         });
 
+        new DebugCommand<float>("set_construction_ratio", "Sets the selected unit construction ratio.", "set_construction_ratio <ratio>", (x) =>
+        {
+            if (Globals.SELECTED_UNITS.Count == 0) return;
+            Building b = (Building) Globals.SELECTED_UNITS[0].GetComponent<BuildingManager>().Unit;
+            if (b == null) return;
+            b.SetConstructionRatio(x);
+        });
+
         _displayType = DisplayType.None;
     }
 
@@ -228,6 +236,17 @@ public class DebugConsole : MonoBehaviour
                     else
                     {
                         Debug.LogError($"'{command.Id}' requires an int parameter!");
+                        return;
+                    }
+                }
+                if (command is DebugCommand<float> dcFloat)
+                {
+                    float f;
+                    if (float.TryParse(inputParts[1], out f))
+                        dcFloat.Invoke(f);
+                    else
+                    {
+                        Debug.LogError($"'{command.Id}' requires a float parameter!");
                         return;
                     }
                 }

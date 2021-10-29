@@ -41,7 +41,7 @@ public class TaskFollow : Node
     private Vector3 _GetTargetPosition(Transform target, Vector2 offset)
     {
         Vector3 s = target.Find("Mesh").localScale;
-        float targetSize = Mathf.Max(s.x, s.z);
+        float targetSize = Mathf.Max(s.x, s.z) * 1.2f;
 
         Vector3 p = _manager.transform.position;
         Vector3 t = new Vector3(target.position.x + offset.x, target.position.y, target.position.z + offset.y) - p;

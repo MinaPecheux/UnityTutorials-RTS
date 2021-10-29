@@ -15,26 +15,41 @@ public class Building : Unit
     private BuildingPlacement _placement;
     private List<Material> _materials;
 
+    private MeshFilter _rendererMesh;
+    private Mesh[] _constructionMeshes;
+    private float _constructionRatio;
+    private BuildingBT _bt;
+
+    private bool _isAlive;
+
     public Building(BuildingData data, int owner) : this(data, owner, new List<ResourceValue>() { }) { }
     public Building(BuildingData data, int owner, List<ResourceValue> production) :
         base(data, owner, production)
     {
         _buildingManager = _transform.GetComponent<BuildingManager>();
-        _materials = new List<Material>();
-        foreach (Material material in _transform.Find("Mesh").GetComponent<Renderer>().materials)
-        {
-            _materials.Add(new Material(material));
-        }
+        _bt = _transform.GetComponent<BuildingBT>();
+        _bt.enabled = false;
 
-        _placement = BuildingPlacement.VALID;
+        _constructionRatio = 0f;
+        _isAlive = false;
+
+        Transform mesh = _transform.Find("Mesh");
+
+        _materials = new List<Material>();
+        foreach (Material material in mesh.GetComponent<Renderer>().materials)
+            _materials.Add(new Material(material));
         SetMaterials();
+        _placement = BuildingPlacement.VALID;
+
+        _rendererMesh = mesh.GetComponent<MeshFilter>();
+        _constructionMeshes = data.constructionMeshes;
 
         if (data.ambientSound != null)
         {
             if (_buildingManager.ambientSource != null)
             {
                 _buildingManager.ambientSource.clip = data.ambientSound;
-                _buildingManager.ambientSource.Play();
+                _buildingManager.ambientSource.enabled = false;
             }
             else
                 Debug.LogWarning($"'{data.unitName}' prefab is missing an ambient audio source!");
@@ -73,10 +88,24 @@ public class Building : Unit
         _placement = BuildingPlacement.FIXED;
         // change building materials
         SetMaterials();
-        // activate particles if there are any
-        Transform particlesChild = _transform.Find("Particles");
-        if (particlesChild)
-            particlesChild.gameObject.SetActive(true);
+        // change building construction ratio
+        SetConstructionRatio(0);
+    }
+
+    public void SetConstructionRatio(float constructionRatio)
+    {
+        if (_isAlive) return;
+
+        _constructionRatio = constructionRatio;
+
+        int meshIndex = Mathf.Max(
+            0,
+            (int)(_constructionMeshes.Length * constructionRatio) - 1);
+        Mesh m = _constructionMeshes[meshIndex];
+        _rendererMesh.sharedMesh = m;
+
+        if (_constructionRatio >= 1)
+            _SetAlive();
     }
 
     public void CheckValidPlacement()
@@ -87,8 +116,21 @@ public class Building : Unit
             : BuildingPlacement.INVALID;
     }
 
+    private void _SetAlive()
+    {
+        _isAlive = true;
+        _bt.enabled = true;
+        ComputeProduction();
+        _buildingManager.ambientSource.enabled = true;
+        _buildingManager.ambientSource.Play();
+        EventManager.TriggerEvent("PlaySoundByName", "onBuildingPlacedSound");
+        Globals.UpdateNavMeshSurface();
+    }
+
+    public float ConstructionRatio { get => _constructionRatio; }
     public bool HasValidPlacement { get => _placement == BuildingPlacement.VALID; }
     public bool IsFixed { get => _placement == BuildingPlacement.FIXED; }
+    public override bool IsAlive { get => _isAlive; }
     public int DataIndex
     {
         get

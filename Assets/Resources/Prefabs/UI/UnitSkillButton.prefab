@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 3488946347740494117}
   - component: {fileID: 3488946347740494116}
   - component: {fileID: 3488946347740494139}
+  - component: {fileID: 5872694239786190251}
   m_Layer: 5
   m_Name: UnitSkillButton
   m_TagString: Untagged
@@ -197,3 +198,15 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5872694239786190251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3488946347740494137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 166e509b8f1fc4549b789128ddd35f7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

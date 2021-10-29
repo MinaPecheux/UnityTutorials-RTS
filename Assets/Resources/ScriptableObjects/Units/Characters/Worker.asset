@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d3d7baebcf3947ce9b0366a4348bef9, type: 3}
+  m_Name: Worker
+  m_EditorClassIdentifier: 
+  code: worker
+  unitName: Worker
+  description: A base unit to build your town!
+  healthpoints: 30
+  prefab: {fileID: 4893885829384556338, guid: 03face13f501747ae8285d6b6580b96f, type: 3}
+  sprite: {fileID: 0}
+  cost:
+  - code: 0
+    amount: 20
+  canProduce: 
+  skills:
+  - {fileID: 11400000, guid: 88601b1dc99164cea803ef051660433f, type: 2}
+  fieldOfView: 18
+  attackRange: 2
+  attackDamage: 2
+  attackRate: 2
+  onSelectSound: {fileID: 0}
+  onMoveValidSound: {fileID: 0}
+  onMoveInvalidSound: {fileID: 0}
+  buildRange: 2
+  buildPower: 1
+  buildRate: 1.2

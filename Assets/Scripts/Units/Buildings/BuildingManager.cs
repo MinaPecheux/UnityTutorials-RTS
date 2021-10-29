@@ -70,6 +70,13 @@ public class BuildingManager : UnitManager
         return invalidCornersCount < 3;
     }
 
+    public bool Build(int buildPower)
+    {
+        _building.SetConstructionRatio(_building.ConstructionRatio + buildPower / 10f);
+        UpdateHealthbar();
+        return _building.IsAlive;
+    }
+
     protected override bool IsActive()
     {
         return _building.IsFixed;
@@ -78,5 +85,18 @@ public class BuildingManager : UnitManager
     protected override bool IsMovable()
     {
         return false;
+    }
+
+    protected override void UpdateHealthbar()
+    {
+        if (!healthbar) return;
+        Transform fill = healthbar.transform.Find("Fill");
+
+        // if in construction: show current construction ratio
+        if (IsActive() && !_building.IsAlive)
+            fill.GetComponent<UnityEngine.UI.Image>().fillAmount = _building.ConstructionRatio;
+        // else show health ratio a usual
+        else
+            fill.GetComponent<UnityEngine.UI.Image>().fillAmount = Unit.HP / (float)Unit.MaxHP;
     }
 }

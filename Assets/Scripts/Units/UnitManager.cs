@@ -20,8 +20,8 @@ public class UnitManager : MonoBehaviour
     public int SelectIndex { get => _selectIndex; }
     private bool _hovered = false;
 
+    protected GameObject healthbar;
     private Transform _canvas;
-    private GameObject _healthbar;
     private GameObject _levelUpVFX;
     private Material _levelUpVFXMaterial;
     private Coroutine _levelUpVFXCoroutine = null;
@@ -83,7 +83,7 @@ public class UnitManager : MonoBehaviour
     public void TakeHit(int attackPoints)
     {
         Unit.HP -= attackPoints;
-        _UpdateHealthbar();
+        UpdateHealthbar();
         if (Unit.HP <= 0) _Die();
     }
 
@@ -131,8 +131,8 @@ public class UnitManager : MonoBehaviour
 
         EventManager.TriggerEvent("DeselectUnit", Unit);
         selectionCircle.SetActive(false);
-        Destroy(_healthbar);
-        _healthbar = null;
+        Destroy(healthbar);
+        healthbar = null;
         _selected = false;
         _selectIndex = -1;
     }
@@ -161,12 +161,12 @@ public class UnitManager : MonoBehaviour
         Globals.SELECTED_UNITS.Add(this);
         EventManager.TriggerEvent("SelectUnit", Unit);
         selectionCircle.SetActive(true);
-        if (_healthbar == null)
+        if (healthbar == null)
         {
-            _healthbar = GameObject.Instantiate(Resources.Load("Prefabs/UI/Healthbar")) as GameObject;
-            _healthbar.transform.SetParent(_canvas);
-            _UpdateHealthbar();
-            Healthbar h = _healthbar.GetComponent<Healthbar>();
+            healthbar = GameObject.Instantiate(Resources.Load("Prefabs/UI/Healthbar")) as GameObject;
+            healthbar.transform.SetParent(_canvas);
+            UpdateHealthbar();
+            Healthbar h = healthbar.GetComponent<Healthbar>();
             Rect boundingBox = Utils.GetBoundingBoxOnScreen(
                 transform.Find("Mesh").GetComponent<Renderer>().bounds,
                 Camera.main
@@ -189,10 +189,10 @@ public class UnitManager : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void _UpdateHealthbar()
+    protected virtual void UpdateHealthbar()
     {
-        if (!_healthbar) return;
-        Transform fill = _healthbar.transform.Find("Fill");
+        if (!healthbar) return;
+        Transform fill = healthbar.transform.Find("Fill");
         fill.GetComponent<UnityEngine.UI.Image>().fillAmount = Unit.HP / (float)Unit.MaxHP;
     }
 

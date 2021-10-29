@@ -2,15 +2,17 @@
 
 using BehaviorTree;
 
-public class CheckEnemyInAttackRange : Node
+public class CheckUnitInRange : Node
 {
     UnitManager _manager;
-    float _attackRange;
+    float _range;
 
-    public CheckEnemyInAttackRange(UnitManager manager) : base()
+    public CheckUnitInRange(UnitManager manager, bool checkAttack) : base()
     {
         _manager = manager;
-        _attackRange = _manager.Unit.AttackRange;
+        _range = checkAttack
+            ? _manager.Unit.AttackRange
+            : ((CharacterData)_manager.Unit.Data).buildRange;
     }
 
     public override NodeState Evaluate()
@@ -34,10 +36,10 @@ public class CheckEnemyInAttackRange : Node
         }
 
         Vector3 s = target.Find("Mesh").localScale;
-        float targetSize = Mathf.Max(s.x, s.z);
+        float targetSize = Mathf.Max(s.x, s.z) * 1.2f;
 
         float d = Vector3.Distance(_manager.transform.position, target.position);
-        bool isInRange = (d - targetSize) <= _attackRange;
+        bool isInRange = (d - targetSize) <= _range;
         _state = isInRange ? NodeState.SUCCESS : NodeState.FAILURE;
         return _state;
     }

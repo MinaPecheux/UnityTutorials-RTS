@@ -25,6 +25,7 @@ MonoBehaviour:
     amount: 120
   canProduce: 000000000100000002000000
   skills:
+  - {fileID: 11400000, guid: ec00e33a40c434f6b97b314d4e96576c, type: 2}
   - {fileID: 11400000, guid: c95be254c31c543539a9005c6196e54c, type: 2}
   fieldOfView: 35
   attackRange: 10
@@ -32,3 +33,7 @@ MonoBehaviour:
   attackRate: 2
   onSelectSound: {fileID: 8300000, guid: 5fcdb8808e727418799af689b1ce0d74, type: 3}
   ambientSound: {fileID: 8300000, guid: c0f50d5293b224b9486abd58973e08af, type: 3}
+  constructionMeshes:
+  - {fileID: -4252228335409972894, guid: 668c78909037a4025b3debb3acdb213e, type: 3}
+  - {fileID: -7756893256904936357, guid: 63fd3fecfe08747c7a08d9c990b44b0f, type: 3}
+  - {fileID: 4887216478360415443, guid: 0149cd5d3524943f0b8cebb3e623c673, type: 3}

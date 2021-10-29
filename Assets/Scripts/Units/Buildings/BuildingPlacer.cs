@@ -4,14 +4,20 @@ using UnityEngine.EventSystems;
 
 public class BuildingPlacer : MonoBehaviour
 {
+    public static BuildingPlacer instance;
+
     private Building _placedBuilding = null;
 
     private Ray _ray;
     private RaycastHit _raycastHit;
     private Vector3 _lastPlacementPosition;
 
+    private UnitManager _builderManager;
+
     private void Start()
     {
+        instance = this;
+
         // instantiate our headquarters
         SpawnBuilding(
             GameManager.instance.gameGlobalParameters.initialBuilding,
@@ -111,6 +117,7 @@ public class BuildingPlacer : MonoBehaviour
         _placedBuilding.SetPosition(position);
         // finish up the placement
         _PlaceBuilding(false);
+        _placedBuilding.SetConstructionRatio(1);
 
         // restore the previous state
         _placedBuilding = prevPlacedBuilding;
@@ -118,13 +125,17 @@ public class BuildingPlacer : MonoBehaviour
 
     void _PreparePlacedBuilding(int buildingDataIndex)
     {
+        _PreparePlacedBuilding(Globals.BUILDING_DATA[buildingDataIndex]);
+    }
+    void _PreparePlacedBuilding(BuildingData buildingData)
+    {
         // destroy the previous "phantom" if there is one
         if (_placedBuilding != null && !_placedBuilding.IsFixed)
         {
             Destroy(_placedBuilding.Transform.gameObject);
         }
         Building building = new Building(
-            Globals.BUILDING_DATA[buildingDataIndex],
+            buildingData,
             GameManager.instance.gamePlayersParameters.myPlayerId
         );
         _placedBuilding = building;
@@ -142,7 +153,15 @@ public class BuildingPlacer : MonoBehaviour
 
     void _PlaceBuilding(bool canChain = true)
     {
-        _placedBuilding.ComputeProduction();
+        // if there is a worker assigned to this construction,
+        // warn its behaviour tree
+        if (_builderManager != null)
+        {
+            _builderManager
+                .GetComponent<CharacterBT>()
+                .StartBuildingConstruction(_placedBuilding.Transform);
+        }
+
         _placedBuilding.Place();
         if (canChain)
         {
@@ -154,14 +173,15 @@ public class BuildingPlacer : MonoBehaviour
                 _placedBuilding = null;
             }
         }
-        EventManager.TriggerEvent("PlaySoundByName", "onBuildingPlacedSound");
-        EventManager.TriggerEvent("UpdateResourceTexts");
-        EventManager.TriggerEvent("CheckBuildingButtons");
-        Globals.UpdateNavMeshSurface();
     }
 
     public void SelectPlacedBuilding(int buildingDataIndex)
     {
         _PreparePlacedBuilding(buildingDataIndex);
+    }
+    public void SelectPlacedBuilding(BuildingData buildingData, UnitManager builderManager = null)
+    {
+        _builderManager = builderManager;
+        _PreparePlacedBuilding(buildingData);
     }
 }
