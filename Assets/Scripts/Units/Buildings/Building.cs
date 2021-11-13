@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum BuildingPlacement
@@ -18,6 +18,8 @@ public class Building : Unit
     private MeshFilter _rendererMesh;
     private Mesh[] _constructionMeshes;
     private float _constructionRatio;
+    private List<CharacterManager> _constructors;
+    private List<Transform> _smokeVfx;
     private BuildingBT _bt;
 
     private bool _isAlive;
@@ -31,6 +33,8 @@ public class Building : Unit
         _bt.enabled = false;
 
         _constructionRatio = 0f;
+        _constructors = new List<CharacterManager>();
+        _smokeVfx = new List<Transform>();
         _isAlive = false;
 
         Transform mesh = _transform.Find("Mesh");
@@ -116,6 +120,37 @@ public class Building : Unit
             : BuildingPlacement.INVALID;
     }
 
+    public void AddConstructor(CharacterManager m)
+    {
+        _constructors.Add(m);
+        EventManager.TriggerEvent("UpdateConstructionMenu", this);
+
+        // when adding first constructor, add some smoke VFX
+        // + play construction sound
+        if (_constructors.Count == 1)
+        {
+            List<Vector2> vfxPositions = Utils.SampleOffsets(3, 1.5f, Vector2.one * 4f);
+            foreach (Vector2 offset in vfxPositions)
+                _smokeVfx.Add(VFXManager.instance.Spawn(
+                    VfxType.Smoke,
+                    Transform.position + new Vector3(offset.x, 0, offset.y)));
+
+        }
+    }
+
+    public void RemoveConstructor(int index)
+    {
+        CharacterBT bt = _constructors[index].GetComponent<CharacterBT>();
+        bt.StopBuildingConstruction();
+        _constructors.RemoveAt(index);
+        EventManager.TriggerEvent("UpdateConstructionMenu", this);
+
+        // when removing last constructor, remove smoke VFX
+        foreach (Transform vfx in _smokeVfx)
+            VFXManager.instance.Unspawn(VfxType.Smoke, vfx);
+        _smokeVfx.Clear();
+    }
+
     private void _SetAlive()
     {
         _isAlive = true;
@@ -125,9 +160,16 @@ public class Building : Unit
         _buildingManager.ambientSource.Play();
         EventManager.TriggerEvent("PlaySoundByName", "onBuildingPlacedSound");
         Globals.UpdateNavMeshSurface();
+
+        // when finishing construction, remove smoke VFX
+        foreach (Transform vfx in _smokeVfx)
+            VFXManager.instance.Unspawn(VfxType.Smoke, vfx);
+        _smokeVfx.Clear();
     }
 
     public float ConstructionRatio { get => _constructionRatio; }
+    public List<CharacterManager> Constructors { get => _constructors; }
+    public bool HasConstructorsFull { get => _constructors.Count == 3; }
     public bool HasValidPlacement { get => _placement == BuildingPlacement.VALID; }
     public bool IsFixed { get => _placement == BuildingPlacement.FIXED; }
     public override bool IsAlive { get => _isAlive; }

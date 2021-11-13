@@ -22,6 +22,10 @@ public class UIManager : MonoBehaviour
     private Text _infoPanelDescriptionText;
     private Transform _infoPanelResourcesCostParent;
 
+    [Header("Construction Menu")]
+    public GameObject constructionMenu;
+    private Button[] _constructionSlotButtons;
+
     [Header("Units Selection")]
     public GameObject selectedUnitMenu;
     public GameObject selectedUnitMenuUpgradeButton;
@@ -75,6 +79,12 @@ public class UIManager : MonoBehaviour
         _infoPanelTitleText = infoPanelTransform.Find("Content/Title").GetComponent<Text>();
         _infoPanelDescriptionText = infoPanelTransform.Find("Content/Description").GetComponent<Text>();
         _infoPanelResourcesCostParent = infoPanelTransform.Find("Content/ResourcesCost");
+
+        _constructionSlotButtons = new Button[3];
+        Transform constructionSlots = constructionMenu.transform.Find("BuildSlots");
+        for (int i = 0; i < 3; i++)
+            _constructionSlotButtons[i] = constructionSlots.GetChild(i).Find("Button").GetComponent<Button>();
+        constructionMenu.SetActive(false);
 
         Transform selectedUnitMenuTransform = selectedUnitMenu.transform;
         _selectedUnitTitleText = selectedUnitMenuTransform.Find("UnitSpecific/Content/GeneralInfo/Title").GetComponent<Text>();
@@ -138,6 +148,7 @@ public class UIManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.AddListener("UpdateResourceTexts", _OnUpdateResourceTexts);
+        EventManager.AddListener("UpdateConstructionMenu", _OnUpdateConstructionMenu);
         EventManager.AddListener("UpdatePlacedBuildingProduction", _OnUpdatePlacedBuildingProduction);
         EventManager.AddListener("HoverSkillButton", _OnHoverSkillButton);
         EventManager.AddListener("UnhoverSkillButton", _OnUnhoverSkillButton);
@@ -152,6 +163,7 @@ public class UIManager : MonoBehaviour
     private void OnDisable()
     {
         EventManager.RemoveListener("UpdateResourceTexts", _OnUpdateResourceTexts);
+        EventManager.RemoveListener("UpdateConstructionMenu", _OnUpdateConstructionMenu);
         EventManager.RemoveListener("UpdatePlacedBuildingProduction", _OnUpdatePlacedBuildingProduction);
         EventManager.RemoveListener("HoverSkillButton", _OnHoverSkillButton);
         EventManager.RemoveListener("UnhoverSkillButton", _OnUnhoverSkillButton);
@@ -299,6 +311,11 @@ public class UIManager : MonoBehaviour
         _CheckBuyLimits();
     }
 
+    private void _OnUpdateConstructionMenu(object data)
+    {
+        _SetConstructionMenu((Building)data);
+    }
+
     private void _OnUpdatePlacedBuildingProduction(object data)
     {
         object[] values = (object[]) data;
@@ -362,6 +379,11 @@ public class UIManager : MonoBehaviour
             _SetSelectedUnitMenu(unit);
             _ShowSelectedUnitMenu(true);
         }
+        else if (unit is Building b)
+        {
+            _SetConstructionMenu(b);
+            _ShowConstructionMenu(true);
+        }
     }
 
     private void _OnDeselectUnit(object data)
@@ -371,7 +393,19 @@ public class UIManager : MonoBehaviour
         if (Globals.SELECTED_UNITS.Count == 0)
             _ShowSelectedUnitMenu(false);
         else
-            _SetSelectedUnitMenu(Globals.SELECTED_UNITS[Globals.SELECTED_UNITS.Count - 1].Unit);
+        {
+            Unit u = Globals.SELECTED_UNITS[Globals.SELECTED_UNITS.Count - 1].Unit;
+            if (u.IsAlive)
+            {
+                _SetSelectedUnitMenu(u);
+                _ShowSelectedUnitMenu(true);
+            }
+            else if (u is Building b)
+            {
+                _SetConstructionMenu(b);
+                _ShowConstructionMenu(true);
+            }
+        }
     }
 
     private void _OnPlaceBuildingOn()
@@ -478,6 +512,29 @@ public class UIManager : MonoBehaviour
             t.text = count.ToString();
     }
 
+    private void _SetConstructionMenu(Building building)
+    {
+        int nConstructors = building.Constructors.Count;
+        for (int i = 0; i < 3; i++)
+        {
+            _constructionSlotButtons[i].gameObject.SetActive(i < nConstructors);
+            _SetConstructionMenuSlotListener(
+                _constructionSlotButtons[i], building, i);
+        }
+    }
+
+    private void _SetConstructionMenuSlotListener(Button b, Building building, int i)
+    {
+        b.onClick.RemoveAllListeners();
+        b.onClick.AddListener(() => { building.RemoveConstructor(i); });
+    }
+
+    private void _ShowConstructionMenu(bool show)
+    {
+        selectedUnitMenu.SetActive(false);
+        constructionMenu.SetActive(show);
+    }
+
     private void _SetSelectedUnitMenu(Unit unit, bool showUpgrade = false)
     {
         _selectedUnit = unit;
@@ -561,6 +618,7 @@ public class UIManager : MonoBehaviour
 
     private void _ShowSelectedUnitMenu(bool show)
     {
+        constructionMenu.SetActive(false);
         selectedUnitMenu.SetActive(show);
     }
 

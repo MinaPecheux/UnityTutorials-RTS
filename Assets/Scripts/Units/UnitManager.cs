@@ -43,7 +43,7 @@ public class UnitManager : MonoBehaviour
 
     private void Update()
     {
-        if (_hovered && Input.GetMouseButtonDown(0) && IsActive())
+        if (_hovered && Input.GetMouseButtonDown(0))
             Select(
                 true,
                 Input.GetKey(KeyCode.LeftShift) ||
@@ -155,6 +155,8 @@ public class UnitManager : MonoBehaviour
 
     private void _SelectUtil()
     {
+        // abort if not active
+        if (!IsActive()) return;
         // abort if already selected
         if (Globals.SELECTED_UNITS.Contains(this)) return;
 

@@ -154,23 +154,32 @@ public class BuildingPlacer : MonoBehaviour
     void _PlaceBuilding(bool canChain = true)
     {
         // if there is a worker assigned to this construction,
-        // warn its behaviour tree
+        // warn its behaviour tree and deselect the building
         if (_builderManager != null)
         {
+            _builderManager.Select();
             _builderManager
                 .GetComponent<CharacterBT>()
                 .StartBuildingConstruction(_placedBuilding.Transform);
-        }
+            _builderManager = null;
 
-        _placedBuilding.Place();
-        if (canChain)
+            _placedBuilding.Place();
+
+            EventManager.TriggerEvent("PlaceBuildingOff");
+            _placedBuilding = null;
+        }
+        else
         {
-            if (_placedBuilding.CanBuy())
-                _PreparePlacedBuilding(_placedBuilding.DataIndex);
-            else
+            _placedBuilding.Place();
+            if (canChain)
             {
-                EventManager.TriggerEvent("PlaceBuildingOff");
-                _placedBuilding = null;
+                if (_placedBuilding.CanBuy())
+                    _PreparePlacedBuilding(_placedBuilding.DataIndex);
+                else
+                {
+                    EventManager.TriggerEvent("PlaceBuildingOff");
+                    _placedBuilding = null;
+                }
             }
         }
     }

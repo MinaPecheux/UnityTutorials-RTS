@@ -44,6 +44,14 @@ public class CharacterBT : Tree
         }, buildingTransform);
     }
 
+    public void StopBuildingConstruction()
+    {
+        manager.SetRendererVisibility(true);
+        manager.SetIsConstructor(false);
+        _trySetDestinationOrTargetNode.ClearData("currentTarget");
+        _trySetDestinationOrTargetNode.ClearData("currentTargetOffset");
+    }
+
     protected override Node SetupTree()
     {
         Node _root;

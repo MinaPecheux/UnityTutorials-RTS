@@ -14,6 +14,12 @@ public class CharacterManager : UnitManager
         set { _character = value is Character ? (Character)value : null; }
     }
 
+    public Renderer characterRenderer;
+    public BoxCollider characterCollider;
+
+    private bool _isConstructor = false;
+    public bool IsConstructor => _isConstructor;
+
     private void Start()
     {
         _character.Place();
@@ -34,5 +40,30 @@ public class CharacterManager : UnitManager
         if (playSound)
             contextualSource.PlayOneShot(((CharacterData)Unit.Data).onMoveValidSound);
         return true;
+    }
+
+    public void SetRendererVisibility(bool on)
+    {
+        if (on && !characterRenderer.enabled)
+        {
+            characterRenderer.enabled = true;
+            characterCollider.enabled = true;
+        }
+        else if (!on && characterRenderer.enabled)
+        {
+            characterRenderer.enabled = false;
+            characterCollider.enabled = false;
+        }
+    }
+
+    public void SetIsConstructor(bool on)
+    {
+        _isConstructor = on;
+        if (_isConstructor) Deselect();
+    }
+
+    protected override bool IsActive()
+    {
+        return !_isConstructor;
     }
 }
