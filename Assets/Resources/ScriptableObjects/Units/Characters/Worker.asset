@@ -31,6 +31,6 @@ MonoBehaviour:
   onSelectSound: {fileID: 0}
   onMoveValidSound: {fileID: 0}
   onMoveInvalidSound: {fileID: 0}
-  buildRange: 2
+  buildRange: 1
   buildPower: 1
   buildRate: 1.2

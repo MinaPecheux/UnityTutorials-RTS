@@ -19,8 +19,10 @@ MonoBehaviour:
   - musicVolume
   - sfxVolume
   musicVolume: -80
-  sfxVolume: -80
+  sfxVolume: 0
   onDayStartSound: {fileID: 8300000, guid: 33462e0fa276449f69f26dec259b4c3e, type: 3}
   onNightStartSound: {fileID: 8300000, guid: 67811de47fade405bb864388dafb8e74, type: 3}
+  constructionSiteSound: {fileID: 8300000, guid: 0129816f33c8f4d4fade501cc19b565d,
+    type: 3}
   onBuildingPlacedSound: {fileID: 8300000, guid: 3bc35e06babe7403f94ec8b7f7bfb850,
     type: 3}
