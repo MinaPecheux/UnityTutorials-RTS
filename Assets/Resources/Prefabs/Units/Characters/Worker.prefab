@@ -105,6 +105,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -129,6 +130,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &4893885829384556338
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,6 +216,8 @@ MonoBehaviour:
   contextualSource: {fileID: 7928814290623769016}
   ownerMaterialSlotIndex: 0
   agent: {fileID: 2810587783769693676}
+  characterRenderer: {fileID: 4893885829248897416}
+  characterCollider: {fileID: 7861637201734098210}
 --- !u!114 &-5990931336701222570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,7 +244,7 @@ NavMeshAgent:
   m_Acceleration: 4
   avoidancePriority: 50
   m_AngularSpeed: 90
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -354,6 +358,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1163763907868961944, guid: 27ddadfce77ff44b0a7335bc76b87b4b,
         type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1163763907868961944, guid: 27ddadfce77ff44b0a7335bc76b87b4b,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -369,6 +378,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1163763907868961944, guid: 27ddadfce77ff44b0a7335bc76b87b4b,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1163763907868961944, guid: 27ddadfce77ff44b0a7335bc76b87b4b,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: -0.7071068
       objectReference: {fileID: 0}
@@ -381,16 +395,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1163763907868961944, guid: 27ddadfce77ff44b0a7335bc76b87b4b,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 1163763907868961944, guid: 27ddadfce77ff44b0a7335bc76b87b4b,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1163763907868961944, guid: 27ddadfce77ff44b0a7335bc76b87b4b,
         type: 3}
