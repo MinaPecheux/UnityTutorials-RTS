@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public enum BuildingPlacement
@@ -17,10 +17,12 @@ public class Building : Unit
 
     private MeshFilter _rendererMesh;
     private Mesh[] _constructionMeshes;
-    private float _constructionRatio;
+    private int _constructionHP;
     private List<CharacterManager> _constructors;
     private List<Transform> _smokeVfx;
     private BuildingBT _bt;
+
+    private AudioClip _ambientSound;
 
     private bool _isAlive;
 
@@ -32,7 +34,7 @@ public class Building : Unit
         _bt = _transform.GetComponent<BuildingBT>();
         _bt.enabled = false;
 
-        _constructionRatio = 0f;
+        _constructionHP = 0;
         _constructors = new List<CharacterManager>();
         _smokeVfx = new List<Transform>();
         _isAlive = false;
@@ -48,16 +50,14 @@ public class Building : Unit
         _rendererMesh = mesh.GetComponent<MeshFilter>();
         _constructionMeshes = data.constructionMeshes;
 
-        if (data.ambientSound != null)
+        if (_buildingManager.ambientSource != null)
         {
-            if (_buildingManager.ambientSource != null)
-            {
-                _buildingManager.ambientSource.clip = data.ambientSound;
-                _buildingManager.ambientSource.enabled = false;
-            }
-            else
-                Debug.LogWarning($"'{data.unitName}' prefab is missing an ambient audio source!");
+            _buildingManager.ambientSource.clip =
+                GameManager.instance.gameSoundParameters.constructionSiteSound;
+            _ambientSound = data.ambientSound;
         }
+        else
+            Debug.LogWarning($"'{data.unitName}' prefab is missing an ambient audio source!");
     }
 
     public void SetMaterials() { SetMaterials(_placement); }
@@ -93,14 +93,15 @@ public class Building : Unit
         // change building materials
         SetMaterials();
         // change building construction ratio
-        SetConstructionRatio(0);
+        SetConstructionHP(0);
     }
 
-    public void SetConstructionRatio(float constructionRatio)
+    public void SetConstructionHP(int constructionHP)
     {
         if (_isAlive) return;
 
-        _constructionRatio = constructionRatio;
+        _constructionHP = constructionHP;
+        float constructionRatio = _constructionHP / (float) MaxHP;
 
         int meshIndex = Mathf.Max(
             0,
@@ -108,7 +109,7 @@ public class Building : Unit
         Mesh m = _constructionMeshes[meshIndex];
         _rendererMesh.sharedMesh = m;
 
-        if (_constructionRatio >= 1)
+        if (constructionRatio >= 1)
             _SetAlive();
     }
 
@@ -135,6 +136,7 @@ public class Building : Unit
                     VfxType.Smoke,
                     Transform.position + new Vector3(offset.x, 0, offset.y)));
 
+            _buildingManager.ambientSource.Play();
         }
     }
 
@@ -149,6 +151,8 @@ public class Building : Unit
         foreach (Transform vfx in _smokeVfx)
             VFXManager.instance.Unspawn(VfxType.Smoke, vfx);
         _smokeVfx.Clear();
+        // stop construction sound
+        _buildingManager.ambientSource.Pause();
     }
 
     private void _SetAlive()
@@ -156,8 +160,6 @@ public class Building : Unit
         _isAlive = true;
         _bt.enabled = true;
         ComputeProduction();
-        _buildingManager.ambientSource.enabled = true;
-        _buildingManager.ambientSource.Play();
         EventManager.TriggerEvent("PlaySoundByName", "onBuildingPlacedSound");
         Globals.UpdateNavMeshSurface();
 
@@ -165,9 +167,19 @@ public class Building : Unit
         foreach (Transform vfx in _smokeVfx)
             VFXManager.instance.Unspawn(VfxType.Smoke, vfx);
         _smokeVfx.Clear();
+        // replace construction sound
+        if (_ambientSound)
+        {
+            _buildingManager.ambientSource.clip = _ambientSound;
+            _buildingManager.ambientSource.Play();
+        }
+        else
+        {
+            _buildingManager.ambientSource.Stop();
+        }
     }
 
-    public float ConstructionRatio { get => _constructionRatio; }
+    public int ConstructionHP { get => _constructionHP; }
     public List<CharacterManager> Constructors { get => _constructors; }
     public bool HasConstructorsFull { get => _constructors.Count == 3; }
     public bool HasValidPlacement { get => _placement == BuildingPlacement.VALID; }

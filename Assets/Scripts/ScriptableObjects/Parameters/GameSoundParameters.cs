@@ -14,5 +14,6 @@ public class GameSoundParameters : GameParameters
     [Header("Ambient sounds")]
     public AudioClip onDayStartSound;
     public AudioClip onNightStartSound;
+    public AudioClip constructionSiteSound;
     public AudioClip onBuildingPlacedSound;
 }

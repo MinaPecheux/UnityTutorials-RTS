@@ -72,7 +72,7 @@ public class BuildingManager : UnitManager
 
     public bool Build(int buildPower)
     {
-        _building.SetConstructionRatio(_building.ConstructionRatio + buildPower / 10f);
+        _building.SetConstructionHP(_building.ConstructionHP + buildPower);
         UpdateHealthbar();
         return _building.IsAlive;
     }
@@ -92,11 +92,11 @@ public class BuildingManager : UnitManager
         if (!healthbar) return;
         Transform fill = healthbar.transform.Find("Fill");
 
-        // if in construction: show current construction ratio
-        if (IsActive() && !_building.IsAlive)
-            fill.GetComponent<UnityEngine.UI.Image>().fillAmount = _building.ConstructionRatio;
-        // else show health ratio a usual
-        else
-            fill.GetComponent<UnityEngine.UI.Image>().fillAmount = Unit.HP / (float)Unit.MaxHP;
+        // if in construction: show current construction HP
+        // else, show current health
+        int hp = (IsActive() && !_building.IsAlive)
+            ? _building.ConstructionHP
+            : Unit.HP;
+        fill.GetComponent<UnityEngine.UI.Image>().fillAmount = hp / (float)Unit.MaxHP;
     }
 }

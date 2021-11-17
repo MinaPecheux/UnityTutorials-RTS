@@ -86,12 +86,12 @@ public class DebugConsole : MonoBehaviour
             EventManager.TriggerEvent("UpdateUnitFormationType");
         });
 
-        new DebugCommand<float>("set_construction_ratio", "Sets the selected unit construction ratio.", "set_construction_ratio <ratio>", (x) =>
+        new DebugCommand<int>("set_construction_hp", "Sets the selected unit construction HP.", "set_construction_hp <hp>", (x) =>
         {
             if (Globals.SELECTED_UNITS.Count == 0) return;
             Building b = (Building) Globals.SELECTED_UNITS[0].GetComponent<BuildingManager>().Unit;
             if (b == null) return;
-            b.SetConstructionRatio(x);
+            b.SetConstructionHP(x);
         });
 
         _displayType = DisplayType.None;

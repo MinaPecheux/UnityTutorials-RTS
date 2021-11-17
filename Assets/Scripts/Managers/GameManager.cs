@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     public GameGlobalParameters gameGlobalParameters;
     public GamePlayersParameters gamePlayersParameters;
+    public GameSoundParameters gameSoundParameters;
     public GameInputParameters gameInputParameters;
     public GameObject fov;
 

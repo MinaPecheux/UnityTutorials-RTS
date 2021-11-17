@@ -92,6 +92,23 @@ public class BuildingPlacer : MonoBehaviour
 
     private void _OnBuildInput(object data)
     {
+        // check to see if there is at least one selected unit
+        // that can build -> we arbitrarily choose the first one
+        if (Globals.SELECTED_UNITS.Count == 0) return;
+
+        UnitManager um = null;
+        foreach (UnitManager selected in Globals.SELECTED_UNITS)
+        {
+            if (selected is CharacterManager cm && ((CharacterData) cm.Unit.Data).buildPower > 0)
+            {
+                um = cm;
+                break;
+            }
+        }
+        if (um == null) return;
+        _builderManager = um;
+
+
         string buildingCode = (string)data;
         for (int i = 0; i < Globals.BUILDING_DATA.Length; i++)
         {
@@ -117,7 +134,7 @@ public class BuildingPlacer : MonoBehaviour
         _placedBuilding.SetPosition(position);
         // finish up the placement
         _PlaceBuilding(false);
-        _placedBuilding.SetConstructionRatio(1);
+        _placedBuilding.SetConstructionHP(_placedBuilding.MaxHP);
 
         // restore the previous state
         _placedBuilding = prevPlacedBuilding;
