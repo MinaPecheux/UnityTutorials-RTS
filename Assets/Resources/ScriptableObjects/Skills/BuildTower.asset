@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39a57a855255a4545a0014b6b052d14c, type: 3}
+  m_Name: BuildTower
+  m_EditorClassIdentifier: 
+  code: build_tower
+  skillName: Build a Tower
+  description: Builds a Tower.
+  type: 1
+  unitReference: {fileID: 11400000, guid: 639a0392acefa480c9c2cfc57940efec, type: 2}
+  castTime: 0
+  cooldown: 0
+  sprite: {fileID: 0}
+  onStartSound: {fileID: 0}
+  onEndSound: {fileID: 0}

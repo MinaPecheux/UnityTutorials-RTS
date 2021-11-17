@@ -15,7 +15,7 @@ MonoBehaviour:
   code: tower
   unitName: Tower
   description: A great viewpoint to observe the horizon.
-  healthpoints: 60
+  healthpoints: 40
   prefab: {fileID: 5402915671810342723, guid: 7f0b6d2ff07aa40d893433079b556e39, type: 3}
   sprite: {fileID: 0}
   cost:
@@ -33,3 +33,7 @@ MonoBehaviour:
   attackRate: 0
   onSelectSound: {fileID: 8300000, guid: 4d3eda5ad26b045408f87c6ee1d0f656, type: 3}
   ambientSound: {fileID: 0}
+  constructionMeshes:
+  - {fileID: -4527691476495185224, guid: 33ff5627ca6dd47d49c5827fdc1d4a2a, type: 3}
+  - {fileID: -580478676541104599, guid: 812f2b3fbb82944cc81eb2169c644e24, type: 3}
+  - {fileID: -1277366460620338370, guid: 628e95d0a586840ffa77b6f09d203042, type: 3}

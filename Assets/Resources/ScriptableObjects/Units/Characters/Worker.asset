@@ -24,6 +24,7 @@ MonoBehaviour:
   canProduce: 
   skills:
   - {fileID: 11400000, guid: 88601b1dc99164cea803ef051660433f, type: 2}
+  - {fileID: 11400000, guid: 87948d5f5193647ad8aad46a2e8142c2, type: 2}
   fieldOfView: 18
   attackRange: 2
   attackDamage: 2
@@ -32,5 +33,5 @@ MonoBehaviour:
   onMoveValidSound: {fileID: 0}
   onMoveInvalidSound: {fileID: 0}
   buildRange: 1
-  buildPower: 1
+  buildPower: 10
   buildRate: 1.2

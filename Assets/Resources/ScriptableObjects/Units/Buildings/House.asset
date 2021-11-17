@@ -15,7 +15,7 @@ MonoBehaviour:
   code: house
   unitName: House
   description: A basic shed to rest.
-  healthpoints: 100
+  healthpoints: 200
   prefab: {fileID: 4893885829384556338, guid: f6a6d46e467fb47bea39575cc022a002, type: 3}
   sprite: {fileID: 0}
   cost:
