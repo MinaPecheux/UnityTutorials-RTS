@@ -18,18 +18,18 @@ public class BuildingPlacer : MonoBehaviour
     {
         instance = this;
 
-        // instantiate our headquarters
-        SpawnBuilding(
-            GameManager.instance.gameGlobalParameters.initialBuilding,
-            GameManager.instance.gamePlayersParameters.myPlayerId,
-            GameManager.instance.startPosition
-        );
-        //// instantiate our headquarters
-        //SpawnBuilding(
-        //    GameManager.instance.gameGlobalParameters.initialBuilding,
-        //    1 - GameManager.instance.gamePlayersParameters.myPlayerId,
-        //    GameManager.instance.startPosition - Vector3.right * 32f
-        //);
+        Transform spawnpoints = GameObject.Find("Spawnpoints").transform;
+
+        BuildingData initialBuilding = GameManager.instance.gameGlobalParameters.initialBuilding;
+        GamePlayersParameters p = GameManager.instance.gamePlayersParameters;
+        Vector3 pos;
+        for (int i = 0; i < p.players.Length; i++)
+        {
+            pos = spawnpoints.GetChild(i).position;
+            SpawnBuilding(initialBuilding, i, pos);
+            if (i == p.myPlayerId)
+                Camera.main.GetComponent<CameraManager>().SetPosition(pos);
+        }
     }
 
     void Update()

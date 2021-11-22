@@ -2,7 +2,7 @@
 
 public class FogRendererToggler : MonoBehaviour
 {
-    public Renderer myRenderer; // reference to the render you want toggled based on the position of this transform
+    public GameObject mesh; // reference to the render you want toggled based on the position of this transform
     [Range(0f, 1f)] public float threshold = 0.1f; //the threshold for when this script considers myRenderer should render
 
     private Camera _camera; //The Camera using the masked render texture
@@ -19,7 +19,14 @@ public class FogRendererToggler : MonoBehaviour
             this.enabled = false;
             return;
         }
-        
+
+        // disable if no mesh is defined
+        if (!mesh)
+        {
+            this.enabled = false;
+            return;
+        }
+
         _camera = GameObject.Find("UnexploredAreasCam").GetComponent<Camera>();
     }
 
@@ -63,12 +70,8 @@ public class FogRendererToggler : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!myRenderer)
-        {
-            this.enabled = false;
-            return;
-        }
-
-        myRenderer.enabled = GetColorAtPosition().grayscale >= threshold;
+        bool active = GetColorAtPosition().grayscale >= threshold;
+        if (mesh.activeSelf != active)
+            mesh.SetActive(active);
     }
 }

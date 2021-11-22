@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -10,11 +10,13 @@ public class CameraManager : MonoBehaviour
     public float altitude = 40f;
 
     public Transform groundTarget;
+    public bool autoAdaptAltitude;
 
     private Camera _camera;
     private RaycastHit _hit;
     private Ray _ray;
 
+    private float _distance = 100f;
     private Vector3 _forwardDir;
     private Coroutine _mouseOnScreenCoroutine;
     private int _mouseOnScreenBorder;
@@ -114,10 +116,10 @@ public class CameraManager : MonoBehaviour
         pos.z -= indicatorH / 2f;
         Vector3 off = transform.position - Utils.MiddleOfScreenPointToWorld();
         Vector3 newPos = pos + off;
-        newPos.y = 100f;
         transform.position = newPos;
 
-        _FixAltitude();
+        if (autoAdaptAltitude)
+            _FixAltitude();
         _ComputeMinimapIndicator(false);
     }
 
@@ -132,7 +134,8 @@ public class CameraManager : MonoBehaviour
         else if (dir == 3)  // left
             transform.Translate(-transform.right * Time.deltaTime * translationSpeed);
 
-        _FixAltitude();
+        if (autoAdaptAltitude)
+            _FixAltitude();
         _ComputeMinimapIndicator(false);
     }
 
@@ -224,5 +227,11 @@ public class CameraManager : MonoBehaviour
         }
         // move the game object at the center of the main camera screen
         _minimapIndicator.position = middle;
+    }
+
+    public void SetPosition(Vector3 pos)
+    {
+        transform.position = pos - _distance * transform.forward;
+        _ComputeMinimapIndicator(false);
     }
 }

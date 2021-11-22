@@ -69,6 +69,12 @@ public class Unit
 
         _transform.GetComponent<UnitManager>().Initialize(this);
 
+        // setup minimap icon color with owner color
+        GamePlayersParameters p = GameManager.instance.gamePlayersParameters;
+        Color c = p.players[owner].color;
+        Transform minimapIcon = _transform.Find("Mesh/MinimapIcon");
+        minimapIcon.GetComponent<Renderer>().material.color = c;
+
         // prepare data for upgrade to next level
         _levelUpData = _GetLevelUpData();
     }
