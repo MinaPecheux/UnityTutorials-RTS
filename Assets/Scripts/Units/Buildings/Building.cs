@@ -52,9 +52,16 @@ public class Building : Unit
 
         if (_buildingManager.ambientSource != null)
         {
-            _buildingManager.ambientSource.clip =
-                GameManager.instance.gameSoundParameters.constructionSiteSound;
-            _ambientSound = data.ambientSound;
+            if (_owner == GameManager.instance.gamePlayersParameters.myPlayerId)
+            {
+                _buildingManager.ambientSource.clip =
+                    GameManager.instance.gameSoundParameters.constructionSiteSound;
+                _ambientSound = data.ambientSound;
+            }
+            else
+            {
+                _buildingManager.ambientSource.enabled = false;
+            }
         }
         else
             Debug.LogWarning($"'{data.unitName}' prefab is missing an ambient audio source!");
@@ -160,22 +167,25 @@ public class Building : Unit
         _isAlive = true;
         _bt.enabled = true;
         ComputeProduction();
-        EventManager.TriggerEvent("PlaySoundByName", "onBuildingPlacedSound");
         Globals.UpdateNavMeshSurface();
 
         // when finishing construction, remove smoke VFX
         foreach (Transform vfx in _smokeVfx)
             VFXManager.instance.Unspawn(VfxType.Smoke, vfx);
         _smokeVfx.Clear();
-        // replace construction sound
-        if (_ambientSound)
+        if (_owner == GameManager.instance.gamePlayersParameters.myPlayerId)
         {
-            _buildingManager.ambientSource.clip = _ambientSound;
-            _buildingManager.ambientSource.Play();
-        }
-        else
-        {
-            _buildingManager.ambientSource.Stop();
+            EventManager.TriggerEvent("PlaySoundByName", "onBuildingPlacedSound");
+            // replace construction sound
+            if (_ambientSound)
+            {
+                _buildingManager.ambientSource.clip = _ambientSound;
+                _buildingManager.ambientSource.Play();
+            }
+            else
+            {
+                _buildingManager.ambientSource.Stop();
+            }
         }
     }
 
