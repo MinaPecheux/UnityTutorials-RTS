@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,12 +16,15 @@ public class GameManager : MonoBehaviour
     public GameObject fov;
 
     [Header("Minimap")]
+    public Transform minimapAnchor;
+    public Camera minimapCamera;
+    public BoxCollider minimapFOVCollider;
+    public Minimap minimapScript;
     public Collider mapWrapperCollider;
     public int terrainSize = 200;
 
     [HideInInspector]
     public bool gameIsPaused;
-    public Vector3 startPosition;
 
     [HideInInspector]
     public float producingRate = 3f; // in seconds
@@ -46,13 +49,28 @@ public class GameManager : MonoBehaviour
         // enable/disable FOV depending on game parameters
         fov.SetActive(gameGlobalParameters.enableFOV);
 
-        _GetStartPosition();
+        _SetupMinimap();
+
         gameIsPaused = false;
     }
 
     public void Start()
     {
         instance = this;
+    }
+
+    private void _SetupMinimap()
+    {
+        Bounds b = GameObject.Find("Terrain").GetComponent<Terrain>().terrainData.bounds;
+
+        float terrainSize = b.size.x;
+        float p = terrainSize / 2;
+
+        minimapAnchor.position = new Vector3(p, 0, p);
+        minimapCamera.orthographicSize = p;
+        minimapFOVCollider.center = new Vector3(0, b.center.y, 0);
+        minimapFOVCollider.size = b.size;
+        minimapScript.terrainSize = Vector2.one * terrainSize;
     }
 
     private void Update()
@@ -114,11 +132,6 @@ public class GameManager : MonoBehaviour
     {
         bool fovIsOn = (bool)data;
         fov.SetActive(fovIsOn);
-    }
-
-    private void _GetStartPosition()
-    {
-        startPosition = Utils.MiddleOfScreenPointToWorld();
     }
 
     private void OnApplicationQuit()

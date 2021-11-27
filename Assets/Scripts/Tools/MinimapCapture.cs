@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.IO;
 
 public static class MinimapCapture
 {
@@ -22,9 +23,12 @@ public static class MinimapCapture
         byte[] bytes = output.EncodeToJPG(90);
         Object.DestroyImmediate(output);
 
-        // For testing purposes, also write to a file in the project folder
-        string filePath = Application.dataPath + $"/{name}.jpg";
-        System.IO.File.WriteAllBytes(filePath, bytes);
+        // write to a file in the project folder
+        string folderPath = Application.dataPath + "/MapCaptures";
+        if (!Directory.Exists(folderPath))
+            Directory.CreateDirectory(folderPath);
+        string filePath = $"{folderPath}/{name}.jpg";
+        File.WriteAllBytes(filePath, bytes);
 
         // clean
         RenderTexture.active = null;
