@@ -34,6 +34,7 @@ public class Minimap : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                 0f,
                 uiPos.y / _uiSize.y * terrainSize.y
             );
+            realPos = Utils.ProjectOnTerrain(realPos);
             EventManager.TriggerEvent("MoveCamera", realPos);
         }
     }

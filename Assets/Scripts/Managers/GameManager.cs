@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour
     public GameSoundParameters gameSoundParameters;
     public GameInputParameters gameInputParameters;
     public GameObject fov;
+
+    [Header("Minimap")]
+    public Collider mapWrapperCollider;
+    public int terrainSize = 200;
 
     [HideInInspector]
     public bool gameIsPaused;
