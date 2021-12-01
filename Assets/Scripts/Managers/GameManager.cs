@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     public BoxCollider minimapFOVCollider;
     public Minimap minimapScript;
     public Collider mapWrapperCollider;
-    public int terrainSize = 200;
+    public int terrainSize;
 
     [HideInInspector]
     public bool gameIsPaused;
@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
     {
         Bounds b = GameObject.Find("Terrain").GetComponent<Terrain>().terrainData.bounds;
 
-        float terrainSize = b.size.x;
+        terrainSize = (int) b.size.x;
         float p = terrainSize / 2;
 
         minimapAnchor.position = new Vector3(p, 0, p);

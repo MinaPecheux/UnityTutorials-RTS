@@ -16,7 +16,6 @@ public class CoreBooter : MonoBehaviour
     private void Start()
     {
         LoadMap("Map1");
-        //SceneManager.LoadSceneAsync("SampleScene", LoadSceneMode.Additive);
     }
 
     public void LoadMap(string mapReference)
