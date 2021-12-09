@@ -91,6 +91,8 @@ You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-pr
 <li>Tutorial #38: <a href="https://mina-pecheux.medium.com/making-a-rts-game-38-using-workers-to-construct-buildings-3-3-unity-c-1469f08adb76" rel="noopener follow"><strong>Using workers to construct buildings 3/3</strong></a></li>
   
 <li>Tutorial #39: <a href="https://mina-pecheux.medium.com/making-a-rts-game-39-boosting-our-game-scene-unity-c-bab128549317" rel="noopener follow"><strong>Boosting our game scene</strong></a></li>
+  
+<li>Tutorial #40: <a href="https://mina-pecheux.medium.com/making-a-rts-game-40-fixing-our-minimap-unity-c-dd3f46c8cfb4" rel="noopener follow"><strong>Fixing our minimap</strong></a></li>
 
 </ul>
 
