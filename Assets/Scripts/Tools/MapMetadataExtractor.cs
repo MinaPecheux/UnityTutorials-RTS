@@ -49,6 +49,9 @@ public static class MapMetadataExtractor
         Bounds bounds = terrain.terrainData.bounds;
         data.mapSize = bounds.size.x;
 
+        // get the max number of players = number of spawnpoints
+        data.maxPlayers = GameObject.Find("Spawnpoints").transform.childCount;
+
         // update the Scriptable Object
         EditorUtility.SetDirty(data);
         AssetDatabase.SaveAssets();
