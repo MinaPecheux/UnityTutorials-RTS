@@ -44,13 +44,13 @@ public class MinimapCaptureWindow : EditorWindow
             _screenshotCameraAnchor.position = new Vector3(t, 0, t);
             _screenshotCamera.orthographicSize = t;
 
-            _screenshotCameraAnchor.position = prevAnchorPos;
-            _screenshotCamera.orthographicSize = prevOrthoSize;
-
             MinimapCapture.TakeScreenshot(
                 _screenshotName,
                 new Vector2Int((int)_imgSize, (int)_imgSize),
                 _screenshotCamera);
+
+            _screenshotCameraAnchor.position = prevAnchorPos;
+            _screenshotCamera.orthographicSize = prevOrthoSize;
         }
         EditorGUI.EndDisabledGroup();
     }
