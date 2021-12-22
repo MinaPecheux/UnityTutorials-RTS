@@ -24,7 +24,7 @@ public static class MinimapCapture
         Object.DestroyImmediate(output);
 
         // write to a file in the project folder
-        string folderPath = Application.dataPath + "/MapCaptures";
+        string folderPath = Application.dataPath + "/Resources/MapCaptures";
         if (!Directory.Exists(folderPath))
             Directory.CreateDirectory(folderPath);
         string filePath = $"{folderPath}/{name}.jpg";
