@@ -98,6 +98,8 @@ You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-pr
 
 <li>Tutorial #42: <a href="https://mina-pecheux.medium.com/making-a-rts-game-42-designing-our-main-menu-1-2-unity-c-6ccf284c4db7" rel="noopener follow"><strong>Designing our main menu 1/2</strong></a></li>
 
+<li>Tutorial #43: <a href="https://mina-pecheux.medium.com/making-a-rts-game-43-designing-our-main-menu-2-2-unity-c-44ddca297787" rel="noopener follow"><strong>Designing our main menu 2/2</strong></a></li>
+
 </ul>
 
 ## Known issues
