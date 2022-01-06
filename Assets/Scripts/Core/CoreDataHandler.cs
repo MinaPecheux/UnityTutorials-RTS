@@ -6,15 +6,22 @@ public class CoreDataHandler : MonoBehaviour
 {
     public static CoreDataHandler instance;
 
+    private string _gameUID;
     private MapData _mapData;
 
-    public string Scene => _mapData.sceneName;
+    public string GameUID => _gameUID;
+    public string Scene => _mapData != null ? _mapData.sceneName : null;
     public float MapSize => _mapData.mapSize;
 
     private void Awake()
     {
         if (instance == null)
             instance = this;
+    }
+
+    public void SetGameUID(MapData d)
+    {
+        _gameUID = $"{d.sceneName}__{System.Guid.NewGuid().ToString()}";
     }
 
     public void SetMapData(MapData d)

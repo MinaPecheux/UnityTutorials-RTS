@@ -213,6 +213,22 @@ public class MainMenuManager : MonoBehaviour
         b.onClick.AddListener(() => _TogglePlayer(t, i));
     }
 
+    public void StartNewGame()
+    {
+        CoreDataHandler.instance.SetGameUID(_selectedMap);
+
+        // save player parameters for this map
+        // from the menu setup
+        GamePlayersParameters p = new GamePlayersParameters();
+        p.players = _playersData
+            .Where((KeyValuePair<int, PlayerData> p) => _activePlayers[p.Key])
+            .Select((KeyValuePair<int, PlayerData> p) => p.Value)
+            .ToArray();
+        p.myPlayerId = 0;
+        p.SaveToFile($"Games/{CoreDataHandler.instance.GameUID}/PlayerParameters", true);
+
+        CoreBooter.instance.LoadMap(_selectedMap.sceneName);
+    }
     #endregion
 
 }

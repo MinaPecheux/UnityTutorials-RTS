@@ -13,7 +13,12 @@ public static class DataHandler
         // load game parameters
         GameParameters[] gameParametersList = Resources.LoadAll<GameParameters>("ScriptableObjects/Parameters");
         foreach (GameParameters parameters in gameParametersList)
-            parameters.LoadFromFile();
+        {
+            if (parameters is GamePlayersParameters pp)
+                pp.LoadFromFile($"Games/{CoreDataHandler.instance.GameUID}/PlayerParameters");
+            else
+                parameters.LoadFromFile();
+        }
     }
 
     public static void SaveGameData()

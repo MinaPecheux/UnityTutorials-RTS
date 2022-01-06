@@ -18,14 +18,14 @@ public class BinarySerializableData
 
     public Dictionary<string, object> properties;
 
-    public BinarySerializableData(ScriptableObject obj, List<string> fieldsToSerialize)
+    public BinarySerializableData(ScriptableObject obj, List<string> fieldsToSerialize, bool serializeAll = false)
     {
         properties = new Dictionary<string, object>();
 
         Type T = obj.GetType();
         foreach (FieldInfo field in T.GetFields())
         {
-            if (!fieldsToSerialize.Contains(field.Name))
+            if (!serializeAll && !fieldsToSerialize.Contains(field.Name))
                 continue;
 
             object value;
