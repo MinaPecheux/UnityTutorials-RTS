@@ -100,6 +100,8 @@ You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-pr
 
 <li>Tutorial #43: <a href="https://mina-pecheux.medium.com/making-a-rts-game-43-designing-our-main-menu-2-2-unity-c-44ddca297787" rel="noopener follow"><strong>Designing our main menu 2/2</strong></a></li>
 
+<li>Tutorial #44: <a href="https://mina-pecheux.medium.com/making-a-rts-game-44-importing-models-animating-our-characters-1-2-unity-c-9f883a494f9b" rel="noopener follow"><strong>Importing models & animating our characters 1/2</strong></a></li>
+
 </ul>
 
 ## Known issues
