@@ -14,7 +14,6 @@ public class CharacterManager : UnitManager
         set { _character = value is Character ? (Character)value : null; }
     }
 
-    public Renderer characterRenderer;
     public BoxCollider characterCollider;
 
     private bool _isConstructor = false;
@@ -44,14 +43,14 @@ public class CharacterManager : UnitManager
 
     public void SetRendererVisibility(bool on)
     {
-        if (on && !characterRenderer.enabled)
+        if (on && !meshRenderer.enabled)
         {
-            characterRenderer.enabled = true;
+            meshRenderer.enabled = true;
             characterCollider.enabled = true;
         }
-        else if (!on && characterRenderer.enabled)
+        else if (!on && meshRenderer.enabled)
         {
-            characterRenderer.enabled = false;
+            meshRenderer.enabled = false;
             characterCollider.enabled = false;
         }
     }

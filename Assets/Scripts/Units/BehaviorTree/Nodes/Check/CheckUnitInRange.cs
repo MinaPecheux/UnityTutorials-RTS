@@ -5,6 +5,7 @@ using BehaviorTree;
 public class CheckUnitInRange : Node
 {
     UnitManager _manager;
+    bool _checkAttack;
     float _range;
 
     Transform _lastTarget;
@@ -13,6 +14,7 @@ public class CheckUnitInRange : Node
     public CheckUnitInRange(UnitManager manager, bool checkAttack) : base()
     {
         _manager = manager;
+        _checkAttack = checkAttack;
         _range = checkAttack
             ? _manager.Unit.AttackRange
             : ((CharacterData)_manager.Unit.Data).buildRange;
@@ -31,10 +33,7 @@ public class CheckUnitInRange : Node
         Transform target = (Transform)currentTarget;
         if (target != _lastTarget)
         {
-            Vector3 s = target
-                .Find("Mesh")
-                .GetComponent<MeshFilter>()
-                .sharedMesh.bounds.size / 2;
+            Vector3 s = target.GetComponent<UnitManager>().MeshSize;
             _targetSize = Mathf.Max(s.x, s.z);
             _lastTarget = target;
         }
@@ -45,6 +44,8 @@ public class CheckUnitInRange : Node
         {
             Parent.ClearData("currentTarget");
             Parent.ClearData("currentTargetOffset");
+            _manager.SetAnimatorBoolVariable("Running", false);
+            _manager.SetAnimatorBoolVariable("Attacking", false);
             _state = NodeState.FAILURE;
             return _state;
         }
@@ -57,21 +58,26 @@ public class CheckUnitInRange : Node
         {
             Unit u = ((Transform)currentTarget).GetComponent<UnitManager>().Unit;
             int targetOwner = u.Owner;
-            if (
-                targetOwner == GameManager.instance.gamePlayersParameters.myPlayerId &&
-                u is Building b
-            )
+
+            if (targetOwner == GameManager.instance.gamePlayersParameters.myPlayerId)
             {
-                CharacterManager cm = (CharacterManager)_manager;
-                if (!cm.IsConstructor)
+                if (u is Building b && !b.IsAlive)
                 {
-                    b.AddConstructor(cm);
-                    cm.SetIsConstructor(true);
-                    cm.SetRendererVisibility(false);
-                    cm.agent.Warp(
-                        target.position +
-                        Quaternion.Euler(0f, Random.Range(0f, 360f), 0f) * Vector3.right * _targetSize * 0.8f);
+                    CharacterManager cm = (CharacterManager)_manager;
+                    if (!cm.IsConstructor)
+                    {
+                        b.AddConstructor(cm);
+                        cm.SetIsConstructor(true);
+                        cm.SetRendererVisibility(false);
+                        cm.agent.Warp(
+                            target.position +
+                            Quaternion.Euler(0f, Random.Range(0f, 360f), 0f) * Vector3.right * _targetSize * 0.8f);
+                    }
                 }
+            }
+            else if (_checkAttack)
+            {
+                _manager.SetAnimatorBoolVariable("Attacking", true);
             }
         }
 

@@ -7,7 +7,9 @@ public class UnitManager : MonoBehaviour
 {
     public GameObject selectionCircle;
     public GameObject fov;
+    public Renderer meshRenderer;
     public AudioSource contextualSource;
+    public Animator animator;
 
     public int ownerMaterialSlotIndex = 0;
 
@@ -26,9 +28,13 @@ public class UnitManager : MonoBehaviour
     private Material _levelUpVFXMaterial;
     private Coroutine _levelUpVFXCoroutine = null;
 
+    private Vector3 _meshSize;
+    public Vector3 MeshSize => _meshSize;
+
     private void Awake()
     {
         _canvas = GameObject.Find("Canvas").transform;
+        _meshSize = meshRenderer.GetComponent<Renderer>().bounds.size / 2;
     }
 
     private void OnMouseEnter()
@@ -68,9 +74,9 @@ public class UnitManager : MonoBehaviour
     public void SetOwnerMaterial(int owner)
     {
         Color playerColor = GameManager.instance.gamePlayersParameters.players[owner].color;
-        Material[] materials = transform.Find("Mesh").GetComponent<Renderer>().materials;
+        Material[] materials = meshRenderer.materials;
         materials[ownerMaterialSlotIndex].color = playerColor;
-        transform.Find("Mesh").GetComponent<Renderer>().materials = materials;
+        meshRenderer.materials = materials;
     }
 
     public void Attack(Transform target)
@@ -170,7 +176,7 @@ public class UnitManager : MonoBehaviour
             UpdateHealthbar();
             Healthbar h = healthbar.GetComponent<Healthbar>();
             Rect boundingBox = Utils.GetBoundingBoxOnScreen(
-                transform.Find("Mesh").GetComponent<Renderer>().bounds,
+                meshRenderer.bounds,
                 Camera.main
             );
             h.Initialize(transform, IsMovable(), boundingBox.height * 0.5f);
@@ -215,7 +221,7 @@ public class UnitManager : MonoBehaviour
 
         // create visual effect (+ discard it after a few seconds)
         GameObject vfx = Instantiate(Resources.Load("Prefabs/Units/LevelUpVFX")) as GameObject;
-        Vector3 meshScale = transform.Find("Mesh").localScale;
+        Vector3 meshScale = meshRenderer.transform.localScale;
         float s = Mathf.Max(meshScale.x, meshScale.z);
         Transform t = vfx.transform;
         t.localScale = new Vector3(s, meshScale.y, s);
@@ -235,5 +241,17 @@ public class UnitManager : MonoBehaviour
             yield return new WaitForSeconds(step);
         }
         Destroy(_levelUpVFX);
+    }
+
+    public void SetAnimatorBoolVariable(string name, bool boolValue)
+    {
+        if (animator == null) return;
+        animator.SetBool(name, boolValue);
+    }
+
+    public void SetAnimatorTriggerVariable(string name)
+    {
+        if (animator == null) return;
+        animator.SetTrigger(name);
     }
 }

@@ -26,10 +26,7 @@ public class TaskFollow : Node
 
         if (target != _lastTarget)
         {
-            Vector3 s = target
-                .Find("Mesh")
-                .GetComponent<MeshFilter>()
-                .sharedMesh.bounds.size / 2;
+            Vector3 s = target.GetComponent<UnitManager>().MeshSize;
             _targetSize = Mathf.Max(s.x, s.z);
 
             int targetOwner = target.GetComponent<UnitManager>().Unit.Owner;

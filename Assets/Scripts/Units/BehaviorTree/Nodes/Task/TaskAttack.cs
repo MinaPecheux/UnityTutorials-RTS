@@ -14,6 +14,7 @@ public class TaskAttack : Node
     public override NodeState Evaluate()
     {
         object currentTarget = GetData("currentTarget");
+        _manager.SetAnimatorTriggerVariable("Hit");
         _manager.Attack((Transform) currentTarget);
         _state = NodeState.SUCCESS;
         return _state;

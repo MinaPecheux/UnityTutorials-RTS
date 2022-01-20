@@ -39,15 +39,13 @@ public class Building : Unit
         _smokeVfx = new List<Transform>();
         _isAlive = false;
 
-        Transform mesh = _transform.Find("Mesh");
-
         _materials = new List<Material>();
-        foreach (Material material in mesh.GetComponent<Renderer>().materials)
+        foreach (Material material in _buildingManager.meshRenderer.materials)
             _materials.Add(new Material(material));
         SetMaterials();
         _placement = BuildingPlacement.VALID;
 
-        _rendererMesh = mesh.GetComponent<MeshFilter>();
+        _rendererMesh = _buildingManager.meshRenderer.GetComponent<MeshFilter>();
         _constructionMeshes = data.constructionMeshes;
 
         if (_buildingManager.ambientSource != null)
@@ -89,7 +87,7 @@ public class Building : Unit
             materials = _materials;
         else
             return;
-        _transform.Find("Mesh").GetComponent<Renderer>().materials = materials.ToArray();
+        _buildingManager.meshRenderer.materials = materials.ToArray();
     }
 
     public override void Place()
