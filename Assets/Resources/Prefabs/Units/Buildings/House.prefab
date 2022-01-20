@@ -134,6 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionCircle: {fileID: 1541329661}
   fov: {fileID: 5994947547720212358}
+  meshRenderer: {fileID: 723053326697462797}
   contextualSource: {fileID: -2031709788381366338}
   ownerMaterialSlotIndex: 2
   ambientSource: {fileID: -2194822987851611251}
@@ -582,6 +583,12 @@ GameObject:
 --- !u!4 &2625390771459832514 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 0149cd5d3524943f0b8cebb3e623c673,
+    type: 3}
+  m_PrefabInstance: {fileID: 6995768289337676248}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &723053326697462797 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1504981713932161579, guid: 0149cd5d3524943f0b8cebb3e623c673,
     type: 3}
   m_PrefabInstance: {fileID: 6995768289337676248}
   m_PrefabAsset: {fileID: 0}

@@ -23,10 +23,13 @@ MonoBehaviour:
     amount: 30
   canProduce: 
   skills: []
-  fieldOfView: 22
-  attackRange: 2
+  fieldOfView: 16
+  attackRange: 1
   attackDamage: 20
-  attackRate: 1
+  attackRate: 2
   onSelectSound: {fileID: 8300000, guid: 52613f28a316c4ec2a02ca4d01eacf0d, type: 3}
   onMoveValidSound: {fileID: 8300000, guid: d17c2a850b12741799bbde9458aa8005, type: 3}
   onMoveInvalidSound: {fileID: 8300000, guid: 7684a035e88994f5387716d7239b1653, type: 3}
+  buildRange: 0
+  buildPower: 0
+  buildRate: 0

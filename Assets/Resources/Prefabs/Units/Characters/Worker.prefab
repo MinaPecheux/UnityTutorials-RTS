@@ -215,6 +215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionCircle: {fileID: 1541329661}
   fov: {fileID: 2773615677517416114}
+  meshRenderer: {fileID: 4893885829248897416}
   contextualSource: {fileID: 7928814290623769016}
   ownerMaterialSlotIndex: 0
   agent: {fileID: 2810587783769693676}

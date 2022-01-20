@@ -17,8 +17,8 @@ MonoBehaviour:
   - myPlayerId
   _fieldsToShowInGame: []
   players:
-  - name: Enemy
-    color: {r: 0, g: 0.23097992, b: 1, a: 1}
-  - name: Mina
-    color: {r: 1, g: 0, b: 0.038758278, a: 1}
+  - name: Player
+    color: {r: 1, g: 0, b: 0, a: 1}
+  - name: Enemy 1
+    color: {r: 0, g: 0, b: 1, a: 1}
   myPlayerId: 1
