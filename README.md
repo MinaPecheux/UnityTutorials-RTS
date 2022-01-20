@@ -102,6 +102,8 @@ You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-pr
 
 <li>Tutorial #44: <a href="https://mina-pecheux.medium.com/making-a-rts-game-44-importing-models-animating-our-characters-1-2-unity-c-9f883a494f9b" rel="noopener follow"><strong>Importing models & animating our characters 1/2</strong></a></li>
 
+<li>Tutorial #45: <a href="https://mina-pecheux.medium.com/making-a-rts-game-45-importing-models-animating-our-characters-2-2-unity-c-89f346f3fa92" rel="noopener follow"><strong>Importing models & animating our characters 2/2</strong></a></li>
+
 </ul>
 
 ## Known issues
