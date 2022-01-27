@@ -29,7 +29,8 @@ public class GamePlayerData
 public class GameData : BinarySerializable
 {
     public static string gameUid;
-    private static string _dataFileName = "GameData.data";
+
+    public static string DATA_FILE_NAME = "GameData.data";
 
     public GamePlayerData[] players;
     public Vector3 camPosition;
@@ -40,7 +41,7 @@ public class GameData : BinarySerializable
             DATA_DIRECTORY,
             "Games",
             gameUid,
-            _dataFileName);
+            DATA_FILE_NAME);
 
     public static void Save(GameData instance)
     {

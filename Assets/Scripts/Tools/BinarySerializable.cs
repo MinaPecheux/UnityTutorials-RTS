@@ -26,6 +26,8 @@ public class BinarySerializable : ISerializable
         Type T = instance.GetType();
         foreach (FieldInfo field in T.GetFields())
         {
+            if (field.IsStatic) continue;
+
             Type serializedType = BinarySerializableData.GetSerializedType(field);
             if (serializedType.IsArray)
             {
@@ -64,6 +66,8 @@ public class BinarySerializable : ISerializable
         Type T = GetType();
         foreach (FieldInfo field in T.GetFields())
         {
+            if (field.IsStatic) continue;
+
             object value;
             if (BinarySerializableData.Serialize(field, this, out value))
             {
