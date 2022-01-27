@@ -26,6 +26,12 @@ public static class Globals
     public static int ROCK_MASK = 1 << 14;
 
     public static Dictionary<InGameResource, GameResource>[] GAME_RESOURCES;
+    public static InGameResource[] GAME_RESOURCE_KEYS = new InGameResource[]
+        {
+            InGameResource.Gold,
+            InGameResource.Wood,
+            InGameResource.Stone,
+        };
 
     public static Dictionary<InGameResource, int> XP_CONVERSION_TO_RESOURCE = new Dictionary<InGameResource, int>()
     {

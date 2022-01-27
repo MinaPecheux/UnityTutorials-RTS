@@ -239,7 +239,7 @@ public class UIManager : MonoBehaviour
 
     public void SaveGame()
     {
-
+        DataHandler.SaveGameData();
     }
 
     public void ResumeGame()

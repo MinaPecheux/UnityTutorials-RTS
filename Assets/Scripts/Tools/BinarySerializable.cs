@@ -1,17 +1,29 @@
 ﻿using System;
 using System.Collections;
-using System.Runtime.Serialization;
-using System.Security.Permissions;
+using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Permissions;
+using UnityEngine;
 
 [Serializable]
 public class BinarySerializable : ISerializable
 {
-    public BinarySerializable() {}
+#if UNITY_EDITOR
+    public static string DATA_DIRECTORY = "Data_Dev";
+#else
+    public static string DATA_DIRECTORY = "Data";
+#endif
 
-    protected BinarySerializable(SerializationInfo info, StreamingContext context)
+    public BinarySerializable() { }
+
+    protected static void Deserialize(
+        BinarySerializable instance,
+        SerializationInfo info,
+        StreamingContext context)
     {
-        Type T = GetType();
+        Type T = instance.GetType();
         foreach (FieldInfo field in T.GetFields())
         {
             Type serializedType = BinarySerializableData.GetSerializedType(field);
@@ -25,20 +37,25 @@ public class BinarySerializable : ISerializable
 
                 object value;
                 if (BinarySerializableData.Deserialize(field, deserializedValue, out value))
-                    field.SetValue(this, value);
+                    field.SetValue(instance, value);
                 else
-                    UnityEngine.Debug.LogWarning($"Could not serialize field: {field.Name} - getting default values");
+                    Debug.LogWarning($"Could not serialize field: {field.Name} - getting default values");
             }
             else
             {
                 object deserializedValue = info.GetValue(field.Name, field.FieldType);
                 object value;
                 if (BinarySerializableData.Deserialize(field, deserializedValue, out value))
-                    field.SetValue(this, value);
+                    field.SetValue(instance, value);
                 else
-                    UnityEngine.Debug.LogWarning($"Could not serialize field: {field.Name} - getting default values");
+                    Debug.LogWarning($"Could not serialize field: {field.Name} - getting default values");
             }
         }
+    }
+
+    protected BinarySerializable(SerializationInfo info, StreamingContext context)
+    {
+        Deserialize(this, info, context);
     }
 
     [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
@@ -67,8 +84,31 @@ public class BinarySerializable : ISerializable
             }
             else
             {
-                UnityEngine.Debug.LogWarning($"Could not serialize field: {field.Name} - ignoring");
+                Debug.LogWarning($"Could not serialize field: {field.Name} - ignoring");
             }
         }
+    }
+
+    public static BinarySerializable Load(string filePath)
+    {
+        if (!File.Exists(filePath))
+        {
+            Debug.LogWarning($"File \"{filePath}\" not found! Getting default values.");
+            return null;
+        }
+
+        IFormatter formatter = new BinaryFormatter();
+        FileStream s = new FileStream(filePath, FileMode.Open);
+        BinarySerializable d = (BinarySerializable)formatter.Deserialize(s);
+        s.Close();
+        return d;
+    }
+
+    public static void Save(string filePath, BinarySerializable instance)
+    {
+        IFormatter formatter = new BinaryFormatter();
+        FileStream s = new FileStream(filePath, FileMode.Create);
+        formatter.Serialize(s, instance);
+        s.Close();
     }
 }

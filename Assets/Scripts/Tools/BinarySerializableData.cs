@@ -14,6 +14,8 @@ public class BinarySerializableData
         typeof(string),
         typeof(InputBinding),
         typeof(PlayerData),
+        typeof(GamePlayerUnitData),
+        typeof(GamePlayerData),
     };
 
     public Dictionary<string, object> properties;
@@ -72,6 +74,12 @@ public class BinarySerializableData
             outValue = new float[] { c.r, c.g, c.b, c.a };
             return true;
         }
+        else if (_IsOfType(T, typeof(Vector3)))
+        {
+            Vector3 v = (Vector3)inValue;
+            outValue = new float[] { v.x, v.y, v.z };
+            return true;
+        }
 
         outValue = null;
         return false;
@@ -94,6 +102,12 @@ public class BinarySerializableData
         {
             float[] c = (float[])data;
             value = new Color(c[0], c[1], c[2], c[3]);
+            return true;
+        }
+        else if (_IsOfType(T, typeof(Vector3)))
+        {
+            float[] v = (float[])data;
+            value = new Vector3(v[0], v[1], v[2]);
             return true;
         }
 

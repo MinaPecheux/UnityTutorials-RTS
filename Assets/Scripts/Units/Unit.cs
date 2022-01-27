@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -25,6 +25,7 @@ public struct UnitLevelUpData
 
 public class Unit
 {
+    public static Dictionary<int, List<Unit>> UNITS_BY_OWNER;
 
     protected string _uid;
     protected UnitData _data;
@@ -77,6 +78,13 @@ public class Unit
 
         // prepare data for upgrade to next level
         _levelUpData = _GetLevelUpData();
+
+        // auto-register unit
+        if (UNITS_BY_OWNER == null)
+            UNITS_BY_OWNER = new Dictionary<int, List<Unit>>();
+        if (!UNITS_BY_OWNER.ContainsKey(_owner))
+            UNITS_BY_OWNER[_owner] = new List<Unit>();
+        UNITS_BY_OWNER[_owner].Add(this);
     }
 
     public void SetPosition(Vector3 position)

@@ -8,12 +8,6 @@ using UnityEngine;
 
 public class BinarySerializableScriptableObject : ScriptableObject
 {
-#if UNITY_EDITOR
-    private static string _scriptableObjectsDataDirectory = "ScriptableObjects_Dev";
-#else
-    private static string _scriptableObjectsDataDirectory = "ScriptableObjects";
-#endif
-
     [SerializeField]
     protected List<string> _fieldsToSerialize;
     public List<string> FieldsToSeralize => _fieldsToSerialize;
@@ -40,7 +34,7 @@ public class BinarySerializableScriptableObject : ScriptableObject
     {
         string dirPath = Path.Combine(
             Application.persistentDataPath,
-            _scriptableObjectsDataDirectory
+            BinarySerializable.DATA_DIRECTORY
         );
         string filePath = Path.Combine(
             dirPath,
@@ -73,7 +67,7 @@ public class BinarySerializableScriptableObject : ScriptableObject
     {
         string filePath = Path.Combine(
             Application.persistentDataPath,
-            _scriptableObjectsDataDirectory,
+            BinarySerializable.DATA_DIRECTORY,
             $"{(fileName == null ? name : fileName)}.data"
         );
 
