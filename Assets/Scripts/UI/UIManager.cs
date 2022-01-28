@@ -344,8 +344,7 @@ public class UIManager : MonoBehaviour
         // place container top-right of the "phantom" building
         placedBuildingProductionRectTransform.anchoredPosition =
             (Vector2) Camera.main.WorldToScreenPoint(pos) / GameManager.instance.canvasScaleFactor
-            + Vector2.right * 40f
-            + Vector2.up * 10f;
+            + Vector2.right * 60f;
     }
 
     private void _OnHoverSkillButton(object data)

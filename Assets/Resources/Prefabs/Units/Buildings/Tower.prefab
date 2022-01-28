@@ -135,8 +135,9 @@ MonoBehaviour:
   fov: {fileID: 2773615676608542857}
   meshRenderer: {fileID: 1277570843251847066}
   contextualSource: {fileID: 231915562201925242}
+  animator: {fileID: 0}
   ownerMaterialSlotIndex: 3
-  ambientSource: {fileID: 0}
+  ambientSource: {fileID: 231915562201925242}
 --- !u!114 &-4105628491187885730
 MonoBehaviour:
   m_ObjectHideFlags: 0

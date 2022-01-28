@@ -7726,7 +7726,7 @@ GameObject:
   - component: {fileID: 1466245625}
   m_Layer: 10
   m_Name: CameraFOVWrapper
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
