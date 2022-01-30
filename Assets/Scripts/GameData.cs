@@ -17,6 +17,12 @@ public class GamePlayerUnitData : BinarySerializable
     // building-specific
     public int constructionHP;
 
+    public GamePlayerUnitData() { }
+
+    protected GamePlayerUnitData(SerializationInfo info, StreamingContext context)
+    {
+        BinarySerializable.Deserialize(this, info, context);
+    }
 }
 [System.Serializable]
 public class GamePlayerData
@@ -29,6 +35,8 @@ public class GamePlayerData
 public class GameData : BinarySerializable
 {
     public static string gameUid;
+    private static GameData _instance;
+    public static GameData Instance => _instance;
 
     public static string DATA_FILE_NAME = "GameData.data";
 
@@ -42,6 +50,19 @@ public class GameData : BinarySerializable
             "Games",
             gameUid,
             DATA_FILE_NAME);
+
+    public GameData() { }
+
+    protected GameData(SerializationInfo info, StreamingContext context)
+    {
+        BinarySerializable.Deserialize(this, info, context);
+    }
+
+    public static GameData Load()
+    {
+        _instance = (GameData) BinarySerializable.Load(_GetFilePath());
+        return _instance;
+    }
 
     public static void Save(GameData instance)
     {

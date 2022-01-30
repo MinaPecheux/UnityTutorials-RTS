@@ -23,6 +23,10 @@ public class CoreDataHandler : MonoBehaviour
     {
         _gameUID = $"{d.sceneName}__{System.Guid.NewGuid().ToString()}";
     }
+    public void SetGameUID(string uid)
+    {
+        _gameUID = uid;
+    }
 
     public void SetMapData(MapData d)
     {

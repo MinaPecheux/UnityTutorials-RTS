@@ -18,17 +18,21 @@ public class BuildingPlacer : MonoBehaviour
     {
         instance = this;
 
-        Transform spawnpoints = GameObject.Find("Spawnpoints").transform;
-
-        BuildingData initialBuilding = GameManager.instance.gameGlobalParameters.initialBuilding;
-        GamePlayersParameters p = GameManager.instance.gamePlayersParameters;
-        Vector3 pos;
-        for (int i = 0; i < p.players.Length; i++)
+        // if no previous game data, spawn initial buildings
+        if (GameData.Instance == null)
         {
-            pos = spawnpoints.GetChild(i).position;
-            SpawnBuilding(initialBuilding, i, pos);
-            if (i == p.myPlayerId)
-                Camera.main.GetComponent<CameraManager>().SetPosition(pos);
+            Transform spawnpoints = GameObject.Find("Spawnpoints").transform;
+
+            BuildingData initialBuilding = GameManager.instance.gameGlobalParameters.initialBuilding;
+            GamePlayersParameters p = GameManager.instance.gamePlayersParameters;
+            Vector3 pos;
+            for (int i = 0; i < p.players.Length; i++)
+            {
+                pos = spawnpoints.GetChild(i).position;
+                SpawnBuilding(initialBuilding, i, pos);
+                if (i == p.myPlayerId)
+                    Camera.main.GetComponent<CameraManager>().SetPosition(pos);
+            }
         }
     }
 

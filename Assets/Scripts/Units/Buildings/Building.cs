@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum BuildingPlacement
@@ -90,9 +90,9 @@ public class Building : Unit
         _buildingManager.meshRenderer.materials = materials.ToArray();
     }
 
-    public override void Place()
+    public override void Place(bool fromSavedData = false)
     {
-        base.Place();
+        base.Place(fromSavedData);
         // set placement state
         _placement = BuildingPlacement.FIXED;
         // change building materials
@@ -101,7 +101,7 @@ public class Building : Unit
         SetConstructionHP(0);
     }
 
-    public void SetConstructionHP(int constructionHP)
+    public void SetConstructionHP(int constructionHP, bool fromSavedData = false)
     {
         if (_isAlive) return;
 
@@ -115,7 +115,7 @@ public class Building : Unit
         _rendererMesh.sharedMesh = m;
 
         if (constructionRatio >= 1)
-            _SetAlive();
+            _SetAlive(fromSavedData);
     }
 
     public void CheckValidPlacement()
@@ -160,7 +160,7 @@ public class Building : Unit
         _buildingManager.ambientSource.Pause();
     }
 
-    private void _SetAlive()
+    private void _SetAlive(bool fromSavedData = false)
     {
         _isAlive = true;
         _bt.enabled = true;
@@ -173,7 +173,8 @@ public class Building : Unit
         _smokeVfx.Clear();
         if (_owner == GameManager.instance.gamePlayersParameters.myPlayerId)
         {
-            EventManager.TriggerEvent("PlaySoundByName", "onBuildingPlacedSound");
+            if (!fromSavedData)
+                EventManager.TriggerEvent("PlaySoundByName", "onBuildingPlacedSound");
             // replace construction sound
             if (_ambientSound)
             {

@@ -16,7 +16,7 @@
     }
 
     public string Name { get => _name; }
-    public int Amount { get => _currentAmount; }
+    public int Amount { get => _currentAmount; set { _currentAmount = value; } }
 }
 
 [System.Serializable]

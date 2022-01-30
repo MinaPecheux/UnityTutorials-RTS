@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -139,7 +139,7 @@ public class Unit
         return _production;
     }
 
-    public virtual void Place()
+    public virtual void Place(bool fromSavedData = false)
     {
         // remove "is trigger" flag from box collider to allow
         // for collisions with units
@@ -147,11 +147,14 @@ public class Unit
 
         // update game resources: remove the cost of the building
         // from each game resource
-        foreach (ResourceValue resource in _data.cost)
+        if (!fromSavedData)
         {
-            Globals.GAME_RESOURCES[_owner][resource.code].AddAmount(-resource.amount);
+            foreach (ResourceValue resource in _data.cost)
+            {
+                Globals.GAME_RESOURCES[_owner][resource.code].AddAmount(-resource.amount);
+            }
+            EventManager.TriggerEvent("UpdateResourceTexts");
         }
-        EventManager.TriggerEvent("UpdateResourceTexts");
 
         if (_owner == GameManager.instance.gamePlayersParameters.myPlayerId)
             _transform.GetComponent<UnitManager>().EnableFOV(_fieldOfView);
@@ -162,7 +165,7 @@ public class Unit
         return _data.CanBuy(_owner);
     }
 
-    public void LevelUp()
+    public void LevelUp(bool fromSavedData = false)
     {
         // if unit already at max level: abort early
         if (_levelMaxedOut)
@@ -179,21 +182,24 @@ public class Unit
         _attackDamage = _levelUpData.newAttackDamage;
         _attackRange = _levelUpData.newAttackRange;
 
-        // consume resources
-        foreach (ResourceValue resource in _levelUpData.cost)
-        {
-            Globals.GAME_RESOURCES[_owner][resource.code].AddAmount(-resource.amount);
-        }
-        EventManager.TriggerEvent("UpdateResourceTexts");
-
-        // play sound / show nice VFX
-        _transform.GetComponent<UnitManager>().LevelUp();
-
         // check if reached max level
         _levelMaxedOut = _level == p.UnitMaxLevel();
 
         // prepare data for upgrade to next level
         _levelUpData = _GetLevelUpData();
+
+        if (!fromSavedData)
+        {
+            // consume resources
+            foreach (ResourceValue resource in _levelUpData.cost)
+            {
+                Globals.GAME_RESOURCES[_owner][resource.code].AddAmount(-resource.amount);
+            }
+            EventManager.TriggerEvent("UpdateResourceTexts");
+
+            // play sound / show nice VFX
+            _transform.GetComponent<UnitManager>().LevelUp();
+        }
     }
 
     public void ProduceResources()
@@ -237,20 +243,20 @@ public class Unit
         );
     }
 
-    public string Uid { get => _uid; }
+    public string Uid { get => _uid; set { _uid = value; } }
     public UnitData Data { get => _data; }
     public string Code { get => _data.code; }
     public Transform Transform { get => _transform; }
     public int HP { get => _currentHealth; set => _currentHealth = value; }
     public int MaxHP { get => _data.healthpoints; }
-    public int Level { get => _level; }
+    public int Level { get => _level; set { _level = value; } }
     public bool LevelMaxedOut { get => _levelMaxedOut; }
     public UnitLevelUpData LevelUpData { get => _levelUpData; }
     public Dictionary<InGameResource, int> Production { get => _production; }
     public List<SkillManager> SkillManagers { get => _skillManagers; }
     public int Owner { get => _owner; }
-    public int AttackDamage { get => _attackDamage; }
-    public float AttackRange { get => _attackRange; }
+    public int AttackDamage { get => _attackDamage; set { _attackDamage = value; } }
+    public float AttackRange { get => _attackRange; set { _attackRange = value; } }
 
     public virtual bool IsAlive { get => true; }
 }

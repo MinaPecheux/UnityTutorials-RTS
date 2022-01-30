@@ -28,23 +28,31 @@ public class MainMenuManager : MonoBehaviour
     public Text newGameDetailInfoText;
     public Transform newGamePlayersList;
     public Button startGameButton;
+    public Transform loadGameScrollview;
+    public Image loadGameDetailMapCapture;
+    public Text loadGameDetailInfoText;
+    public Button loadGameButton;
 
+    private MapData[] _maps;
     private MapData _selectedMap;
     private List<bool> _activePlayers;
     private Dictionary<int, PlayerData> _playersData;
     private List<Color> _availableColors;
 
+    private string _selectedLoadGameUid;
+
     private void Start()
     {
+        _maps = Resources.LoadAll<MapData>("ScriptableObjects/Maps");
         _PopulateMapsList();
+        _PopulateLoadsList();
     }
 
     #region New Game
     private void _PopulateMapsList()
     {
-        MapData[] maps = Resources.LoadAll<MapData>("ScriptableObjects/Maps");
         Transform t; Sprite s;
-        foreach (MapData map in maps)
+        foreach (MapData map in _maps)
         {
             GameObject g = Instantiate(menuScenePickPrefab, newGameScrollview);
             t = g.transform;
@@ -228,6 +236,61 @@ public class MainMenuManager : MonoBehaviour
         p.SaveToFile($"Games/{CoreDataHandler.instance.GameUID}/PlayerParameters", true);
 
         CoreBooter.instance.LoadMap(_selectedMap.sceneName);
+    }
+    #endregion
+
+    #region Load Game
+    private void _PopulateLoadsList()
+    {
+        Dictionary<string, MapData> mapsByScene = new Dictionary<string, MapData>();
+        foreach (MapData m in _maps) mapsByScene[m.sceneName] = m;
+
+        // get list of available saves
+        List<(string, System.DateTime)> availableGames = DataHandler.GetGamesList();
+
+        Transform t; Sprite s; MapData map;
+        string gameUid, sceneName;
+        foreach ((string gamePath, System.DateTime lastModification) in availableGames)
+        {
+            gameUid = System.IO.Path.GetFileName(gamePath);
+            sceneName = gameUid.Split(
+                new string[] { "__" }, System.StringSplitOptions.None)[0];
+            map = mapsByScene[sceneName];
+            GameObject g = Instantiate(menuScenePickPrefab, loadGameScrollview);
+            t = g.transform;
+            s = Resources.Load<Sprite>($"MapCaptures/{map.sceneName}");
+            t.Find("MapCapture").GetComponent<Image>().sprite = s;
+            t.Find("Data/Name").GetComponent<Text>().text = map.mapName;
+            t.Find("Data/Desc").GetComponent<Text>().text =
+                $"Last modification: {lastModification.ToShortDateString()}, " +
+                $"{lastModification.ToShortTimeString()}";
+            _AddSceneLoadListener(g.GetComponent<Button>(), gameUid, map, s);
+        }
+    }
+
+    private void _SelectLoad(string gameUid, MapData map, Sprite mapSprite)
+    {
+        _selectedLoadGameUid = gameUid;
+        loadGameButton.interactable = true;
+        loadGameDetailMapCapture.sprite = mapSprite;
+        loadGameDetailInfoText.text =
+            $"{map.mapName} <size=20>({map.mapSize}x{map.mapSize})</size>";
+    }
+
+    private void _AddSceneLoadListener(Button b, string gameUid, MapData map, Sprite mapSprite)
+    {
+        b.onClick.AddListener(() => _SelectLoad(gameUid, map, mapSprite));
+    }
+
+    public void LoadGame()
+    {
+        if (_selectedLoadGameUid == "") return;
+
+        CoreDataHandler.instance.SetGameUID(_selectedLoadGameUid);
+        string sceneName = _selectedLoadGameUid.Split(
+            new string[] { "__" },
+            System.StringSplitOptions.None)[0];
+        CoreBooter.instance.LoadMap(sceneName);
     }
     #endregion
 
