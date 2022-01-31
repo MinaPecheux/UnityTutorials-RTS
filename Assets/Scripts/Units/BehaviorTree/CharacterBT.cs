@@ -90,21 +90,20 @@ public class CharacterBT : Tree
         }
 
         CharacterData cd = (CharacterData)manager.Unit.Data;
+        Sequence buildSequence = new Sequence(new List<Node> {
+            new CheckTargetIsMine(manager),
+            new CheckUnitInRange(manager, false)
+        });
+        Timer buildTimer = new Timer(
+            cd.buildRate,
+            new List<Node>()
+            {
+                new TaskBuild(manager)
+            }
+        );
         if (cd.buildPower > 0)
-        {
-            Sequence buildSequence = new Sequence(new List<Node> {
-                new CheckTargetIsMine(manager),
-                new CheckUnitInRange(manager, false),
-                new Timer(
-                    cd.buildRate,
-                    new List<Node>()
-                    {
-                        new TaskBuild(manager)
-                    }
-                ),
-            });
-            attackOrBuildSelector.Attach(buildSequence);
-        }
+            buildSequence.Attach(buildTimer);
+        attackOrBuildSelector.Attach(buildSequence);
 
         Sequence moveToTargetSequence = new Sequence(new List<Node> {
             new CheckHasTarget(),

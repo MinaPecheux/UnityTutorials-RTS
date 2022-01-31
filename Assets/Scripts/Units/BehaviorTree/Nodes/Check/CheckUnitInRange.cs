@@ -61,18 +61,32 @@ public class CheckUnitInRange : Node
 
             if (targetOwner == GameManager.instance.gamePlayersParameters.myPlayerId)
             {
-                if (u is Building b && !b.IsAlive)
+                CharacterManager cm = (CharacterManager)_manager;
+                int buildPower = ((CharacterData)cm.Unit.Data).buildPower;
+
+                if (buildPower > 0)
                 {
-                    CharacterManager cm = (CharacterManager)_manager;
-                    if (!cm.IsConstructor)
+                    if (u is Building b && !b.IsAlive)
                     {
-                        b.AddConstructor(cm);
-                        cm.SetIsConstructor(true);
-                        cm.SetRendererVisibility(false);
-                        cm.agent.Warp(
-                            target.position +
-                            Quaternion.Euler(0f, Random.Range(0f, 360f), 0f) * Vector3.right * _targetSize * 0.8f);
+                        if (!cm.IsConstructor)
+                        {
+                            b.AddConstructor(cm);
+                            cm.SetIsConstructor(true);
+                            cm.SetRendererVisibility(false);
+                            cm.agent.Warp(
+                                target.position +
+                                Quaternion.Euler(0f, Random.Range(0f, 360f), 0f) * Vector3.right * _targetSize * 0.8f);
+                        }
                     }
+                }
+                else
+                {
+                    Parent.ClearData("currentTarget");
+                    Parent.ClearData("currentTargetOffset");
+                    _manager.SetAnimatorBoolVariable("Running", false);
+                    _manager.SetAnimatorBoolVariable("Attacking", false);
+                    _state = NodeState.FAILURE;
+                    return _state;
                 }
             }
             else if (_checkAttack)

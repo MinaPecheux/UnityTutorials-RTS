@@ -59,14 +59,18 @@ public class TaskFollow : Node
             }
             else
             {
-                if (u is Building b)
+                int buildPower = ((CharacterData)_manager.Unit.Data).buildPower;
+                if (u is Building b && !b.IsAlive)
                 {
                     if (b.HasConstructorsFull)
                     {
                         ClearData("currentTarget");
                         ClearData("currentTargetOffset");
                     }
-                    else if (!_manager.IsConstructor)
+                    else if (
+                        !_manager.IsConstructor &&
+                        buildPower > 0
+                    )
                     {
                         b.AddConstructor(_manager);
                         _manager.SetIsConstructor(true);
