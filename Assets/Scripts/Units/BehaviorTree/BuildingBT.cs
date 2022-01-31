@@ -44,7 +44,7 @@ public class BuildingBT : Tree
                 },
                 delegate
                 {
-                    EventManager.TriggerEvent("UpdateResourceTexts");
+                    EventManager.TriggerEvent("UpdatedResources");
                 }
             )
         }));

@@ -12,11 +12,11 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        EventManager.TriggerEvent("HoverSkillButton", _skillData);
+        EventManager.TriggerEvent("HoveredSkillButton", _skillData);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        EventManager.TriggerEvent("UnhoverSkillButton");
+        EventManager.TriggerEvent("UnhoveredSkillButton");
     }
 }

@@ -96,8 +96,8 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.AddListener("PauseGame", _OnPauseGame);
-        EventManager.AddListener("ResumeGame", _OnResumeGame);
+        EventManager.AddListener("PausedGame", _OnPausedGame);
+        EventManager.AddListener("ResumedGame", _OnResumedGame);
 
         EventManager.AddListener("UpdateGameParameter:enableDayAndNightCycle", _OnUpdateDayAndNightCycle);
         EventManager.AddListener("UpdateGameParameter:enableFOV", _OnUpdateFOV);
@@ -105,19 +105,19 @@ public class GameManager : MonoBehaviour
 
     private void OnDisable()
     {
-        EventManager.RemoveListener("PauseGame", _OnPauseGame);
-        EventManager.RemoveListener("ResumeGame", _OnResumeGame);
+        EventManager.RemoveListener("PausedGame", _OnPausedGame);
+        EventManager.RemoveListener("ResumedGame", _OnResumedGame);
 
         EventManager.RemoveListener("UpdateGameParameter:enableDayAndNightCycle", _OnUpdateDayAndNightCycle);
         EventManager.RemoveListener("UpdateGameParameter:enableFOV", _OnUpdateFOV);
     }
 
-    private void _OnPauseGame()
+    private void _OnPausedGame()
     {
         gameIsPaused = true;
     }
 
-    private void _OnResumeGame()
+    private void _OnResumedGame()
     {
         gameIsPaused = false;
     }

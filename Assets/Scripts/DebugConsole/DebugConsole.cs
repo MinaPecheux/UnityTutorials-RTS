@@ -37,17 +37,17 @@ public class DebugConsole : MonoBehaviour
         new DebugCommand<int>("add_gold", "Adds a given amount of gold to the current player.", "add_gold <amount>", (x) =>
         {
             Globals.GAME_RESOURCES[GameManager.instance.gamePlayersParameters.myPlayerId][InGameResource.Gold].AddAmount(x);
-            EventManager.TriggerEvent("UpdateResourceTexts");
+            EventManager.TriggerEvent("UpdatedResources");
         });
         new DebugCommand<int>("add_wood", "Adds a given amount of wood to the current player.", "add_wood <amount>", (x) =>
         {
             Globals.GAME_RESOURCES[GameManager.instance.gamePlayersParameters.myPlayerId][InGameResource.Wood].AddAmount(x);
-            EventManager.TriggerEvent("UpdateResourceTexts");
+            EventManager.TriggerEvent("UpdatedResources");
         });
         new DebugCommand<int>("add_stone", "Adds a given amount of stone to the current player.", "add_stone <amount>", (x) =>
         {
             Globals.GAME_RESOURCES[GameManager.instance.gamePlayersParameters.myPlayerId][InGameResource.Stone].AddAmount(x);
-            EventManager.TriggerEvent("UpdateResourceTexts");
+            EventManager.TriggerEvent("UpdatedResources");
         });
         new DebugCommand("list_players", "Lists all current players (with their IDs).", "list_players", () =>
         {
@@ -83,7 +83,7 @@ public class DebugConsole : MonoBehaviour
         new DebugCommand<int>("set_unit_formation_type", "Sets the unit formation type (by index).", "set_unit_formation_type <formation_index>", (x) =>
         {
             Globals.UNIT_FORMATION_TYPE = (UnitFormationType)x;
-            EventManager.TriggerEvent("UpdateUnitFormationType");
+            EventManager.TriggerEvent("UpdatedUnitFormationType");
         });
 
         new DebugCommand<int>("set_construction_hp", "Sets the selected unit construction HP.", "set_construction_hp <hp>", (x) =>
@@ -110,7 +110,7 @@ public class DebugConsole : MonoBehaviour
     private void _OnShowDebugConsole()
     {
         _showConsole = true;
-        EventManager.TriggerEvent("PauseGame");
+        EventManager.TriggerEvent("PausedGame");
     }
 
     private void OnGUI()
@@ -158,7 +158,7 @@ public class DebugConsole : MonoBehaviour
                 else if (e.keyCode == KeyCode.Escape)
                 {
                     _showConsole = false;
-                    EventManager.TriggerEvent("ResumeGame");
+                    EventManager.TriggerEvent("ResumedGame");
                 }
             }
         }

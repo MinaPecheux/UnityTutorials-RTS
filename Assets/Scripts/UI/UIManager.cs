@@ -99,7 +99,7 @@ public class UIManager : MonoBehaviour
             unitFormationTypesParent.Find("FormationGrid").GetComponent<Image>(),
             unitFormationTypesParent.Find("FormationXCross").GetComponent<Image>()
         };
-        _OnUpdateUnitFormationType();
+        _OnUpdatedUnitFormationType();
 
         placedBuildingProductionRectTransform.gameObject.SetActive(false);
 
@@ -147,32 +147,32 @@ public class UIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.AddListener("UpdateResourceTexts", _OnUpdateResourceTexts);
-        EventManager.AddListener("UpdateConstructionMenu", _OnUpdateConstructionMenu);
-        EventManager.AddListener("UpdatePlacedBuildingProduction", _OnUpdatePlacedBuildingProduction);
-        EventManager.AddListener("HoverSkillButton", _OnHoverSkillButton);
-        EventManager.AddListener("UnhoverSkillButton", _OnUnhoverSkillButton);
-        EventManager.AddListener("SelectUnit", _OnSelectUnit);
-        EventManager.AddListener("DeselectUnit", _OnDeselectUnit);
+        EventManager.AddListener("UpdatedResources", _OnUpdatedResources);
+        EventManager.AddListener("UpdatedConstructors", _OnUpdatedConstructors);
+        EventManager.AddListener("UpdatedPlacedBuildingPosition", _OnUpdatedPlacedBuildingPosition);
+        EventManager.AddListener("HoveredSkillButton", _OnHoveredSkillButton);
+        EventManager.AddListener("UnhoveredSkillButton", _OnUnhoveredSkillButton);
+        EventManager.AddListener("SelectedUnit", _OnSelectedUnit);
+        EventManager.AddListener("DeselectedUnit", _OnDeselectedUnit);
         EventManager.AddListener("PlaceBuildingOn", _OnPlaceBuildingOn);
         EventManager.AddListener("PlaceBuildingOff", _OnPlaceBuildingOff);
         EventManager.AddListener("SetPlayer", _OnSetPlayer);
-        EventManager.AddListener("UpdateUnitFormationType", _OnUpdateUnitFormationType);
+        EventManager.AddListener("UpdatedUnitFormationType", _OnUpdatedUnitFormationType);
     }
 
     private void OnDisable()
     {
-        EventManager.RemoveListener("UpdateResourceTexts", _OnUpdateResourceTexts);
-        EventManager.RemoveListener("UpdateConstructionMenu", _OnUpdateConstructionMenu);
-        EventManager.RemoveListener("UpdatePlacedBuildingProduction", _OnUpdatePlacedBuildingProduction);
-        EventManager.RemoveListener("HoverSkillButton", _OnHoverSkillButton);
-        EventManager.RemoveListener("UnhoverSkillButton", _OnUnhoverSkillButton);
-        EventManager.RemoveListener("SelectUnit", _OnSelectUnit);
-        EventManager.RemoveListener("DeselectUnit", _OnDeselectUnit);
+        EventManager.RemoveListener("UpdatedResources", _OnUpdatedResources);
+        EventManager.RemoveListener("UpdatedConstructors", _OnUpdatedConstructors);
+        EventManager.RemoveListener("UpdatedPlacedBuildingPosition", _OnUpdatedPlacedBuildingPosition);
+        EventManager.RemoveListener("HoveredSkillButton", _OnHoveredSkillButton);
+        EventManager.RemoveListener("UnhoveredSkillButton", _OnUnhoveredSkillButton);
+        EventManager.RemoveListener("SelectedUnit", _OnSelectedUnit);
+        EventManager.RemoveListener("DeselectedUnit", _OnDeselectedUnit);
         EventManager.RemoveListener("PlaceBuildingOn", _OnPlaceBuildingOn);
         EventManager.RemoveListener("PlaceBuildingOff", _OnPlaceBuildingOff);
         EventManager.RemoveListener("SetPlayer", _OnSetPlayer);
-        EventManager.RemoveListener("UpdateUnitFormationType", _OnUpdateUnitFormationType);
+        EventManager.RemoveListener("UpdatedUnitFormationType", _OnUpdatedUnitFormationType);
     }
 
     public void ToggleSelectionGroupButton(int groupIndex, bool on)
@@ -184,14 +184,14 @@ public class UIManager : MonoBehaviour
     {
         bool showGameSettingsPanel = !gameSettingsPanel.activeSelf;
         gameSettingsPanel.SetActive(showGameSettingsPanel);
-        EventManager.TriggerEvent(showGameSettingsPanel ? "PauseGame" : "ResumeGame");
+        EventManager.TriggerEvent(showGameSettingsPanel ? "PausedGame" : "ResumedGame");
     }
 
     public void ToggleMainMenuPanel()
     {
         bool showMainMenuPanel = !mainMenuPanel.activeSelf;
         mainMenuPanel.SetActive(showMainMenuPanel);
-        EventManager.TriggerEvent(showMainMenuPanel ? "PauseGame" : "ResumeGame");
+        EventManager.TriggerEvent(showMainMenuPanel ? "PausedGame" : "ResumedGame");
     }
 
     public void HoverLevelUpButton()
@@ -229,7 +229,7 @@ public class UIManager : MonoBehaviour
     public void SetUnitFormationType(int type)
     {
         Globals.UNIT_FORMATION_TYPE = (UnitFormationType)type;
-        _OnUpdateUnitFormationType();
+        _OnUpdatedUnitFormationType();
     }
 
     public void LoadGame()
@@ -245,7 +245,7 @@ public class UIManager : MonoBehaviour
     public void ResumeGame()
     {
         mainMenuPanel.SetActive(false);
-        EventManager.TriggerEvent("ResumeGame");
+        EventManager.TriggerEvent("ResumedGame");
     }
 
     public void QuitGame()
@@ -303,7 +303,7 @@ public class UIManager : MonoBehaviour
         _resourceTexts[resource].text = value.ToString();
     }
 
-    private void _OnUpdateResourceTexts()
+    private void _OnUpdatedResources()
     {
         foreach (KeyValuePair<InGameResource, GameResource> pair in Globals.GAME_RESOURCES[_myPlayerId])
             _SetResourceText(pair.Key, pair.Value.Amount);
@@ -311,12 +311,12 @@ public class UIManager : MonoBehaviour
         _CheckBuyLimits();
     }
 
-    private void _OnUpdateConstructionMenu(object data)
+    private void _OnUpdatedConstructors(object data)
     {
         _SetConstructionMenu((Building)data);
     }
 
-    private void _OnUpdatePlacedBuildingProduction(object data)
+    private void _OnUpdatedPlacedBuildingPosition(object data)
     {
         object[] values = (object[]) data;
         Dictionary<InGameResource, int> production = (Dictionary<InGameResource, int>) values[0];
@@ -347,7 +347,7 @@ public class UIManager : MonoBehaviour
             + Vector2.right * 60f;
     }
 
-    private void _OnHoverSkillButton(object data)
+    private void _OnHoveredSkillButton(object data)
     {
         SkillData s = (SkillData)data;
         string title = s.skillName;
@@ -364,12 +364,12 @@ public class UIManager : MonoBehaviour
         ShowInfoPanel(true);
     }
 
-    private void _OnUnhoverSkillButton()
+    private void _OnUnhoveredSkillButton()
     {
         ShowInfoPanel(false);
     }
 
-    private void _OnSelectUnit(object data)
+    private void _OnSelectedUnit(object data)
     {
         Unit unit = (Unit) data;
         AddSelectedUnitToUIList(unit);
@@ -385,7 +385,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void _OnDeselectUnit(object data)
+    private void _OnDeselectedUnit(object data)
     {
         Unit unit = (Unit) data;
         RemoveSelectedUnitFromUIList(unit.Code);
@@ -424,11 +424,11 @@ public class UIManager : MonoBehaviour
         Color c = GameManager.instance.gamePlayersParameters.players[_myPlayerId].color;
         c = Utils.LightenColor(c, 0.2f);
         playerIndicatorImage.color = c;
-        _OnUpdateResourceTexts();
+        _OnUpdatedResources();
         _CheckBuyLimits();
     }
 
-    private void _OnUpdateUnitFormationType()
+    private void _OnUpdatedUnitFormationType()
     {
         for (int i = 0; i < 4; i++)
         {

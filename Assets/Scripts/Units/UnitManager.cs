@@ -135,7 +135,7 @@ public class UnitManager : MonoBehaviour
         if (!Globals.SELECTED_UNITS.Contains(this)) return;
         Globals.SELECTED_UNITS.Remove(this);
 
-        EventManager.TriggerEvent("DeselectUnit", Unit);
+        EventManager.TriggerEvent("DeselectedUnit", Unit);
         selectionCircle.SetActive(false);
         Destroy(healthbar);
         healthbar = null;
@@ -167,7 +167,7 @@ public class UnitManager : MonoBehaviour
         if (Globals.SELECTED_UNITS.Contains(this)) return;
 
         Globals.SELECTED_UNITS.Add(this);
-        EventManager.TriggerEvent("SelectUnit", Unit);
+        EventManager.TriggerEvent("SelectedUnit", Unit);
         selectionCircle.SetActive(true);
         if (healthbar == null)
         {

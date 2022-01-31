@@ -113,7 +113,7 @@ public class DataHandler : MonoBehaviour
         }
 
         Camera.main.transform.position = data.camPosition;
-        EventManager.TriggerEvent("UpdateResourceTexts");
+        EventManager.TriggerEvent("UpdatedResources");
     }
 
     public static GameData SerializeGameData()

@@ -129,7 +129,7 @@ public class Building : Unit
     public void AddConstructor(CharacterManager m)
     {
         _constructors.Add(m);
-        EventManager.TriggerEvent("UpdateConstructionMenu", this);
+        EventManager.TriggerEvent("UpdatedConstructors", this);
 
         // when adding first constructor, add some smoke VFX
         // + play construction sound
@@ -150,7 +150,7 @@ public class Building : Unit
         CharacterBT bt = _constructors[index].GetComponent<CharacterBT>();
         bt.StopBuildingConstruction();
         _constructors.RemoveAt(index);
-        EventManager.TriggerEvent("UpdateConstructionMenu", this);
+        EventManager.TriggerEvent("UpdatedConstructors", this);
 
         // when removing last constructor, remove smoke VFX
         foreach (Transform vfx in _smokeVfx)

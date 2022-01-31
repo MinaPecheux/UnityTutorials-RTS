@@ -61,7 +61,7 @@ public class BuildingPlacer : MonoBehaviour
                 {
                     _placedBuilding.CheckValidPlacement();
                     Dictionary<InGameResource, int> prod = _placedBuilding.ComputeProduction();
-                    EventManager.TriggerEvent("UpdatePlacedBuildingProduction", new object[] { prod, _raycastHit.point });
+                    EventManager.TriggerEvent("UpdatedPlacedBuildingPosition", new object[] { prod, _raycastHit.point });
                 }
                 _lastPlacementPosition = _raycastHit.point;
             }

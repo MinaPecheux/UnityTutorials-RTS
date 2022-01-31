@@ -29,17 +29,17 @@ public class DayAndNightCycler : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.AddListener("PauseGame", _OnPauseGame);
-        EventManager.AddListener("ResumeGame", _OnResumeGame);
+        EventManager.AddListener("PausedGame", _OnPausedGame);
+        EventManager.AddListener("ResumedGame", _OnResumedGame);
     }
 
     private void OnDisable()
     {
-        EventManager.RemoveListener("PauseGame", _OnPauseGame);
-        EventManager.RemoveListener("ResumeGame", _OnResumeGame);
+        EventManager.RemoveListener("PausedGame", _OnPausedGame);
+        EventManager.RemoveListener("ResumedGame", _OnResumedGame);
     }
 
-    private void _OnPauseGame()
+    private void _OnPausedGame()
     {
         if (_starsCoroutine != null)
         {
@@ -48,7 +48,7 @@ public class DayAndNightCycler : MonoBehaviour
         }
     }
 
-    private void _OnResumeGame()
+    private void _OnResumedGame()
     {
         if (_starsCoroutine == null)
             _starsCoroutine = StartCoroutine("_UpdateStars");

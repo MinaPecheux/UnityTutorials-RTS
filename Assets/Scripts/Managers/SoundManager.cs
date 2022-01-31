@@ -19,8 +19,8 @@ public class SoundManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.AddListener("PlaySoundByName", _OnPlaySoundByName);
-        EventManager.AddListener("PauseGame", _OnPauseGame);
-        EventManager.AddListener("ResumeGame", _OnResumeGame);
+        EventManager.AddListener("PausedGame", _OnPausedGame);
+        EventManager.AddListener("ResumedGame", _OnResumedGame);
 
         EventManager.AddListener("UpdateGameParameter:musicVolume", _OnUpdateMusicVolume);
         EventManager.AddListener("UpdateGameParameter:sfxVolume", _OnUpdateSfxVolume);
@@ -29,20 +29,20 @@ public class SoundManager : MonoBehaviour
     private void OnDisable()
     {
         EventManager.RemoveListener("PlaySoundByName", _OnPlaySoundByName);
-        EventManager.RemoveListener("PauseGame", _OnPauseGame);
-        EventManager.RemoveListener("ResumeGame", _OnResumeGame);
+        EventManager.RemoveListener("PausedGame", _OnPausedGame);
+        EventManager.RemoveListener("ResumedGame", _OnResumedGame);
 
         EventManager.RemoveListener("UpdateGameParameter:musicVolume", _OnUpdateMusicVolume);
         EventManager.RemoveListener("UpdateGameParameter:sfxVolume", _OnUpdateSfxVolume);
     }
 
-    private void _OnPauseGame()
+    private void _OnPausedGame()
     {
         StartCoroutine(_TransitioningVolume("musicVol", soundParameters.musicVolume, soundParameters.musicVolume - 6, 0.5f));
         StartCoroutine(_TransitioningVolume("sfxVol", soundParameters.sfxVolume, -80, 0.5f));
     }
 
-    private void _OnResumeGame()
+    private void _OnResumedGame()
     {
         StartCoroutine(_TransitioningVolume("musicVol", soundParameters.musicVolume - 6, soundParameters.musicVolume, 0.5f));
         StartCoroutine(_TransitioningVolume("sfxVol", -80, soundParameters.sfxVolume, 0.5f));

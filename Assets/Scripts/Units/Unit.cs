@@ -153,7 +153,7 @@ public class Unit
             {
                 Globals.GAME_RESOURCES[_owner][resource.code].AddAmount(-resource.amount);
             }
-            EventManager.TriggerEvent("UpdateResourceTexts");
+            EventManager.TriggerEvent("UpdatedResources");
         }
 
         if (_owner == GameManager.instance.gamePlayersParameters.myPlayerId)
@@ -195,7 +195,7 @@ public class Unit
             {
                 Globals.GAME_RESOURCES[_owner][resource.code].AddAmount(-resource.amount);
             }
-            EventManager.TriggerEvent("UpdateResourceTexts");
+            EventManager.TriggerEvent("UpdatedResources");
 
             // play sound / show nice VFX
             _transform.GetComponent<UnitManager>().LevelUp();
