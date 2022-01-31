@@ -14,14 +14,22 @@ public class BuildingManager : UnitManager
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Terrain") return;
+        if (
+            other.tag == "Terrain" ||
+            other.gameObject.layer == Globals.FOV_LAYER
+        )
+            return;
         _nCollisions++;
         CheckPlacement();
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Terrain") return;
+        if (
+            other.tag == "Terrain" ||
+            other.gameObject.layer == Globals.FOV_LAYER
+        )
+            return;
         _nCollisions--;
         CheckPlacement();
     }
@@ -67,7 +75,17 @@ public class BuildingManager : UnitManager
             ))
                 invalidCornersCount++;
         }
-        return invalidCornersCount < 3;
+        if (invalidCornersCount >= 3)
+            return false;
+
+        // check building is within the current FOV bounds
+        if (!Physics.Raycast(
+            p + Vector3.up * 100,
+            -Vector3.up, 1000,
+            Globals.FOV_LAYER_MASK))
+            return false;
+
+        return true;
     }
 
     public bool Build(int buildPower)

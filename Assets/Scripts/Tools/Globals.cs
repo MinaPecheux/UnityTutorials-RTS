@@ -21,6 +21,8 @@ public static class Globals
 {
     public static int TERRAIN_LAYER_MASK = 1 << 8;
     public static int FLAT_TERRAIN_LAYER_MASK = 1 << 10;
+    public static int FOV_LAYER = 9;
+    public static int FOV_LAYER_MASK = 1 << FOV_LAYER;
     public static int UNIT_MASK = 1 << 12;
     public static int TREE_MASK = 1 << 13;
     public static int ROCK_MASK = 1 << 14;
