@@ -234,15 +234,17 @@ public static class Utils
     {
         Vector3 bottomLeftCorner = new Vector3(0f, 0f);
         Vector3 topRightCorner = new Vector3(1f, 1f);
-        float dist = MainCamera.transform.position.y * 2;
+        float dist = 1000f;
 
         _ray = MainCamera.ViewportPointToRay(bottomLeftCorner);
-        Vector3 bottomLeft = GameManager.instance.mapWrapperCollider.Raycast(_ray, out _hit, dist)
-            ? _hit.point : new Vector3();
+        Vector3 bottomLeft =
+            GameManager.instance.mapWrapperCollider.Raycast(_ray, out _hit, dist)
+                ? _hit.point : Vector3.zero;
 
         _ray = MainCamera.ViewportPointToRay(topRightCorner);
-        Vector3 topRight = GameManager.instance.mapWrapperCollider.Raycast(_ray, out _hit, dist)
-            ? _hit.point : new Vector3();
+        Vector3 topRight =
+            GameManager.instance.mapWrapperCollider.Raycast(_ray, out _hit, dist)
+                ? _hit.point : Vector3.zero;
 
         return (bottomLeft, topRight);
     }

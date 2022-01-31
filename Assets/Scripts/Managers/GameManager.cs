@@ -18,10 +18,10 @@ public class GameManager : MonoBehaviour
     [Header("Minimap")]
     public Transform minimapAnchor;
     public Camera minimapCamera;
-    public BoxCollider minimapFOVCollider;
     public Minimap minimapScript;
-    public Collider mapWrapperCollider;
+    public BoxCollider mapWrapperCollider;
     public int terrainSize;
+    private const float _TERRAIN_MID_HEIGHT = 30f;
 
     [HideInInspector]
     public bool gameIsPaused;
@@ -68,8 +68,8 @@ public class GameManager : MonoBehaviour
 
         minimapAnchor.position = new Vector3(p, 0, p);
         minimapCamera.orthographicSize = p;
-        minimapFOVCollider.center = new Vector3(0, b.center.y, 0);
-        minimapFOVCollider.size = b.size;
+        mapWrapperCollider.center = new Vector3(0, _TERRAIN_MID_HEIGHT, 0);
+        mapWrapperCollider.size = new Vector3(b.size.x, 1f, b.size.z);
         minimapScript.terrainSize = Vector2.one * terrainSize;
     }
 

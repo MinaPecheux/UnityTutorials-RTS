@@ -7370,7 +7370,6 @@ MonoBehaviour:
   fov: {fileID: 2088108720}
   minimapAnchor: {fileID: 1484669896}
   minimapCamera: {fileID: 1039973280}
-  minimapFOVCollider: {fileID: 1466245625}
   minimapScript: {fileID: 1909154646}
   mapWrapperCollider: {fileID: 1466245625}
   terrainSize: 200
@@ -7729,7 +7728,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 200, y: 30, z: 200}
+  m_Size: {x: 200, y: 10, z: 200}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &1466245626
 Transform:
