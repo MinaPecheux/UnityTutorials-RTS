@@ -258,7 +258,8 @@ public class MainMenuManager : MonoBehaviour
             map = mapsByScene[sceneName];
             GameObject g = Instantiate(menuScenePickPrefab, loadGameScrollview);
             t = g.transform;
-            s = Resources.Load<Sprite>($"MapCaptures/{map.sceneName}");
+            s = Utils.LoadSpriteFromFile(
+                System.IO.Path.Combine(gamePath, "minimap.jpg"));
             t.Find("MapCapture").GetComponent<Image>().sprite = s;
             t.Find("Data/Name").GetComponent<Text>().text = map.mapName;
             t.Find("Data/Desc").GetComponent<Text>().text =

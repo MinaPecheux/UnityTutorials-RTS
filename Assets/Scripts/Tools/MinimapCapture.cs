@@ -3,7 +3,7 @@ using System.IO;
 
 public static class MinimapCapture
 {
-    public static void TakeScreenshot(string name, Vector2Int size, Camera camera)
+    public static void TakeScreenshot(string name, Vector2Int size, Camera camera, string folderPath = "")
     {
         RenderTexture prevRt = camera.targetTexture;
 
@@ -24,9 +24,12 @@ public static class MinimapCapture
         Object.DestroyImmediate(output);
 
         // write to a file in the project folder
-        string folderPath = Application.dataPath + "/Resources/MapCaptures";
-        if (!Directory.Exists(folderPath))
-            Directory.CreateDirectory(folderPath);
+        if (folderPath == "")
+        {
+            folderPath = Application.dataPath + "/Resources/MapCaptures";
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+        }
         string filePath = $"{folderPath}/{name}.jpg";
         File.WriteAllBytes(filePath, bytes);
 

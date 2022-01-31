@@ -43,13 +43,15 @@ public class GameData : BinarySerializable
     public GamePlayerData[] players;
     public Vector3 camPosition;
 
-    private static string _GetFilePath()
+    public static string GetFolderPath()
         => System.IO.Path.Combine(
             Application.persistentDataPath,
             DATA_DIRECTORY,
             "Games",
-            gameUid,
-            DATA_FILE_NAME);
+            gameUid);
+
+    private static string _GetFilePath()
+        => System.IO.Path.Combine(GetFolderPath(), DATA_FILE_NAME);
 
     public GameData() { }
 

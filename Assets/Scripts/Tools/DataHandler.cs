@@ -46,6 +46,15 @@ public class DataHandler : MonoBehaviour
         // save game scene data
         GameData.gameUid = CoreDataHandler.instance.GameUID;
         GameData.Save(SerializeGameData());
+        // save game scene current minimap
+        Camera minimapCamera = GameObject.Find("CameraMinimap").GetComponent<Camera>();
+        MinimapManager.IS_ENABLED = false;
+        MinimapCapture.TakeScreenshot(
+            "minimap",
+            new Vector2Int(512, 512),
+            minimapCamera,
+            GameData.GetFolderPath());
+        MinimapManager.IS_ENABLED = true;
     }
 
     public static void DeserializeGameData()

@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class MinimapManager : MonoBehaviour
 {
+    public static bool IS_ENABLED = true;
     private static Material _indicatorMat;
 
     public float lineWidth;
@@ -20,6 +21,7 @@ public class MinimapManager : MonoBehaviour
 
     public void OnPostRender()
     {
+        if (!IS_ENABLED) return;
         (Vector3 minWorldPoint, Vector3 maxWorldPoint) = Utils.GetCameraWorldBounds();
         Vector3 minViewportPoint = _minimapCam.WorldToViewportPoint(minWorldPoint);
         Vector3 maxViewportPoint = _minimapCam.WorldToViewportPoint(maxWorldPoint);

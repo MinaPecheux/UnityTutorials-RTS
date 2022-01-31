@@ -246,4 +246,16 @@ public static class Utils
 
         return (bottomLeft, topRight);
     }
+
+    public static Sprite LoadSpriteFromFile(string filePath)
+    {
+        if (!System.IO.File.Exists(filePath)) return null;
+
+        byte[] byteArray = System.IO.File.ReadAllBytes(filePath);
+        Texture2D tex = new Texture2D(2, 2);
+        bool isLoaded = tex.LoadImage(byteArray); // this auto-resizes the texture
+        if (isLoaded)
+            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), 64f);
+        return null;
+    }
 }
