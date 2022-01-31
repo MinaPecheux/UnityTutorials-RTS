@@ -34,6 +34,8 @@ public class DataHandler : MonoBehaviour
         // load game scene data
         GameData.gameUid = gameUid;
         GameData.Load();
+
+        EventManager.TriggerEvent("LoadedScene");
     }
 
     public static void SaveGameData()

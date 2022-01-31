@@ -7321,7 +7321,6 @@ GameObject:
   - component: {fileID: 1464451461}
   - component: {fileID: 1464451462}
   - component: {fileID: 1464451463}
-  - component: {fileID: 1464451464}
   - component: {fileID: 1464451468}
   - component: {fileID: 1464451469}
   - component: {fileID: 1464451466}
@@ -7456,18 +7455,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiManager: {fileID: 1464451462}
---- !u!114 &1464451464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1464451458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f429378d8ffab46a59550915a7f8f245, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1464451465
 MonoBehaviour:
   m_ObjectHideFlags: 0

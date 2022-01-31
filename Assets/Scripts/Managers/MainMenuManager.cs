@@ -46,6 +46,7 @@ public class MainMenuManager : MonoBehaviour
         _maps = Resources.LoadAll<MapData>("ScriptableObjects/Maps");
         _PopulateMapsList();
         _PopulateLoadsList();
+        EventManager.TriggerEvent("LoadedScene");
     }
 
     #region New Game

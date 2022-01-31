@@ -9,15 +9,32 @@ public class CoreBooter : MonoBehaviour
 
     public UnityEngine.UI.Image sceneTransitioner;
 
+    private bool _sceneIsLoaded;
+
     private void Awake()
     {
         if (instance == null)
             instance = this;
     }
 
+    private void OnEnable()
+    {
+        EventManager.AddListener("LoadedScene", _OnLoadedScene);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.AddListener("LoadedScene", _OnLoadedScene);
+    }
+
     private void Start()
     {
         LoadMenu();
+    }
+
+    private void _OnLoadedScene()
+    {
+        _sceneIsLoaded = true;
     }
 
     public void LoadMenu() => StartCoroutine(_SwitchingScene("menu"));
@@ -31,6 +48,7 @@ public class CoreBooter : MonoBehaviour
 
     private IEnumerator _SwitchingScene(string to, string map = "")
     {
+        _sceneIsLoaded = false;
         sceneTransitioner.color = Color.clear;
 
         float t = 0;
@@ -47,7 +65,7 @@ public class CoreBooter : MonoBehaviour
         else
             op = _LoadMap(map);
 
-        yield return new WaitUntil(() => op.isDone);
+        yield return new WaitUntil(() => _sceneIsLoaded);
 
         t = 0;
         while (t < 1f)
