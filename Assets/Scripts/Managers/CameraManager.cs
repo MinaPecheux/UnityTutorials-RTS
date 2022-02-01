@@ -15,7 +15,7 @@ public class CameraManager : MonoBehaviour
     private RaycastHit _hit;
     private Ray _ray;
 
-    private float _distance = 100f;
+    private float _distance = 500f;
     private Vector3 _forwardDir;
     private Coroutine _mouseOnScreenCoroutine;
     private int _mouseOnScreenBorder;
@@ -37,18 +37,6 @@ public class CameraManager : MonoBehaviour
         _mouseOnScreenCoroutine = null;
         _mouseOnScreenBorder = -1;
         _placingBuilding = false;
-    }
-
-    private void Start()
-    {
-        _minX = 0;
-        _maxX = GameManager.instance.terrainSize;
-        _minZ = 0;
-        _maxZ = GameManager.instance.terrainSize;
-
-        (Vector3 minWorldPoint, Vector3 maxWorldPoint) = Utils.GetCameraWorldBounds();
-        _camOffset = transform.position - (maxWorldPoint + minWorldPoint) / 2f;
-        _camHalfViewZone = (maxWorldPoint - minWorldPoint) / 2f + Vector3.one * _camMinimapBuffer;
     }
 
     void Update()
@@ -80,14 +68,14 @@ public class CameraManager : MonoBehaviour
     {
         EventManager.AddListener("PlaceBuildingOn", _OnPlaceBuildingOn);
         EventManager.AddListener("PlaceBuildingOff", _OnPlaceBuildingOff);
-        EventManager.AddListener("MoveCamera", _OnMoveCamera);
+        EventManager.AddListener("ClickedMinimap", _OnClickedMinimap);
     }
 
     private void OnDisable()
     {
         EventManager.RemoveListener("PlaceBuildingOn", _OnPlaceBuildingOn);
         EventManager.RemoveListener("PlaceBuildingOff", _OnPlaceBuildingOff);
-        EventManager.RemoveListener("MoveCamera", _OnMoveCamera);
+        EventManager.RemoveListener("ClickedMinimap", _OnClickedMinimap);
     }
 
     private void _OnPlaceBuildingOn()
@@ -117,7 +105,7 @@ public class CameraManager : MonoBehaviour
         _mouseOnScreenBorder = borderIndex;
     }
 
-    private void _OnMoveCamera(object data)
+    private void _OnClickedMinimap(object data)
     {
         Vector3 pos = _FixBounds((Vector3) data);
         SetPosition(pos);
@@ -176,6 +164,18 @@ public class CameraManager : MonoBehaviour
                 1000f,
                 Globals.TERRAIN_LAYER_MASK
             )) transform.position = _hit.point + Vector3.up * altitude;
+    }
+
+    public void InitializeBounds()
+    {
+        _minX = 0;
+        _maxX = GameManager.instance.terrainSize;
+        _minZ = 0;
+        _maxZ = GameManager.instance.terrainSize;
+
+        (Vector3 minWorldPoint, Vector3 maxWorldPoint) = Utils.GetCameraWorldBounds();
+        _camOffset = transform.position - (maxWorldPoint + minWorldPoint) / 2f;
+        _camHalfViewZone = (maxWorldPoint - minWorldPoint) / 2f + Vector3.one * _camMinimapBuffer;
     }
 
     public void SetPosition(Vector3 pos)

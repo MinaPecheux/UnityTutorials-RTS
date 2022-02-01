@@ -7358,6 +7358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6486999289f84ffdba11d4c33eb78ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 1454098051}
   canvasScaleFactor: 0
   gameGlobalParameters: {fileID: 11400000, guid: 26b5823932df14067979b59f63632ae9,
     type: 2}

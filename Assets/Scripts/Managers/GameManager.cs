@@ -7,8 +7,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    [Header("Canvas")]
+    public Canvas canvas;
     public float canvasScaleFactor;
 
+    [Header("Game Parameters")]
     public GameGlobalParameters gameGlobalParameters;
     public GamePlayersParameters gamePlayersParameters;
     public GameSoundParameters gameSoundParameters;
@@ -36,7 +39,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        canvasScaleFactor = GameObject.Find("Canvas").GetComponent<Canvas>().scaleFactor;
+        canvasScaleFactor = canvas.scaleFactor;
 
         DataHandler.LoadGameData();
         GetComponent<DayAndNightCycler>().enabled = gameGlobalParameters.enableDayAndNightCycle;

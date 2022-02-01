@@ -34,8 +34,6 @@ public class DataHandler : MonoBehaviour
         // load game scene data
         GameData.gameUid = gameUid;
         GameData.Load();
-
-        EventManager.TriggerEvent("LoadedScene");
     }
 
     public static void SaveGameData()
@@ -62,7 +60,12 @@ public class DataHandler : MonoBehaviour
     public static void DeserializeGameData()
     {
         GameData data = GameData.Instance;
-        if (data == null) return;
+        if (data == null)
+        {
+            Object.FindObjectOfType<CameraManager>().InitializeBounds();
+            EventManager.TriggerEvent("LoadedScene");
+            return;
+        }
 
         GamePlayersParameters playerParameters = GameManager.instance.gamePlayersParameters;
         for (int p = 0; p < playerParameters.players.Length; p++)
@@ -115,7 +118,9 @@ public class DataHandler : MonoBehaviour
         }
 
         Camera.main.transform.position = data.camPosition;
+        Object.FindObjectOfType<CameraManager>().InitializeBounds();
         EventManager.TriggerEvent("UpdatedResources");
+        EventManager.TriggerEvent("LoadedScene");
     }
 
     public static GameData SerializeGameData()
