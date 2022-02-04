@@ -108,6 +108,8 @@ You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-pr
 
 <li>Tutorial #47: <a href="https://mina-pecheux.medium.com/making-a-rts-game-47-and-loading-back-our-game-scene-data-unity-c-f7399cac2b97" rel="noopener follow"><strong>... and loading back our game scene data!</strong></a></li>
 
+<li>Interlude #3: <a href="https://mina-pecheux.medium.com/rts-interlude-3-showing-our-updated-minimaps-in-the-menu-unity-c-1ffd63fc9e2e" rel="noopener follow"><strong>Showing our updated minimaps in the menu</strong></a></li>
+
 </ul>
 
 ## Known issues
