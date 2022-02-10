@@ -110,6 +110,8 @@ You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-pr
 
 <li>Interlude #3: <a href="https://mina-pecheux.medium.com/rts-interlude-3-showing-our-updated-minimaps-in-the-menu-unity-c-1ffd63fc9e2e" rel="noopener follow"><strong>Showing our updated minimaps in the menu</strong></a></li>
 
+<li>Tutorial #48: <a href="https://mina-pecheux.medium.com/making-a-rts-game-48-various-fixes-improvements-and-clean-ups-unity-c-5ab3a587c44a" rel="noopener follow"><strong>Various fixes, improvements and clean-ups</strong></a></li>
+
 </ul>
 
 ## Known issues
