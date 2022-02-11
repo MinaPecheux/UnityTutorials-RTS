@@ -9,6 +9,8 @@ public class CameraManager : MonoBehaviour
     public float zoomSpeed = 30f;
     public float altitude = 40f;
 
+    public Transform groundTarget;
+
     public bool autoAdaptAltitude;
 
     private Camera _camera;
@@ -125,6 +127,8 @@ public class CameraManager : MonoBehaviour
         else if (dir == 3 && transform.position.x - _camHalfViewZone.x >= _minX)                    // left
             transform.Translate(-transform.right * Time.deltaTime * translationSpeed);
 
+        _FixGroundTarget();
+
         if (autoAdaptAltitude)
             _FixAltitude();
     }
@@ -166,6 +170,11 @@ public class CameraManager : MonoBehaviour
             )) transform.position = _hit.point + Vector3.up * altitude;
     }
 
+    private void _FixGroundTarget()
+    {
+        groundTarget.position = Utils.MiddleOfScreenPointToWorld(_camera);
+    }
+
     public void InitializeBounds()
     {
         _minX = 0;
@@ -176,10 +185,13 @@ public class CameraManager : MonoBehaviour
         (Vector3 minWorldPoint, Vector3 maxWorldPoint) = Utils.GetCameraWorldBounds();
         _camOffset = transform.position - (maxWorldPoint + minWorldPoint) / 2f;
         _camHalfViewZone = (maxWorldPoint - minWorldPoint) / 2f + Vector3.one * _camMinimapBuffer;
+
+        _FixGroundTarget();
     }
 
     public void SetPosition(Vector3 pos)
     {
         transform.position = pos - _distance * transform.forward;
+        _FixGroundTarget();
     }
 }

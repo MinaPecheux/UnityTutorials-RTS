@@ -4779,6 +4779,7 @@ MonoBehaviour:
   translationSpeed: 60
   zoomSpeed: 30
   altitude: 40
+  groundTarget: {fileID: 1540239015}
   autoAdaptAltitude: 0
 --- !u!1 &969078099
 GameObject:
