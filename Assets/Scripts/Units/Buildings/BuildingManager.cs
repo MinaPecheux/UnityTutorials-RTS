@@ -107,14 +107,16 @@ public class BuildingManager : UnitManager
 
     protected override void UpdateHealthbar()
     {
-        if (!healthbar) return;
-        Transform fill = healthbar.transform.Find("Fill");
+        if (!_healthbarRenderer) return;
 
         // if in construction: show current construction HP
         // else, show current health
         int hp = (IsActive() && !_building.IsAlive)
             ? _building.ConstructionHP
             : Unit.HP;
-        fill.GetComponent<UnityEngine.UI.Image>().fillAmount = hp / (float)Unit.MaxHP;
+
+        _healthbarRenderer.GetPropertyBlock(_MaterialPropertyBlock);
+        _MaterialPropertyBlock.SetFloat("_Health", hp / (float)Unit.MaxHP);
+        _healthbarRenderer.SetPropertyBlock(_MaterialPropertyBlock);
     }
 }

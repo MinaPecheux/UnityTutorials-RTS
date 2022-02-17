@@ -5,6 +5,17 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class UnitManager : MonoBehaviour
 {
+    protected static MaterialPropertyBlock _materialPropertyBlock;
+    protected static MaterialPropertyBlock _MaterialPropertyBlock
+    {
+        get
+        {
+            if (_materialPropertyBlock == null)
+                _materialPropertyBlock = new MaterialPropertyBlock();
+            return _materialPropertyBlock;
+        }
+    }
+
     public GameObject selectionCircle;
     public GameObject fov;
     public Renderer meshRenderer;
@@ -22,8 +33,8 @@ public class UnitManager : MonoBehaviour
     public int SelectIndex { get => _selectIndex; }
     private bool _hovered = false;
 
-    protected GameObject healthbar;
-    private Transform _canvas;
+    public GameObject healthbar;
+    protected Renderer _healthbarRenderer;
     private GameObject _levelUpVFX;
     private Material _levelUpVFXMaterial;
     private Coroutine _levelUpVFXCoroutine = null;
@@ -33,8 +44,13 @@ public class UnitManager : MonoBehaviour
 
     private void Awake()
     {
-        _canvas = GameObject.Find("Canvas").transform;
         _meshSize = meshRenderer.GetComponent<Renderer>().bounds.size / 2;
+
+        if (healthbar)
+        {
+            healthbar.SetActive(false);
+            _healthbarRenderer = healthbar.GetComponent<Renderer>();
+        }
     }
 
     private void OnMouseEnter()
@@ -137,8 +153,7 @@ public class UnitManager : MonoBehaviour
 
         EventManager.TriggerEvent("DeselectedUnit", Unit);
         selectionCircle.SetActive(false);
-        Destroy(healthbar);
-        healthbar = null;
+        healthbar.SetActive(false);
         _selected = false;
         _selectIndex = -1;
     }
@@ -169,18 +184,10 @@ public class UnitManager : MonoBehaviour
         Globals.SELECTED_UNITS.Add(this);
         EventManager.TriggerEvent("SelectedUnit", Unit);
         selectionCircle.SetActive(true);
-        if (healthbar == null)
+        if (healthbar)
         {
-            healthbar = GameObject.Instantiate(Resources.Load("Prefabs/UI/Healthbar")) as GameObject;
-            healthbar.transform.SetParent(_canvas);
+            healthbar.SetActive(true);
             UpdateHealthbar();
-            Healthbar h = healthbar.GetComponent<Healthbar>();
-            Rect boundingBox = Utils.GetBoundingBoxOnScreen(
-                meshRenderer.bounds,
-                Camera.main
-            );
-            h.Initialize(transform, IsMovable(), boundingBox.height * 0.5f);
-            h.SetPosition();
         }
 
         // play sound
@@ -199,9 +206,10 @@ public class UnitManager : MonoBehaviour
 
     protected virtual void UpdateHealthbar()
     {
-        if (!healthbar) return;
-        Transform fill = healthbar.transform.Find("Fill");
-        fill.GetComponent<UnityEngine.UI.Image>().fillAmount = Unit.HP / (float)Unit.MaxHP;
+        if (!_healthbarRenderer) return;
+        _healthbarRenderer.GetPropertyBlock(_MaterialPropertyBlock);
+        _MaterialPropertyBlock.SetFloat("_Health", Unit.HP / (float)Unit.MaxHP);
+        _healthbarRenderer.SetPropertyBlock(_MaterialPropertyBlock);
     }
 
     public void LevelUp()
