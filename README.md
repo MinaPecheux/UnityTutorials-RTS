@@ -112,6 +112,8 @@ You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-pr
 
 <li>Tutorial #48: <a href="https://mina-pecheux.medium.com/making-a-rts-game-48-various-fixes-improvements-and-clean-ups-unity-c-5ab3a587c44a" rel="noopener follow"><strong>Various fixes, improvements and clean-ups</strong></a></li>
 
+<li>Tutorial #49: <a href="https://mina-pecheux.medium.com/making-a-rts-game-49-optimisation-tips-tricks-unity-c-d4d70001e58c" rel="noopener follow"><strong>Optimisation tips & tricks</strong></a></li>
+
 </ul>
 
 ## Known issues
