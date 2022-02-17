@@ -120,9 +120,9 @@ You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-pr
 
 ### About installing / upgrading
 
-The project was written in Unity 2019.3. This implies that, when loading it up with more recent versions of Unity, you'll need to auto-upgrade the project. This usually goes without a hitch, but there is for now 2 bugs that has been spotted by the followers and I:
+The project was written in Unity 2020.3. This implies that, when loading it up with different recent versions of Unity, you'll need to "upgrade" the project. This usually goes without a hitch, but there is for now 2 bugs that have been spotted by the followers and I:
 
-- **incorrect lighting**: upgrading to Unity 2020+ might lead to some strange lighting of the scene (because of pipeline render defaults and lighting settings changes). To get a similar lighting to the original project, make sure that you remove all baked lighting data, that all your (directional) lights are set to "Realtime" and that you ignore the environment lighting.
+- **incorrect lighting**: upgrading to some Unity 2020+ might lead to some strange lighting of the scene (because of pipeline render defaults and lighting settings changes). To get a similar lighting to the original project, make sure that you remove all baked lighting data, that all your (directional) lights are set to "Realtime" and that you ignore the environment lighting.
   
   To do so, open the Window > Rendering > Lighting panel, go to the "Environment" tab, and set the "Intensity Multiplier" variable to 0 both in the Environment Lighting and Environment Reflections sections.
 
