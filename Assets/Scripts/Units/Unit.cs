@@ -52,7 +52,9 @@ public class Unit
         _production = production.ToDictionary(rv => rv.code, rv => rv.amount);
         _fieldOfView = data.fieldOfView;
         _owner = owner;
-        _attackDamage = data.attackDamage;
+        _attackDamage = (int) (
+            data.attackDamage *
+            TechnologyNodeActioners.GetMultiplier("attack_booster"));
         _attackRange = data.attackRange;
 
         GameObject g = GameObject.Instantiate(data.prefab) as GameObject;
@@ -90,6 +92,12 @@ public class Unit
     public void SetPosition(Vector3 position)
     {
         _transform.position = position;
+    }
+
+    public void SetAttackDamage(int dmg)
+    {
+        _attackDamage = dmg;
+        _levelUpData = _GetLevelUpData();
     }
 
     public Dictionary<InGameResource, int> ComputeProduction()
@@ -145,13 +153,16 @@ public class Unit
         // for collisions with units
         _transform.GetComponent<BoxCollider>().isTrigger = false;
 
-        // update game resources: remove the cost of the building
+        // update game resources: remove the cost of the unit
         // from each game resource
         if (!fromSavedData)
         {
+            float costReducerBuy =
+                TechnologyNodeActioners.GetMultiplier("cost_reducer_buy");
             foreach (ResourceValue resource in _data.cost)
             {
-                Globals.GAME_RESOURCES[_owner][resource.code].AddAmount(-resource.amount);
+                Globals.GAME_RESOURCES[_owner][resource.code].AddAmount(
+                    (int) (-resource.amount * costReducerBuy));
             }
             EventManager.TriggerEvent("UpdatedResources");
         }

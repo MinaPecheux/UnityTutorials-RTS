@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -358,7 +358,12 @@ public class UIManager : MonoBehaviour
             s.type == SkillType.INSTANTIATE_BUILDING
         )
         {
-            cost = s.unitReference.cost;
+            float costReducerBuy =
+                TechnologyNodeActioners.GetMultiplier("cost_reducer_buy");
+            foreach (ResourceValue rv in s.unitReference.cost)
+                cost.Add(new ResourceValue(
+                    rv.code,
+                    (int) (rv.amount * costReducerBuy)));
         }
         SetInfoPanel(title, desc, cost);
         ShowInfoPanel(true);

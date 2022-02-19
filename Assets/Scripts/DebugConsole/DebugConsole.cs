@@ -94,6 +94,13 @@ public class DebugConsole : MonoBehaviour
             b.SetConstructionHP(x);
         });
 
+        new DebugCommand<string>("unlock_tech", "Unlocks the given technology tree node.", "unlock_tech <code>", (x) =>
+        {
+            TechnologyNodeData node;
+            if (TechnologyNodeData.TECH_TREE_NODES.TryGetValue(x, out node))
+                node.Unlock();
+        });
+
         _displayType = DisplayType.None;
     }
 
@@ -228,7 +235,12 @@ public class DebugConsole : MonoBehaviour
                     Debug.LogError("Missing parameter!");
                     return;
                 }
-                if (command is DebugCommand<int> dcInt)
+
+                if (command is DebugCommand<string> dcString)
+                {
+                    dcString.Invoke(inputParts[1]);
+                }
+                else if (command is DebugCommand<int> dcInt)
                 {
                     int i;
                     if (int.TryParse(inputParts[1], out i))
@@ -239,7 +251,7 @@ public class DebugConsole : MonoBehaviour
                         return;
                     }
                 }
-                if (command is DebugCommand<float> dcFloat)
+                else if (command is DebugCommand<float> dcFloat)
                 {
                     float f;
                     if (float.TryParse(inputParts[1], out f))
@@ -250,7 +262,7 @@ public class DebugConsole : MonoBehaviour
                         return;
                     }
                 }
-                if (command is DebugCommand<string, int> dcStringInt)
+                else if (command is DebugCommand<string, int> dcStringInt)
                 {
                     int i;
                     if (int.TryParse(inputParts[2], out i))
