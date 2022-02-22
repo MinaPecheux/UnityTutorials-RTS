@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -53,6 +53,15 @@ public class UIManager : MonoBehaviour
     [Header("Placed Building Production")]
     public RectTransform placedBuildingProductionRectTransform;
 
+    [Header("Technology Tree")]
+    public GameObject techTreePanel;
+    private Transform _techTreeViewParent;
+    private Transform _techTreeCosts;
+    private const float _TECH_TREE_VIEW_WIDTH = 966f;
+    private bool _initializedTechnologyTree;
+    private bool _showingTechTreePanel;
+    private Dictionary<string, Image> _techTreeProgressBars;
+
     [Header("Game Settings Panel")]
     public GameObject gameSettingsPanel;
     public Transform gameSettingsMenusParent;
@@ -102,6 +111,12 @@ public class UIManager : MonoBehaviour
         _OnUpdatedUnitFormationType();
 
         placedBuildingProductionRectTransform.gameObject.SetActive(false);
+
+        _initializedTechnologyTree = false;
+        _showingTechTreePanel = false;
+        techTreePanel.SetActive(_showingTechTreePanel);
+        _techTreeViewParent = techTreePanel.transform.Find("Panel/Content/Scroll View/Viewport/Content");
+        _techTreeCosts = techTreePanel.transform.Find("Panel/Content/Costs");
 
         gameSettingsPanel.SetActive(false);
         // read the list of game parameters and store them as a dict
@@ -158,6 +173,9 @@ public class UIManager : MonoBehaviour
         EventManager.AddListener("PlaceBuildingOff", _OnPlaceBuildingOff);
         EventManager.AddListener("SetPlayer", _OnSetPlayer);
         EventManager.AddListener("UpdatedUnitFormationType", _OnUpdatedUnitFormationType);
+        EventManager.AddListener("HoveredTechnologyNode", _OnHoveredTechnologyNode);
+        EventManager.AddListener("UnhoveredTechnologyNode", _OnUnhoveredTechnologyNode);
+        EventManager.AddListener("StartedTechTreeNodeUnlock", _OnStartedTechTreeNodeUnlock);
     }
 
     private void OnDisable()
@@ -173,11 +191,27 @@ public class UIManager : MonoBehaviour
         EventManager.RemoveListener("PlaceBuildingOff", _OnPlaceBuildingOff);
         EventManager.RemoveListener("SetPlayer", _OnSetPlayer);
         EventManager.RemoveListener("UpdatedUnitFormationType", _OnUpdatedUnitFormationType);
+        EventManager.RemoveListener("HoveredTechnologyNode", _OnHoveredTechnologyNode);
+        EventManager.RemoveListener("UnhoveredTechnologyNode", _OnUnhoveredTechnologyNode);
+        EventManager.RemoveListener("StartedTechTreeNodeUnlock", _OnStartedTechTreeNodeUnlock);
     }
 
     public void ToggleSelectionGroupButton(int groupIndex, bool on)
     {
         selectionGroupsParent.Find(groupIndex.ToString()).gameObject.SetActive(on);
+    }
+
+    public void ToggleTechnologyTreePanel()
+    {
+        _showingTechTreePanel = !_showingTechTreePanel;
+        if (_showingTechTreePanel && !_initializedTechnologyTree)
+        {
+            _techTreeProgressBars = TechnologyTreeVisualizer.DrawTree(
+                _techTreeViewParent, _TECH_TREE_VIEW_WIDTH);
+            _initializedTechnologyTree = true;
+        }
+        techTreePanel.SetActive(_showingTechTreePanel);
+        EventManager.TriggerEvent(_showingTechTreePanel ? "PausedGame" : "ResumedGame");
     }
 
     public void ToggleGameSettingsPanel()
@@ -273,6 +307,24 @@ public class UIManager : MonoBehaviour
         if (infoPanel.activeSelf)
         {
             foreach (Transform resourceDisplay in _infoPanelResourcesCostParent)
+            {
+                InGameResource resourceCode = (InGameResource)System.Enum.Parse(
+                    typeof(InGameResource),
+                    resourceDisplay.Find("Icon").GetComponent<Image>().sprite.name
+                );
+                Text txt = resourceDisplay.Find("Text").GetComponent<Text>();
+                int resourceAmount = int.Parse(txt.text);
+                if (Globals.GAME_RESOURCES[_myPlayerId][resourceCode].Amount < resourceAmount)
+                    txt.color = invalidTextColor;
+                else
+                    txt.color = validTextColor;
+            }
+        }
+
+        // check if tech is affordable: update text colors
+        if (_showingTechTreePanel)
+        {
+            foreach (Transform resourceDisplay in _techTreeCosts)
             {
                 InGameResource resourceCode = (InGameResource)System.Enum.Parse(
                     typeof(InGameResource),
@@ -442,6 +494,23 @@ public class UIManager : MonoBehaviour
             else
                 _unitFormationTypeImages[i].color = _unitFormationTypeInactiveColor;
         }
+    }
+
+    private void _OnStartedTechTreeNodeUnlock(object data)
+    {
+        string nodeCode = (string)data;
+        StartCoroutine(_UnlockingTechTreeNode(nodeCode));
+    }
+
+    private void _OnHoveredTechnologyNode(object data)
+    {
+        _SetTechTreeNodeCosts((TechnologyNodeData)data);
+        _techTreeCosts.gameObject.SetActive(true);
+    }
+
+    private void _OnUnhoveredTechnologyNode()
+    {
+        _techTreeCosts.gameObject.SetActive(false);
     }
 
     public void SetInfoPanel(UnitData data)
@@ -782,5 +851,57 @@ public class UIManager : MonoBehaviour
         inputParams.bindings[bindingIndex].key = key;
 
         keyText.text = key;
+    }
+
+    private void _SetTechTreeNodeCosts(TechnologyNodeData node)
+    {
+        // clear resource costs and reinstantiate new ones
+        foreach (Transform child in _techTreeCosts)
+            Destroy(child.gameObject);
+
+        if (node.researchCost.Count > 0)
+        {
+            GameObject g;
+            Transform t;
+            foreach (ResourceValue resource in node.researchCost)
+            {
+                g = GameObject.Instantiate(gameResourceCostPrefab, _techTreeCosts);
+                t = g.transform;
+                t.Find("Text").GetComponent<Text>().text = resource.amount.ToString();
+                t.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Textures/GameResources/{resource.code}");
+                // check to see if resource requirement is not currently met -
+                // in that case, turn the text into the "invalid" color
+                if (Globals.GAME_RESOURCES[_myPlayerId][resource.code].Amount < resource.amount)
+                    t.Find("Text").GetComponent<Text>().color = invalidTextColor;
+            }
+        }
+    }
+
+    private IEnumerator _UnlockingTechTreeNode(string code)
+    {
+        TechnologyNodeData node = TechnologyNodeData.TECH_TREE_NODES[code];
+        int myPlayerId = GameManager.instance.gamePlayersParameters.myPlayerId;
+        foreach (ResourceValue resource in node.researchCost)
+            Globals.GAME_RESOURCES[myPlayerId][resource.code].AddAmount(-resource.amount);
+        _OnUpdatedResources();
+
+        float t = 0f;
+        while (t < node.researchTime)
+        {
+            if (_showingTechTreePanel)
+                _techTreeProgressBars[code].fillAmount = t / node.researchTime;
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        node.Unlock();
+
+        // clear tech tree
+        foreach (Transform child in _techTreeViewParent)
+            Destroy(child.gameObject);
+
+        // re-draw tree
+        _techTreeProgressBars = TechnologyTreeVisualizer.DrawTree(
+                _techTreeViewParent, _TECH_TREE_VIEW_WIDTH);
     }
 }

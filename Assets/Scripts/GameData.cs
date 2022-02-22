@@ -42,6 +42,7 @@ public class GameData : BinarySerializable
 
     public GamePlayerData[] players;
     public Vector3 camPosition;
+    public string[] unlockedTechnologyNodeCodes;
 
     public static string GetFolderPath()
         => System.IO.Path.Combine(

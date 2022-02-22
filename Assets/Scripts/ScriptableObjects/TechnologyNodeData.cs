@@ -31,7 +31,8 @@ public class TechnologyNodeData : ScriptableObject
         Dictionary<string, string> parents = new Dictionary<string, string>();
         foreach (TechnologyNodeData nodeData in nodesData)
         {
-            // (reset unlocked flag, because the Unity Editor keeps the changes)
+            // (reset private variables, because the Unity Editor keeps the changes)
+            nodeData._parent = null;
             nodeData._unlocked = false;
 
             TECH_TREE_NODES[nodeData.code] = nodeData;

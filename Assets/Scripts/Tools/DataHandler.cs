@@ -31,6 +31,9 @@ public class DataHandler : MonoBehaviour
                 parameters.LoadFromFile();
         }
 
+        // prepare technology tree
+        TechnologyNodeData.LoadTechnologyTree();
+
         // load game scene data
         GameData.gameUid = gameUid;
         GameData.Load();
@@ -66,6 +69,8 @@ public class DataHandler : MonoBehaviour
             EventManager.TriggerEvent("LoadedScene");
             return;
         }
+
+        TechnologyNodeData.SetUnlockedNodes(data.unlockedTechnologyNodeCodes);
 
         GamePlayersParameters playerParameters = GameManager.instance.gamePlayersParameters;
         for (int p = 0; p < playerParameters.players.Length; p++)
@@ -178,6 +183,7 @@ public class DataHandler : MonoBehaviour
         GameData data = new GameData();
         data.players = players.ToArray();
         data.camPosition = Camera.main.transform.position;
+        data.unlockedTechnologyNodeCodes = TechnologyNodeData.GetUnlockedNodeCodes();
         return data;
     }
 
