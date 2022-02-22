@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   code: root
   displayName: Root
+  researchTime: 0
+  researchCost: []
   children:
-  - {fileID: 11400000, guid: fb190becb223344f5b8860d28a367e48, type: 2}
-  - {fileID: 11400000, guid: 8c6d09c6b133a4d71b7e96d064e00811, type: 2}
-  unlocked: 1
+  - {fileID: 11400000, guid: e6acb49a518f14b3daacd224905d10c7, type: 2}
+  - {fileID: 11400000, guid: 85e70a59506064d138cc11a9651e1b27, type: 2}
