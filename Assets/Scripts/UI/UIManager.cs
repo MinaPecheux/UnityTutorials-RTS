@@ -149,12 +149,11 @@ public class UIManager : MonoBehaviour
         _resourceTexts = new Dictionary<InGameResource, Text>();
         foreach (KeyValuePair<InGameResource, GameResource> pair in Globals.GAME_RESOURCES[_myPlayerId])
         {
-            GameObject display = Instantiate(gameResourceDisplayPrefab);
+            GameObject display = Instantiate(gameResourceDisplayPrefab, resourcesUIParent);
             display.name = pair.Key.ToString();
             _resourceTexts[pair.Key] = display.transform.Find("Text").GetComponent<Text>();
             display.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Textures/GameResources/{pair.Key}");
             _SetResourceText(pair.Key, pair.Value.Amount);
-            display.transform.SetParent(resourcesUIParent, false);
         }
 
         _CheckBuyLimits();
@@ -383,11 +382,12 @@ public class UIManager : MonoBehaviour
         Transform t;
         foreach (KeyValuePair<InGameResource, int> pair in production)
         {
-            g = Instantiate(gameResourceCostPrefab) as GameObject;
+            g = GameObject.Instantiate(
+                gameResourceCostPrefab,
+                placedBuildingProductionRectTransform.transform);
             t = g.transform;
             t.Find("Text").GetComponent<Text>().text = $"+{pair.Value}";
             t.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Textures/GameResources/{pair.Key}");
-            t.SetParent(placedBuildingProductionRectTransform.transform, false);
         }
 
         // resize container to fit the right number of lines
@@ -531,7 +531,7 @@ public class UIManager : MonoBehaviour
             Transform t;
             foreach (ResourceValue resource in resourceCosts)
             {
-                g = Instantiate(gameResourceCostPrefab) as GameObject;
+                g = GameObject.Instantiate(gameResourceCostPrefab, _infoPanelResourcesCostParent);
                 t = g.transform;
                 t.Find("Text").GetComponent<Text>().text = resource.amount.ToString();
                 t.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Textures/GameResources/{resource.code}");
@@ -539,7 +539,6 @@ public class UIManager : MonoBehaviour
                 // in that case, turn the text into the "invalid" color
                 if (Globals.GAME_RESOURCES[_myPlayerId][resource.code].Amount < resource.amount)
                     t.Find("Text").GetComponent<Text>().color = invalidTextColor;
-                t.SetParent(_infoPanelResourcesCostParent, false);
             }
         }
     }
@@ -563,12 +562,11 @@ public class UIManager : MonoBehaviour
         // else create a brand new counter initialized with a count of 1
         else
         {
-            GameObject g = Instantiate(selectedUnitDisplayPrefab);
+            GameObject g = GameObject.Instantiate(selectedUnitDisplayPrefab, selectedUnitsListParent);
             g.name = unit.Code;
             Transform t = g.transform;
             t.Find("Count").GetComponent<Text>().text = "1";
             t.Find("Name").GetComponent<Text>().text = unit.Data.unitName;
-            t.SetParent(selectedUnitsListParent, false);
         }
     }
 
@@ -628,13 +626,12 @@ public class UIManager : MonoBehaviour
             GameObject g; Transform t;
             foreach (KeyValuePair<InGameResource, int> resource in unit.Production)
             {
-                g = Instantiate(gameResourceCostPrefab);
+                g = GameObject.Instantiate(gameResourceCostPrefab, _selectedUnitResourcesProductionParent);
                 t = g.transform;
                 t.Find("Text").GetComponent<Text>().text = showUpgrade
                     ? $"<color=#00ff00>+{_selectedUnit.LevelUpData.newProduction[resource.Key]}</color>"
                     : $"+{resource.Value}";
                 t.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Textures/GameResources/{resource.Key}");
-                t.SetParent(_selectedUnitResourcesProductionParent, false);
             }
         }
 
@@ -646,17 +643,15 @@ public class UIManager : MonoBehaviour
         if (unitIsMine)
         {
             GameObject g;
-            g = Instantiate(uiLabelPrefab);
+            g = GameObject.Instantiate(uiLabelPrefab, _selectedUnitAttackParametersParent);
             g.GetComponent<Text>().text = showUpgrade
                     ? $"Damage: <color=#00ff00>{_selectedUnit.LevelUpData.newAttackDamage}</color>"
                     : $"Damage: {unit.AttackDamage}";
-            g.transform.SetParent(_selectedUnitAttackParametersParent, false);
 
-            g = Instantiate(uiLabelPrefab);
+            g = GameObject.Instantiate(uiLabelPrefab, _selectedUnitAttackParametersParent);
             g.GetComponent<Text>().text = showUpgrade
                     ? $"Range: <color=#00ff00>{(int) _selectedUnit.LevelUpData.newAttackRange}</color>"
                     : $"Range: {(int) unit.AttackRange}";
-            g.transform.SetParent(_selectedUnitAttackParametersParent, false);
         }
 
         // SKILLS ---------------------------------------------------------
@@ -669,13 +664,12 @@ public class UIManager : MonoBehaviour
             GameObject g; Transform t; Button b;
             for (int i = 0; i < unit.SkillManagers.Count; i++)
             {
-                g = Instantiate(unitSkillButtonPrefab);
+                g = GameObject.Instantiate(unitSkillButtonPrefab, _selectedUnitActionButtonsParent);
                 t = g.transform;
                 b = g.GetComponent<Button>();
                 unit.SkillManagers[i].SetButton(b);
                 g.GetComponent<SkillButton>().Initialize(unit.SkillManagers[i].skill);
                 t.Find("Text").GetComponent<Text>().text = unit.SkillManagers[i].skill.skillName;
-                t.SetParent(_selectedUnitActionButtonsParent, false);
                 _AddUnitSkillButtonListener(b, i);
             }
         }
@@ -705,11 +699,10 @@ public class UIManager : MonoBehaviour
             // any parameter to show
             if (parameters.FieldsToShowInGame.Count == 0) continue;
 
-            g = Instantiate(gameSettingsMenuButtonPrefab);
+            g = GameObject.Instantiate(gameSettingsMenuButtonPrefab, gameSettingsMenusParent);
             n = parameters.GetParametersName();
             g.transform.Find("Text").GetComponent<Text>().text = n;
             _AddGameSettingsPanelMenuListener(g.GetComponent<Button>(), n);
-            g.transform.SetParent(gameSettingsMenusParent, false);
             availableMenus.Add(n);
         }
 
@@ -735,7 +728,7 @@ public class UIManager : MonoBehaviour
         GameObject gWrapper, gEditor;
         foreach (string fieldName in parameters.FieldsToShowInGame)
         {
-            gWrapper = Instantiate(gameSettingsParameterPrefab);
+            gWrapper = GameObject.Instantiate(gameSettingsParameterPrefab, gameSettingsContentParent);
             gWrapper.transform.Find("Text").GetComponent<Text>().text = Utils.CapitalizeWords(fieldName);
 
             gEditor = null;
@@ -775,8 +768,7 @@ public class UIManager : MonoBehaviour
                 InputBinding[] bindings = (InputBinding[])field.GetValue(parameters);
                 for (int b = 0; b < bindings.Length; b++)
                 {
-                    GameObject g = Instantiate(inputBindingPrefab);
-                    g.transform.SetParent(gEditor.transform, false);
+                    GameObject g = GameObject.Instantiate(inputBindingPrefab, gEditor.transform);
                     g.transform.Find("Text").GetComponent<Text>().text = bindings[b].displayName;
                     g.transform.Find("Key/Text").GetComponent<Text>().text = bindings[b].key;
                     _AddInputBindingButtonListener(
@@ -787,7 +779,6 @@ public class UIManager : MonoBehaviour
                     );
                 }
             }
-            gWrapper.transform.SetParent(gameSettingsContentParent, false);
             if (gEditor != null)
                 gEditor.transform.SetParent(gWrapper.transform, false);
         }
