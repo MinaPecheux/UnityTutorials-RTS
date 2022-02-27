@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [CreateAssetMenu(
     fileName = "Technology Node",
@@ -62,6 +65,36 @@ public class TechnologyNodeData : ScriptableObject
         foreach (string code in unlockedNodeCodes)
             if (TECH_TREE_NODES.ContainsKey(code))
                 TECH_TREE_NODES[code].Unlock();
+    }
+
+    #if UNITY_EDITOR
+    public static TechnologyNodeData GetRootNodeInDirectory(string path)
+    {
+        string[] nodeAssetPaths = System.IO.Directory.GetFiles(path);
+        foreach (string p in nodeAssetPaths)
+        {
+            if (p.EndsWith(".asset"))
+            {
+                TechnologyNodeData n = AssetDatabase.LoadAssetAtPath<TechnologyNodeData>(p);
+                if (n && n.code == ROOT_NODE_CODE)
+                    return n;
+            }
+        }
+        return null;
+    }
+    #endif
+
+    public void Initialize(string code, string displayName = null)
+    {
+        this.code = code;
+        if (displayName == null)
+            displayName = code;
+        this.displayName = displayName;
+        researchTime = 0;
+        researchCost = new List<ResourceValue>();
+        children = new List<TechnologyNodeData>();
+        _unlocked = false;
+        _parent = null;
     }
 
     public void Unlock()

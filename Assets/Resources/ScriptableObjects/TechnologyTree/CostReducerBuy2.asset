@@ -17,5 +17,5 @@ MonoBehaviour:
   researchTime: 5
   researchCost:
   - code: 0
-    amount: 2000
+    amount: 1000
   children: []
