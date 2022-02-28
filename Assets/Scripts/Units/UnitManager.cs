@@ -31,7 +31,6 @@ public class UnitManager : MonoBehaviour
     public bool IsSelected { get => _selected; }
     private int _selectIndex = -1;
     public int SelectIndex { get => _selectIndex; }
-    private bool _hovered = false;
 
     public GameObject healthbar;
     protected Renderer _healthbarRenderer;
@@ -53,24 +52,13 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    private void OnMouseEnter()
+    private void OnMouseDown()
     {
-        _hovered = true;
-    }
-
-    private void OnMouseExit()
-    {
-        _hovered = false;
-    }
-
-    private void Update()
-    {
-        if (_hovered && Input.GetMouseButtonDown(0))
-            Select(
-                true,
-                Input.GetKey(KeyCode.LeftShift) ||
-                Input.GetKey(KeyCode.RightShift)
-            );
+        Select(
+            true,
+            Input.GetKey(KeyCode.LeftShift) ||
+            Input.GetKey(KeyCode.RightShift)
+        );
     }
 
     public void Initialize(Unit unit)
