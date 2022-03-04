@@ -20,7 +20,7 @@ public class TaskMoveToDestination : Node
         if (Vector3.Distance(destination, _manager.agent.destination) > 0.2f)
         {
             bool canMove = _manager.MoveTo(destination);
-            _state = canMove ? NodeState.SUCCESS : NodeState.FAILURE;
+            _state = canMove ? NodeState.RUNNING : NodeState.FAILURE;
             return _state;
         }
 
