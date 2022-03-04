@@ -6,7 +6,7 @@ public class FogRendererToggler : MonoBehaviour
     public GameObject mesh; // reference to the render you want toggled based on the position of this transform
     [Range(0f, 1f)] public float threshold = 0.1f; //the threshold for when this script considers myRenderer should render
 
-    private const float _UPDATE_RATE = 0.2f;
+    private const float _UPDATE_RATE = 0.5f;
 
     private Camera _camera; // the camera using the masked render texture
     private Coroutine _texUpdateCoroutine;
@@ -17,7 +17,7 @@ public class FogRendererToggler : MonoBehaviour
     private static Rect _rect;
     private static bool _validTexture = true;
 
-    private void Awake()
+    private void Start()
     {
         // disable if:
         // - FOV game parameter is inactive
@@ -26,17 +26,23 @@ public class FogRendererToggler : MonoBehaviour
             !GameManager.instance.gameGlobalParameters.enableFOV ||
             !mesh
         ) {
-            this.enabled = false;
+            Destroy(this);
+            return;
+        }
+
+        // also disable if the unit is mine
+        UnitManager um = GetComponent<UnitManager>();
+        if (um != null && um.Unit.Owner == GameManager.instance.gamePlayersParameters.myPlayerId)
+        {
+            Destroy(this);
             return;
         }
 
         // mark the "first" (arbitrary) instance as main
         if (_mainInstance == null)
             _mainInstance = this;
-    }
 
-    private void OnEnable()
-    {
+
         // only run the texture updates on the main instance
         if (_mainInstance == this)
         {
@@ -60,6 +66,7 @@ public class FogRendererToggler : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (!_camera) return;
         bool active = _GetColorAtPosition().grayscale >= threshold;
         if (mesh.activeSelf != active)
             mesh.SetActive(active);
