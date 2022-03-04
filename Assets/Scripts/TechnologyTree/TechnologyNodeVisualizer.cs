@@ -51,9 +51,6 @@ public class TechnologyNodeVisualizer
 
     public void Draw(Transform parent, float xOffset)
     {
-        if (_node.code == TechnologyNodeData.ROOT_NODE_CODE)
-            return;
-
         GameObject g = GameObject.Instantiate(_UI_PREFAB, parent);
         RectTransform rt = g.GetComponent<RectTransform>();
         rt.anchoredPosition =

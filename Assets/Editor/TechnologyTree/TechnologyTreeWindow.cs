@@ -86,6 +86,7 @@ public class TechnologyTreeWindow : EditorWindow
             List<TechnologyNodeData> newNodes = new List<TechnologyNodeData>();
             foreach (TechnologyNodeData n in currentNodes)
             {
+                if (n == null) continue;
                 editorNode = new TechnologyTreeEditorNode(
                     n,
                     new Vector2(paddingX + x * nodeXSpacing, paddingY + y * nodeYSpacing),
@@ -102,8 +103,14 @@ public class TechnologyTreeWindow : EditorWindow
                 nodesMapping[n.code] = editorNode;
                 _nodes.Add(editorNode);
 
-                foreach (TechnologyNodeData child in n.children)
+                List<TechnologyNodeData> children = new List<TechnologyNodeData>(n.children);
+                foreach (TechnologyNodeData child in children)
                 {
+                    if (child == null)
+                    {
+                        n.children.Remove(child);
+                        continue;
+                    }
                     edges.Add((n, child));
                     newNodes.Add(child);
                 }
