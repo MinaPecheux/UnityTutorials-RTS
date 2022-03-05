@@ -152,12 +152,16 @@ public class Building : Unit
         _constructors.RemoveAt(index);
         EventManager.TriggerEvent("UpdatedConstructors", this);
 
-        // when removing last constructor, remove smoke VFX
-        foreach (Transform vfx in _smokeVfx)
-            VFXManager.instance.Unspawn(VfxType.Smoke, vfx);
-        _smokeVfx.Clear();
-        // stop construction sound
-        _buildingManager.ambientSource.Pause();
+        // when removing last constructor:
+        if (_constructors.Count == 0)
+        {
+            // - remove smoke VFX
+            foreach (Transform vfx in _smokeVfx)
+                VFXManager.instance.Unspawn(VfxType.Smoke, vfx);
+            _smokeVfx.Clear();
+            // - stop construction sound
+            _buildingManager.ambientSource.Pause();
+        }
     }
 
     private void _SetAlive(bool fromSavedData = false)

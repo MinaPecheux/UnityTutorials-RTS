@@ -25,16 +25,15 @@ public class VFXManager : MonoBehaviour
 
         _vfxPools = new Dictionary<VfxType, Transform>();
 
-        GameObject g;
-        Transform smokePool = Instantiate(poolPrefab).transform;
+        Transform smokePool = Instantiate(poolPrefab, transform).transform;
         smokePool.gameObject.name = "Smoke";
         _vfxPools[VfxType.Smoke] = smokePool;
-        smokePool.SetParent(transform);
         Transform smokeStockParent = smokePool.Find("Stock");
         for (int i = 0; i < SMOKE_EFFECT_POOL_SIZE; i++)
         {
-            g = Instantiate(smokeEffectPrefabs[Random.Range(0, smokeEffectPrefabs.Length)]);
-            g.transform.SetParent(smokeStockParent);
+            Instantiate(
+                smokeEffectPrefabs[Random.Range(0, smokeEffectPrefabs.Length)],
+                smokeStockParent);
         }
     }
 
