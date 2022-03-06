@@ -283,6 +283,7 @@ public class UIManager : MonoBehaviour
 
     public void QuitGame()
     {
+        SaveGame();
         CoreBooter.instance.LoadMenu();
     }
 
