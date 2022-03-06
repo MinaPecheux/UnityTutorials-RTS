@@ -283,7 +283,7 @@ public class UIManager : MonoBehaviour
 
     public void QuitGame()
     {
-        Application.Quit();
+        CoreBooter.instance.LoadMenu();
     }
 
     private void _AddUnitSkillButtonListener(Button b, int i)

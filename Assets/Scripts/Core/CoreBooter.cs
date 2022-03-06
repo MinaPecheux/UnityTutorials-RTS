@@ -108,6 +108,12 @@ public class CoreBooter : MonoBehaviour
             Scene s = SceneManager.GetSceneByName("GameScene");
             if (s != null && s.IsValid())
                 SceneManager.UnloadSceneAsync(s);
+            if (CoreDataHandler.instance.Scene != null)
+            {
+                s = SceneManager.GetSceneByName(CoreDataHandler.instance.Scene);
+                if (s != null && s.IsValid())
+                    SceneManager.UnloadSceneAsync(s);
+            }
 
             SceneManager.SetActiveScene(SceneManager.GetSceneByName("MainMenu"));
         };
