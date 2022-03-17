@@ -122,6 +122,8 @@ You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-pr
 
 <li>Tutorial #52: <a href="https://mina-pecheux.medium.com/making-a-rts-game-52-implementing-a-technology-tree-3-3-unity-c-c7038b979e77" rel="noopener follow"><strong>Implementing a technology tree 3/3</strong></a></li>
 
+<li>Article #53: <a href="https://mina-pecheux.medium.com/making-a-rts-game-53-final-words-thanks-and-an-ebook-unity-c-aba38542b9b9" rel="noopener follow"><strong>Final words, thanks… and an ebook!</strong></a></li>
+
 </ul>
 
 ## Known issues
