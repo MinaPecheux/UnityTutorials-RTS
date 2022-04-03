@@ -194,7 +194,7 @@ public class DataHandler : MonoBehaviour
             BinarySerializable.DATA_DIRECTORY,
             "Games");
         if (!Directory.Exists(rootPath))
-            return;
+            return null;
         string[] gameDirs = Directory.GetDirectories(rootPath);
 
         // filter to keep only game folders with a game save

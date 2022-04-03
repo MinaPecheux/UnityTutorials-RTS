@@ -248,6 +248,8 @@ public class MainMenuManager : MonoBehaviour
 
         // get list of available saves
         List<(string, System.DateTime)> availableGames = DataHandler.GetGamesList();
+        if (availableGames == null)
+            return;
 
         Transform t; Sprite s; MapData map;
         string gameUid, sceneName;
