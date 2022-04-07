@@ -18,5 +18,4 @@ MonoBehaviour:
   researchCost:
   - code: 0
     amount: 800
-  children:
-  - {fileID: 11400000, guid: 1ee05e070a529436aa418f2fb8431baf, type: 2}
+  children: []

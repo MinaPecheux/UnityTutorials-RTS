@@ -228,7 +228,7 @@ public class MainMenuManager : MonoBehaviour
 
         // save player parameters for this map
         // from the menu setup
-        GamePlayersParameters p = new GamePlayersParameters();
+        GamePlayersParameters p = ScriptableObject.CreateInstance<GamePlayersParameters>();
         p.players = _playersData
             .Where((KeyValuePair<int, PlayerData> p) => _activePlayers[p.Key])
             .Select((KeyValuePair<int, PlayerData> p) => p.Value)

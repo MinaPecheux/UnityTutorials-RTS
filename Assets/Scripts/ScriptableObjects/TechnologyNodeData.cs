@@ -40,7 +40,10 @@ public class TechnologyNodeData : ScriptableObject
 
             TECH_TREE_NODES[nodeData.code] = nodeData;
             foreach (TechnologyNodeData child in nodeData.children)
+            {
+                if (child == null) continue;
                 parents[child.code] = nodeData.code;
+            }
         }
 
         // re-assign parents after all nodes have been loaded and referenced

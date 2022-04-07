@@ -6,7 +6,7 @@ public class TechnologyTreeNodeEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        TechnologyNodeData tree = (TechnologyNodeData) target;
+        TechnologyNodeData tree = (TechnologyNodeData)target;
         if (GUILayout.Button("Open Editor"))
         {
             if (tree.code == TechnologyNodeData.ROOT_NODE_CODE)
