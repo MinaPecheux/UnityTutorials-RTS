@@ -215,10 +215,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionCircle: {fileID: 1541329661}
   fov: {fileID: 2773615677517416114}
+  meshRenderer: {fileID: 4893885829248897416}
   contextualSource: {fileID: 7928814290623769016}
+  animator: {fileID: 0}
   ownerMaterialSlotIndex: 0
+  healthbar: {fileID: 0}
   agent: {fileID: 2810587783769693676}
-  characterRenderer: {fileID: 4893885829248897416}
   characterCollider: {fileID: 7861637201734098210}
 --- !u!114 &-5990931336701222570
 MonoBehaviour:
