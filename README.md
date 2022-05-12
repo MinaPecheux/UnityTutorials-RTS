@@ -8,6 +8,12 @@
 
 This repository contains the code for my on-going series of tutorials on how to make a real-time strategy (RTS) game in the well-known game engine Unity! Throughout this series of tutorials, I explore C# scripting for games, GUI building, event systems, behavior trees, sound optimization...
 
+---
+#### To run this project, make sure you play it from the **"Core" scene**! ;)
+
+_&rarr; For more info, see <a href="https://mina-pecheux.medium.com/b3c14c46badd" rel="noopener follow">Tutorial #41</a>_
+
+
 ![demo](imgs/demo.gif)
 
 You can find the list of all tutorials [on Medium](https://medium.com/c-sharp-progarmming/making-an-rts-game-in-unity-91a8a0720edc), or right below:

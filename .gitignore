@@ -67,6 +67,8 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # Misc
+MapCaptures.*
+MapCaptures/
 .DS_Store
 _tmp
 _tmp.meta
