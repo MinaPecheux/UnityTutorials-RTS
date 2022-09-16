@@ -54,7 +54,7 @@ public class SoundManager : MonoBehaviour
         while (t < delay)
         {
             masterMixer.SetFloat(volumeParameter, Mathf.Lerp(from, to, t / delay));
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             yield return null;
         }
         masterMixer.SetFloat(volumeParameter, to);

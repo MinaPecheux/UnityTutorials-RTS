@@ -118,11 +118,13 @@ public class GameManager : MonoBehaviour
     private void _OnPausedGame()
     {
         gameIsPaused = true;
+        Time.timeScale = 0;
     }
 
     private void _OnResumedGame()
     {
         gameIsPaused = false;
+        Time.timeScale = 1;
     }
 
     /* game parameters update */
