@@ -49,38 +49,29 @@ namespace BehaviorTree
 
         public object GetData(string key)
         {
-            object value = null;
-            if (_dataContext.TryGetValue(key, out value))
-                return value;
+            object val = null;
+            if (_data.TryGetValue(key, out val))
+                return val;
 
             Node node = _parent;
-            while (node != null)
-            {
-                value = node.GetData(key);
-                if (value != null)
-                    return value;
-                node = node._parent;
-            }
-            return null;
+            if (node != null)
+                val = node.GetData(key);
+            return val;
         }
 
         public bool ClearData(string key)
         {
-            if (_dataContext.ContainsKey(key))
+            bool cleared = false;
+            if (_data.ContainsKey(key))
             {
-                _dataContext.Remove(key);
+                _data.Remove(key);
                 return true;
             }
 
             Node node = _parent;
-            while (node != null)
-            {
-                bool cleared = node.ClearData(key);
-                if (cleared)
-                    return true;
-                node = node._parent;
-            }
-            return false;
+            if (node != null)
+                cleared = node.ClearData(key);
+            return cleared;
         }
 
         public void SetData(string key, object value)
