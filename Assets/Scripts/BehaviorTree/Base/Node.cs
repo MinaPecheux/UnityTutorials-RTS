@@ -50,7 +50,7 @@ namespace BehaviorTree
         public object GetData(string key)
         {
             object val = null;
-            if (_data.TryGetValue(key, out val))
+            if (_dataContext.TryGetValue(key, out val))
                 return val;
 
             Node node = _parent;
@@ -62,9 +62,9 @@ namespace BehaviorTree
         public bool ClearData(string key)
         {
             bool cleared = false;
-            if (_data.ContainsKey(key))
+            if (_dataContext.ContainsKey(key))
             {
-                _data.Remove(key);
+                _dataContext.Remove(key);
                 return true;
             }
 
