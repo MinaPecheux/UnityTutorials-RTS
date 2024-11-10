@@ -4,6 +4,8 @@
 
 ![thumbnail](imgs/thumbnail.jpg)
 
+⚠️⚠️ This series and the repo was made using Unity 2020+ and 2021+ - it is not (and probably won't ever be) compatible with the new Unity 6 core system, sorry! ⚠️⚠️
+
 ### 📕 Discover the series as an ebook and get bonus material <a rel="noopener follow" href="https://mpecheux.gumroad.com/l/rrylr"><strong>on Gumroad</strong></a>!
 
 This repository contains the code for my on-going series of tutorials on how to make a real-time strategy (RTS) game in the well-known game engine Unity! Throughout this series of tutorials, I explore C# scripting for games, GUI building, event systems, behavior trees, sound optimization...
