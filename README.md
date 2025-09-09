@@ -4,7 +4,9 @@
 
 ![thumbnail](imgs/thumbnail.jpg)
 
-⚠️⚠️ This series and the repo was made using Unity 2020+ and 2021+ - it is not (and probably won't ever be) compatible with the new Unity 6 core system, sorry! ⚠️⚠️
+#### This project is now 🔴 UNMAINTAINED 🔴. But feel free to use it as a reference archive :)
+
+⚠️⚠️ In particular, this series and the repo was made using Unity 2020+ and 2021+ - it is not (and probably won't ever be) compatible with the new Unity 6 core system, or the more recent rendering pipelines, sorry! ⚠️⚠️
 
 ### 📕 Discover the series as an ebook and get bonus material <a rel="noopener follow" href="https://mpecheux.gumroad.com/l/rrylr"><strong>on Gumroad</strong></a>!
 
